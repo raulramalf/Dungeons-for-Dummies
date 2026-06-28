@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PerfilController;
+use App\Http\Controllers\EnemigoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -37,5 +38,15 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::middleware('auth')->group(function () {
+    Route::get('/enemigos', [EnemigoController::class, 'index'])->name('enemigos');
+    Route::post('/enemigos', [EnemigoController::class, 'store']);
+    Route::delete('/enemigos/{id}', [EnemigoController::class, 'destroy']);
+});
+
+Route::get('/enemigos/{id}', [EnemigoController::class, 'show']);
+
+Route::patch('/enemigos/{id}', [EnemigoController::class, 'update']);
 
 require __DIR__.'/auth.php';
