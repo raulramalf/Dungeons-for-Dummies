@@ -13,13 +13,15 @@ class Usuario extends Authenticatable
 
     protected $table = 'usuarios';
 
-    protected $fillable = [
+   protected $fillable = [
         'nombre',
         'email',
+        'email_verified_at',
         'password',
         'rol',
         'avatar',
         'ultimo_acceso',
+        'remember_token',
     ];
 
     protected $hidden = [
@@ -36,6 +38,7 @@ class Usuario extends Authenticatable
         ];
     }
 
+<<<<<<< HEAD
     // Relaciones
     public function personajes()
     {
@@ -66,4 +69,16 @@ class Usuario extends Authenticatable
     {
         return $this->hasMany(Campana::class, 'dungeon_master_id');
     }
+=======
+    public function personajes()
+{
+    return $this->hasMany(\App\Models\Personaje::class, 'usuario_id');
+}
+
+public function campanas()
+{
+    return $this->hasMany(\App\Models\Campana::class, 'dungeon_master_id');
+}
+
+>>>>>>> origin/feature/perfil-campanyas-enemigos
 }
