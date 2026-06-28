@@ -14,13 +14,15 @@ class User extends Authenticatable
 
     protected $table = 'usuarios';
 
-    protected $fillable = [
+   protected $fillable = [
         'nombre',
         'email',
+        'email_verified_at',
         'password',
         'rol',
         'avatar',
         'ultimo_acceso',
+        'remember_token',
     ];
 
     protected $hidden = [
@@ -36,4 +38,15 @@ class User extends Authenticatable
             'password'          => 'hashed',
         ];
     }
+
+    public function personajes()
+{
+    return $this->hasMany(\App\Models\Personaje::class, 'usuario_id');
+}
+
+public function campanas()
+{
+    return $this->hasMany(\App\Models\Campana::class, 'dungeon_master_id');
+}
+
 }
