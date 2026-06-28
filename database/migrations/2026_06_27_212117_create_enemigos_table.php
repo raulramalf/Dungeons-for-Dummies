@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('clase_de_armadura');
             $table->string('tipo_armadura')->nullable();
             $table->string('puntos_de_golpe');                 // Ej: "5d8+10"
-            $table->integer('velocidad')->default(30);
+            $table->string('velocidad')->default('30 ft.');
             $table->json('velocidades_especiales')->nullable(); // {"vuelo": 60, "nado": 30}
             // Características
             $table->integer('fuerza')->default(10);
