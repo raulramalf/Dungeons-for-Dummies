@@ -24,7 +24,6 @@
             min-height: 100vh;
         }
 
-        /* OVERLAY */
         .overlay {
             display: none;
             position: fixed;
@@ -34,7 +33,6 @@
         }
         .overlay.active { display: block; }
 
-        /* SIDEBAR */
         .sidebar {
             width: 220px;
             background-color: #120309;
@@ -76,7 +74,6 @@
             border-left: 3px solid var(--color-rojo);
         }
 
-        /* BOTÓN HAMBURGUESA */
         .hamburger {
             display: none;
             background: var(--color-rojo);
@@ -101,14 +98,12 @@
             transition: all 0.3s;
         }
 
-        /* CONTENIDO */
         .main-content {
             margin-left: 220px;
             flex: 1;
             padding: 30px;
         }
 
-        /* HEADER */
         .page-header {
             display: flex;
             justify-content: space-between;
@@ -124,44 +119,6 @@
             text-transform: uppercase;
         }
 
-        /* RESPONSIVE — TABLET */
-        @media (max-width: 1024px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-
-            .sidebar.open {
-                transform: translateX(0);
-            }
-
-            .sidebar .logo {
-                padding-top: 70px;
-            }
-
-            .hamburger {
-                display: flex;
-            }
-
-            .main-content {
-                margin-left: 0;
-                padding: 20px;
-                padding-top: 70px;
-            }
-        }
-
-        /* RESPONSIVE — MÓVIL */
-        @media (max-width: 600px) {
-            .main-content {
-                padding: 15px;
-                padding-top: 70px;
-            }
-
-            .page-header h1 {
-                font-size: 1.1rem;
-            }
-        }
-
-        /* TOPBAR */
         .topbar {
             display: none;
             position: fixed;
@@ -184,8 +141,29 @@
             text-transform: uppercase;
         }
 
-        /* En móvil el page-header del contenido se oculta */
         @media (max-width: 1024px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .sidebar .logo {
+                padding-top: 70px;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+                padding-top: 70px;
+            }
+
             .topbar {
                 display: flex;
             }
@@ -198,14 +176,23 @@
                 position: static;
             }
         }
+
+        @media (max-width: 600px) {
+            .main-content {
+                padding: 15px;
+                padding-top: 70px;
+            }
+
+            .page-header h1 {
+                font-size: 1.1rem;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <!-- OVERLAY -->
     <div class="overlay" id="overlay" onclick="cerrarMenu()"></div>
 
-    <!-- TOPBAR (solo móvil/tablet) -->
     <header class="topbar">
         <button class="hamburger" id="hamburger" onclick="toggleMenu()">
             <span></span>
@@ -215,7 +202,6 @@
         <span class="topbar-titulo">@yield('titulo')</span>
     </header>
 
-    <!-- SIDEBAR -->
     <aside class="sidebar" id="sidebar">
         <div class="logo">⚔ DUNGEONS<br>FOR DUMMIES</div>
         <nav>
@@ -226,9 +212,16 @@
             <a href="/enemigos" class="{{ request()->is('enemigos') ? 'active' : '' }}">💀 Enemigos</a>
             <a href="/perfil" class="{{ request()->is('perfil') ? 'active' : '' }}">👤 Perfil</a>
         </nav>
+        <div style="margin-top: auto; padding: 20px; border-top: 1px solid rgba(179,3,3,0.2);">
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" style="background: none; border: none; color: var(--color-gris); cursor: pointer; font-family: Georgia, serif; font-size: 0.9rem; width: 100%; text-align: left; padding: 5px 0;">
+                    🚪 Cerrar sesión
+                </button>
+            </form>
+        </div>
     </aside>
 
-    <!-- CONTENIDO -->
     <main class="main-content">
         <div class="page-header">
             <h1>@yield('titulo')</h1>
@@ -247,7 +240,6 @@
             document.getElementById('overlay').classList.remove('active');
         }
 
-        // Cerrar al hacer clic en un enlace del menú (útil en móvil)
         document.querySelectorAll('.sidebar nav a').forEach(a => {
             a.addEventListener('click', cerrarMenu);
         });
