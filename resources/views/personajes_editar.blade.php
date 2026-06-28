@@ -1,854 +1,1216 @@
 @extends('layouts.app')
 
-@section('titulo', 'Editar ' . $personaje->nombre)
+@section('titulo', 'Editar — ' . $personaje->nombre)
 
 @section('contenido')
 <style>
+    /* =============================================
+       WRAPPER
+    ============================================= */
     .edit-wrapper {
         max-width: 1100px;
         margin: 0 auto;
-        background: linear-gradient(145deg, rgba(20, 10, 5, 0.95), rgba(40, 20, 10, 0.98));
-        border-radius: 16px;
-        border: 1px solid rgba(179, 3, 3, 0.25);
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+        background: linear-gradient(150deg, rgba(18,8,4,0.97), rgba(36,16,8,0.99));
+        border-radius: 14px;
+        border: 1px solid rgba(179,3,3,0.22);
+        box-shadow: 0 20px 60px rgba(0,0,0,0.75);
         overflow: hidden;
     }
 
+    /* =============================================
+       CABECERA
+    ============================================= */
     .edit-header {
         display: flex;
         flex-wrap: wrap;
-        background: rgba(0, 0, 0, 0.5);
-        border-bottom: 2px solid var(--color-rojo);
-        padding: 1.5rem 2rem;
         gap: 2rem;
         align-items: center;
+        background: rgba(0,0,0,0.5);
+        border-bottom: 2px solid #B30303;
+        padding: 1.8rem 2.2rem;
     }
 
     .edit-avatar {
-        width: 140px;
-        height: 140px;
+        width: 130px;
+        height: 130px;
         border-radius: 50%;
         object-fit: cover;
-        border: 4px solid var(--color-rojo);
+        border: 4px solid #B30303;
         background: #1a0a0a;
         flex-shrink: 0;
-        box-shadow: 0 0 30px rgba(179, 3, 3, 0.3);
+        box-shadow: 0 0 28px rgba(179,3,3,0.3);
     }
 
-    .edit-titulo {
-        flex: 1;
-    }
+    .edit-header-info { flex: 1; min-width: 200px; }
 
-    .edit-titulo h1 {
-        font-size: 2.8rem;
+    .edit-header-info h1 {
+        font-family: 'Cinzel', 'Georgia', serif;
+        font-size: clamp(1.6rem, 3.5vw, 2.4rem);
         color: #fff;
-        margin: 0;
+        margin: 0 0 0.3rem;
         letter-spacing: 2px;
-        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     }
 
-    .edit-titulo .subtitulo {
-        color: var(--color-naranja);
-        font-size: 1.2rem;
-        margin: 0.2rem 0 0.5rem;
+    .edit-header-info .subtitulo {
+        color: #D46043;
+        font-size: 1rem;
+        font-style: italic;
     }
 
-    .edit-body {
-        padding: 2rem 2.5rem;
-    }
+    /* =============================================
+       CUERPO
+    ============================================= */
+    .edit-body { padding: 2rem 2.5rem; }
 
-    .seccion {
-        margin-bottom: 2.5rem;
-    }
+    /* SECCIÓN */
+    .seccion { margin-bottom: 2.8rem; }
 
     .seccion-titulo {
-        color: var(--color-gris);
-        font-size: 0.9rem;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        border-bottom: 1px solid rgba(118, 133, 150, 0.15);
-        padding-bottom: 0.6rem;
-        margin-bottom: 1.5rem;
         display: flex;
         align-items: center;
         gap: 0.6rem;
-    }
-
-    .seccion-titulo .icono {
-        font-size: 1.2rem;
-    }
-
-    .form-group {
+        color: #768596;
+        font-size: 0.78rem;
+        text-transform: uppercase;
+        letter-spacing: 2.5px;
+        border-bottom: 1px solid rgba(118,133,150,0.12);
+        padding-bottom: 0.6rem;
         margin-bottom: 1.5rem;
     }
 
+    /* =============================================
+       FORMULARIO
+    ============================================= */
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.3rem;
+    }
+
+    .form-row-3 {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1.3rem;
+    }
+
+    .form-group { margin-bottom: 1.2rem; }
+
     .form-group label {
         display: block;
-        color: var(--color-gris);
-        font-size: 0.8rem;
+        color: #768596;
+        font-size: 0.75rem;
         text-transform: uppercase;
         letter-spacing: 1px;
         margin-bottom: 0.4rem;
         font-weight: 600;
     }
 
-    .form-group .required {
-        color: var(--color-rojo);
-        margin-left: 0.2rem;
-    }
+    .req { color: #B30303; margin-left: 0.2rem; }
 
     .form-control {
         width: 100%;
-        padding: 0.8rem 1rem;
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid var(--color-gris);
-        border-radius: 8px;
+        padding: 0.75rem 1rem;
+        background: rgba(0,0,0,0.28);
+        border: 1px solid rgba(118,133,150,0.3);
+        border-radius: 6px;
         color: #fff;
         font-family: inherit;
-        font-size: 1rem;
-        transition: border-color 0.3s;
+        font-size: 0.97rem;
+        transition: border-color 0.25s;
+        box-sizing: border-box;
     }
 
     .form-control:focus {
         outline: none;
-        border-color: var(--color-rojo);
-        box-shadow: 0 0 0 3px rgba(179, 3, 3, 0.15);
+        border-color: #B30303;
+        box-shadow: 0 0 0 3px rgba(179,3,3,0.12);
     }
 
-    .form-control.error {
-        border-color: #cc0000;
-    }
+    .form-control.is-error { border-color: #cc0000; }
 
-    .error-text {
-        color: #cc0000;
-        font-size: 0.85rem;
+    .error-msg {
+        color: #cc4444;
+        font-size: 0.8rem;
         margin-top: 0.3rem;
         display: block;
     }
 
-    .form-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1.5rem;
-    }
-
-    .form-actions {
-        display: flex;
-        gap: 1rem;
-        margin-top: 2.5rem;
-        justify-content: flex-end;
-        border-top: 1px solid rgba(118, 133, 150, 0.15);
-        padding-top: 2rem;
-    }
-
-    .btn-submit {
-        background: var(--color-rojo);
-        color: #fff;
-        padding: 0.8rem 2.5rem;
-        border: none;
-        border-radius: 8px;
-        font-weight: 600;
-        font-size: 1rem;
-        cursor: pointer;
-        transition: all 0.3s;
-        font-family: inherit;
-    }
-
-    .btn-submit:hover {
-        background: #8a0202;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(179, 3, 3, 0.3);
-    }
-
-    .btn-cancel {
-        background: rgba(255, 255, 255, 0.06);
-        color: var(--color-gris);
-        padding: 0.8rem 2rem;
-        border: 1px solid var(--color-gris);
-        border-radius: 8px;
-        text-decoration: none;
-        transition: all 0.3s;
-        font-family: inherit;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-    }
-
-    .btn-cancel:hover {
-        background: rgba(255, 255, 255, 0.12);
-        color: #fff;
-    }
+    select.form-control option { background: #1a0808; color: #fff; }
 
     .avatar-preview {
-        width: 100px;
-        height: 100px;
+        width: 80px;
+        height: 80px;
         border-radius: 50%;
         object-fit: cover;
-        border: 3px solid var(--color-rojo);
-        margin-top: 0.8rem;
-        background: #1a0a0a;
+        border: 3px solid #B30303;
+        margin-top: 0.6rem;
     }
 
-    /* Estadísticas en edición (igual que en ver pero con inputs) */
+    /* =============================================
+       UPLOAD DE IMÁGENES
+    ============================================= */
+    .upload-zone {
+        border: 2px dashed rgba(179,3,3,0.3);
+        border-radius: 8px;
+        padding: 1.4rem;
+        text-align: center;
+        background: rgba(0,0,0,0.15);
+        transition: border-color 0.25s;
+        cursor: pointer;
+    }
+
+    .upload-zone:hover { border-color: rgba(179,3,3,0.6); }
+
+    .upload-zone input[type="file"] {
+        display: none;
+    }
+
+    .upload-label {
+        color: #768596;
+        font-size: 0.9rem;
+        cursor: pointer;
+    }
+
+    .upload-label span { color: #D46043; text-decoration: underline; }
+
+    .imgs-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        margin-top: 0.8rem;
+    }
+
+    .img-existente {
+        position: relative;
+        width: 100px;
+        height: 100px;
+    }
+
+    .img-existente img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid rgba(179,3,3,0.25);
+    }
+
+    .img-existente .btn-del-img {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+        width: 22px;
+        height: 22px;
+        background: #B30303;
+        border: none;
+        border-radius: 50%;
+        color: #fff;
+        font-size: 0.75rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        line-height: 1;
+        transition: background 0.2s;
+    }
+
+    .img-existente .btn-del-img:hover { background: #8a0202; }
+
+    .contador-imgs {
+        color: #768596;
+        font-size: 0.8rem;
+        margin-top: 0.4rem;
+    }
+
+    /* =============================================
+       ESTADÍSTICAS (grid con inputs)
+    ============================================= */
     .stats-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-        gap: 1.2rem;
+        gap: 1rem;
     }
 
     .stat-edit {
-        background: rgba(0, 0, 0, 0.35);
+        background: rgba(0,0,0,0.35);
         border-radius: 10px;
         padding: 1rem 0.8rem;
         text-align: center;
-        border: 1px solid rgba(118, 133, 150, 0.1);
+        border: 1px solid rgba(118,133,150,0.1);
+        transition: border-color 0.25s;
     }
 
-    .stat-edit .label {
-        color: var(--color-gris);
-        font-size: 0.75rem;
+    .stat-edit:focus-within { border-color: rgba(179,3,3,0.4); }
+
+    .stat-label {
+        color: #768596;
+        font-size: 0.7rem;
         text-transform: uppercase;
         letter-spacing: 1px;
         display: block;
+        margin-bottom: 0.3rem;
     }
 
-    .stat-edit input {
-        width: 80%;
-        margin: 0.3rem auto 0;
+    .stat-input {
+        width: 75%;
         padding: 0.4rem;
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid var(--color-gris);
-        border-radius: 6px;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(118,133,150,0.25);
+        border-radius: 5px;
         color: #fff;
         text-align: center;
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         font-weight: 700;
         display: block;
+        margin: 0 auto;
     }
 
-    .stat-edit input:focus {
-        border-color: var(--color-rojo);
-        outline: none;
-    }
+    .stat-input:focus { border-color: #B30303; outline: none; }
 
-    .stat-edit .mod {
-        color: var(--color-naranja);
-        font-size: 0.9rem;
+    .stat-mod {
+        color: #D46043;
+        font-size: 0.88rem;
         font-weight: 600;
-        margin-top: 0.2rem;
+        margin-top: 0.3rem;
         display: block;
     }
 
-    .info-grid-edit {
+    /* =============================================
+       COMBATE
+    ============================================= */
+    .combat-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 1.2rem;
+        grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+        gap: 1rem;
     }
 
-    .info-edit {
-        background: rgba(0, 0, 0, 0.3);
+    .combat-field {
+        background: rgba(0,0,0,0.3);
         padding: 1rem 1.2rem;
         border-radius: 8px;
-        border-left: 3px solid var(--color-rojo);
+        border-left: 3px solid #B30303;
     }
 
-    .info-edit label {
-        color: var(--color-gris);
-        font-size: 0.7rem;
+    .combat-field label {
+        color: #768596;
+        font-size: 0.68rem;
         text-transform: uppercase;
         letter-spacing: 0.5px;
         display: block;
+        margin-bottom: 0.3rem;
+        font-weight: 600;
     }
 
-    .info-edit input {
+    .combat-field input {
         width: 100%;
         padding: 0.4rem 0.6rem;
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid var(--color-gris);
-        border-radius: 6px;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(118,133,150,0.25);
+        border-radius: 5px;
         color: #fff;
         font-size: 1.1rem;
         font-weight: 600;
-        margin-top: 0.2rem;
     }
 
-    .info-edit input:focus {
-        border-color: var(--color-rojo);
-        outline: none;
-    }
+    .combat-field input:focus { border-color: #B30303; outline: none; }
 
-    .historia-edit textarea {
-        width: 100%;
-        padding: 1rem;
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid var(--color-gris);
-        border-radius: 8px;
-        color: #c8c8c8;
-        font-family: inherit;
-        font-size: 1rem;
-        line-height: 1.7;
-        resize: vertical;
-        min-height: 120px;
-    }
-
-    .historia-edit textarea:focus {
-        border-color: var(--color-rojo);
-        outline: none;
-    }
-
-    /* Equipo en edición (igual que en ver pero con formulario de añadir y eliminar) */
-    .equipo-grid {
+    /* =============================================
+       COMPETENCIAS (checkboxes)
+    ============================================= */
+    .check-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+        gap: 0.5rem;
+    }
+
+    .check-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.4rem 0.6rem;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .check-item:hover { background: rgba(0,0,0,0.2); }
+
+    .check-item input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+        accent-color: #B30303;
+        flex-shrink: 0;
+    }
+
+    .check-item span {
+        color: #a8b0b8;
+        font-size: 0.88rem;
+    }
+
+    /* =============================================
+       ATAQUES
+    ============================================= */
+    .ataques-lista {
+        display: flex;
+        flex-direction: column;
+        gap: 0.7rem;
+        margin-bottom: 1rem;
+    }
+
+    .ataque-row {
+        display: grid;
+        grid-template-columns: 1fr 100px 1fr auto;
+        gap: 0.6rem;
+        align-items: center;
+    }
+
+    .ataque-row input {
+        padding: 0.6rem 0.8rem;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(118,133,150,0.25);
+        border-radius: 5px;
+        color: #fff;
+        font-size: 0.9rem;
+        font-family: inherit;
+    }
+
+    .ataque-row input:focus { border-color: #B30303; outline: none; }
+
+    .btn-del-ataque {
+        background: none;
+        border: 1px solid rgba(107,26,26,0.5);
+        color: #cc4444;
+        border-radius: 4px;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        flex-shrink: 0;
+    }
+
+    .btn-del-ataque:hover { background: rgba(179,3,3,0.15); }
+
+    .btn-add-ataque {
+        background: rgba(64,72,52,0.5);
+        border: 1px solid #404834;
+        color: #9ab090;
+        padding: 0.5rem 1.2rem;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.88rem;
+        font-family: inherit;
+        transition: background 0.2s;
+    }
+
+    .btn-add-ataque:hover { background: rgba(64,72,52,0.8); }
+
+    /* =============================================
+       EQUIPO
+    ============================================= */
+    .equipo-existente {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
         gap: 1rem;
+        margin-bottom: 1.2rem;
     }
 
     .equipo-item {
-        background: rgba(0, 0, 0, 0.3);
+        background: rgba(0,0,0,0.3);
         padding: 1rem 1.2rem;
         border-radius: 8px;
-        border-left: 3px solid var(--color-naranja);
+        border-left: 3px solid #D46043;
         position: relative;
-        transition: all 0.3s;
     }
 
-    .equipo-item:hover {
-        background: rgba(0, 0, 0, 0.45);
-    }
+    .equipo-nombre { color: #fff; font-weight: 600; }
+    .equipo-det    { color: #768596; font-size: 0.82rem; margin-top: 0.2rem; }
 
-    .equipo-item .nombre {
-        color: #fff;
-        font-weight: 600;
-        font-size: 1.05rem;
-    }
-    .equipo-item .detalle {
-        color: var(--color-gris);
-        font-size: 0.85rem;
-        margin-top: 0.2rem;
-    }
-    .equipo-item .badge-equipado {
-        color: var(--color-verde);
-        font-size: 0.75rem;
-        font-weight: 600;
-        margin-left: 0.5rem;
-    }
-    .equipo-item .eliminar-btn {
+    .btn-del-equipo {
         position: absolute;
         top: 0.5rem;
-        right: 0.8rem;
+        right: 0.7rem;
         background: none;
         border: none;
-        color: #6b1a1a;
+        color: rgba(179,3,3,0.5);
         cursor: pointer;
-        font-size: 1.2rem;
-        transition: color 0.3s;
+        font-size: 1.1rem;
+        transition: color 0.2s;
+        padding: 0;
     }
-    .equipo-item .eliminar-btn:hover {
-        color: #cc0000;
-    }
+
+    .btn-del-equipo:hover { color: #B30303; }
 
     .form-equipo {
-        background: rgba(0, 0, 0, 0.15);
-        padding: 1.5rem;
+        background: rgba(0,0,0,0.15);
+        border: 1px solid rgba(118,133,150,0.1);
         border-radius: 10px;
-        margin-top: 1.5rem;
-        border: 1px solid rgba(118, 133, 150, 0.1);
+        padding: 1.4rem;
     }
 
-    .form-equipo .grid {
+    .form-equipo h4 {
+        color: #768596;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 1rem;
+    }
+
+    .equipo-inputs {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 1rem;
+        gap: 0.9rem;
     }
 
-    .form-equipo .grid .full-width {
-        grid-column: 1 / -1;
-    }
-
-    .form-equipo .grid .checkbox-group {
-        grid-column: 1 / -1;
-        display: flex;
-        gap: 1.5rem;
-    }
-
-    .form-equipo .grid .checkbox-group label {
-        color: var(--color-gris);
-        display: flex;
-        align-items: center;
-        gap: 0.3rem;
-        font-size: 0.9rem;
-        cursor: pointer;
-    }
-
-    .form-equipo .grid input,
-    .form-equipo .grid textarea {
+    .equipo-inputs input,
+    .equipo-inputs textarea,
+    .equipo-inputs select {
         width: 100%;
         padding: 0.6rem 0.8rem;
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid var(--color-gris);
-        border-radius: 6px;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(118,133,150,0.25);
+        border-radius: 5px;
         color: #fff;
         font-family: inherit;
-        font-size: 0.95rem;
+        font-size: 0.9rem;
     }
 
-    .form-equipo .grid input:focus,
-    .form-equipo .grid textarea:focus {
-        border-color: var(--color-rojo);
-        outline: none;
-    }
+    .equipo-inputs input:focus,
+    .equipo-inputs textarea:focus { border-color: #B30303; outline: none; }
 
-    .btn-agregar-equipo {
-        background: var(--color-verde);
-        color: #fff;
-        padding: 0.5rem 1.5rem;
+    .equipo-inputs .full  { grid-column: 1 / -1; }
+    .equipo-inputs .checks { grid-column: 1 / -1; display: flex; gap: 1.5rem; }
+
+    .btn-add-equipo {
+        background: #404834;
+        color: #9ab090;
         border: none;
-        border-radius: 6px;
-        font-weight: 600;
+        padding: 0.6rem 1.5rem;
+        border-radius: 5px;
         cursor: pointer;
-        transition: all 0.3s;
+        font-size: 0.9rem;
         font-family: inherit;
         margin-top: 1rem;
-    }
-
-    .btn-agregar-equipo:hover {
-        background: #2a4a2a;
-        transform: translateY(-2px);
-    }
-
-    /* Monedas en edición */
-    .monedas-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-        gap: 1rem;
-    }
-
-    .moneda-edit {
-        background: rgba(0, 0, 0, 0.25);
-        padding: 0.8rem;
-        border-radius: 8px;
-        text-align: center;
-    }
-
-    .moneda-edit .simbolo {
-        font-size: 1.4rem;
-        display: block;
-    }
-
-    .moneda-edit input {
-        width: 80%;
-        padding: 0.3rem;
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid var(--color-gris);
-        border-radius: 6px;
-        color: #fff;
-        text-align: center;
-        font-size: 1.2rem;
+        transition: background 0.2s;
         font-weight: 600;
-        display: block;
-        margin: 0.2rem auto 0;
     }
 
-    .moneda-edit input:focus {
-        border-color: var(--color-rojo);
-        outline: none;
-    }
+    .btn-add-equipo:hover { background: #2a3828; }
 
-    .form-moneda {
-        background: rgba(0, 0, 0, 0.15);
-        padding: 1.5rem;
-        border-radius: 10px;
-        margin-top: 1.5rem;
-        border: 1px solid rgba(118, 133, 150, 0.1);
-    }
-
-    .form-moneda .grid {
+    /* =============================================
+       MONEDAS
+    ============================================= */
+    .monedas-form-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
         gap: 1rem;
     }
 
-    .form-moneda .grid label {
-        color: var(--color-gris);
-        font-size: 0.75rem;
-        text-transform: uppercase;
+    .moneda-field { text-align: center; }
+
+    .moneda-field .simbolo {
+        font-size: 1.5rem;
         display: block;
-        margin-bottom: 0.2rem;
+        margin-bottom: 0.3rem;
     }
 
-    .form-moneda .grid input {
-        width: 100%;
-        padding: 0.5rem;
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid var(--color-gris);
+    .moneda-field label {
+        display: block;
+        color: #768596;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        margin-bottom: 0.3rem;
+    }
+
+    .moneda-field input {
+        width: 80%;
+        padding: 0.4rem;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(118,133,150,0.25);
+        border-radius: 5px;
+        color: #fff;
+        text-align: center;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .moneda-field input:focus { border-color: #B30303; outline: none; }
+
+    .btn-monedas {
+        background: #B30303;
+        color: #fff;
+        border: none;
+        padding: 0.65rem 2rem;
         border-radius: 6px;
-        color: #fff;
-        font-size: 1rem;
+        cursor: pointer;
+        font-size: 0.92rem;
+        font-family: inherit;
+        font-weight: 600;
+        margin-top: 1rem;
+        transition: background 0.2s;
     }
 
-    .form-moneda .grid input:focus {
-        border-color: var(--color-rojo);
-        outline: none;
+    .btn-monedas:hover { background: #8a0202; }
+
+    /* =============================================
+       ACCIONES FINALES
+    ============================================= */
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+        border-top: 1px solid rgba(118,133,150,0.12);
+        padding-top: 2rem;
+        margin-top: 1rem;
+        flex-wrap: wrap;
     }
 
-    .btn-actualizar-moneda {
-        background: var(--color-rojo);
-        color: #fff;
-        padding: 0.6rem 2rem;
+    .btn-cancel {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.75rem 1.8rem;
+        background: rgba(255,255,255,0.05);
+        border: 1px solid rgba(118,133,150,0.25);
+        border-radius: 6px;
+        color: #768596;
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: all 0.25s;
+    }
+
+    .btn-cancel:hover { background: rgba(255,255,255,0.1); color: #fff; }
+
+    .btn-save {
+        padding: 0.75rem 2.5rem;
+        background: #B30303;
         border: none;
         border-radius: 6px;
-        font-weight: 600;
+        color: #fff;
+        font-size: 0.97rem;
+        font-weight: 700;
         cursor: pointer;
-        transition: all 0.3s;
         font-family: inherit;
-        margin-top: 1rem;
+        letter-spacing: 0.5px;
+        transition: all 0.25s;
     }
 
-    .btn-actualizar-moneda:hover {
+    .btn-save:hover {
         background: #8a0202;
         transform: translateY(-2px);
-        box-shadow: 0 4px 15px rgba(179, 3, 3, 0.3);
+        box-shadow: 0 6px 18px rgba(179,3,3,0.35);
     }
 
+    /* =============================================
+       RESPONSIVE
+    ============================================= */
     @media (max-width: 768px) {
-        .edit-header {
-            flex-direction: column;
-            text-align: center;
-            padding: 1.5rem;
-        }
-        .edit-avatar {
-            width: 120px;
-            height: 120px;
-        }
-        .edit-titulo h1 {
-            font-size: 2rem;
-        }
-        .edit-body {
-            padding: 1.5rem;
-        }
-        .form-row {
-            grid-template-columns: 1fr;
-        }
-        .stats-grid {
-            grid-template-columns: repeat(3, 1fr);
-        }
-        .info-grid-edit {
-            grid-template-columns: 1fr 1fr;
-        }
-        .form-equipo .grid {
-            grid-template-columns: 1fr;
-        }
-        .form-equipo .grid .full-width {
-            grid-column: 1;
-        }
-        .form-equipo .grid .checkbox-group {
-            grid-column: 1;
-            flex-wrap: wrap;
-        }
-        .form-actions {
-            flex-direction: column;
-        }
-        .form-actions .btn-submit,
-        .form-actions .btn-cancel {
-            width: 100%;
-            justify-content: center;
-        }
+        .edit-header { flex-direction: column; text-align: center; padding: 1.5rem; }
+        .edit-body { padding: 1.5rem; }
+        .form-row, .form-row-3 { grid-template-columns: 1fr; }
+        .stats-grid { grid-template-columns: repeat(3, 1fr); }
+        .combat-grid { grid-template-columns: 1fr 1fr; }
+        .ataque-row { grid-template-columns: 1fr auto; }
+        .ataque-row input:nth-child(2), .ataque-row input:nth-child(3) { display: none; }
+        .equipo-inputs { grid-template-columns: 1fr; }
+        .form-actions { flex-direction: column; }
+        .form-actions > * { width: 100%; text-align: center; justify-content: center; }
     }
 
     @media (max-width: 480px) {
-        .stats-grid {
-            grid-template-columns: repeat(2, 1fr);
-        }
-        .info-grid-edit {
-            grid-template-columns: 1fr;
-        }
-        .equipo-grid {
-            grid-template-columns: 1fr;
-        }
-        .monedas-grid {
-            grid-template-columns: repeat(3, 1fr);
-        }
+        .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        .combat-grid { grid-template-columns: 1fr; }
+        .check-grid { grid-template-columns: 1fr; }
     }
 </style>
 
-<div class="edit-wrapper">
-    <!-- CABECERA -->
-    <div class="edit-header">
-        <img class="edit-avatar" src="{{ $personaje->avatar_url }}" alt="{{ $personaje->nombre }}">
+@php
+    $est = $personaje->estadisticas;
+    $statsMap = [
+        'FUE' => 'fuerza',
+        'DES' => 'destreza',
+        'CON' => 'constitucion',
+        'INT' => 'inteligencia',
+        'SAB' => 'sabiduria',
+        'CAR' => 'carisma',
+    ];
+    $habilidades = [
+        'Atletismo'       => 'fuerza',
+        'Acrobacias'      => 'destreza',
+        'Sigilo'          => 'destreza',
+        'Prestidigitación' => 'destreza',
+        'Arcana'          => 'inteligencia',
+        'Historia'        => 'inteligencia',
+        'Investigación'   => 'inteligencia',
+        'Naturaleza'      => 'inteligencia',
+        'Religión'        => 'inteligencia',
+        'Medicina'        => 'sabiduria',
+        'Percepción'      => 'sabiduria',
+        'Perspicacia'     => 'sabiduria',
+        'Supervivencia'   => 'sabiduria',
+        'Trato con animales' => 'sabiduria',
+        'Engaño'          => 'carisma',
+        'Intimidación'    => 'carisma',
+        'Actuación'       => 'carisma',
+        'Persuasión'      => 'carisma',
+    ];
+    $compHab = json_decode($personaje->competencias_habilidades ?? '[]', true) ?? [];
+    $compSal = json_decode($personaje->competencias_salvaciones ?? '[]', true) ?? [];
+    $ataques = json_decode($personaje->ataques ?? '[]', true) ?? [];
+    $imgsPersonaje = json_decode($personaje->imagenes_personaje ?? '[]', true) ?? [];
+    $imgsArmas     = json_decode($personaje->imagenes_armas ?? '[]', true) ?? [];
+@endphp
 
-        <div class="edit-titulo">
+<div class="edit-wrapper">
+
+    {{-- CABECERA --}}
+    <div class="edit-header">
+        <img class="edit-avatar" src="{{ $personaje->avatar_url }}" alt="{{ $personaje->nombre }}" id="avatarPreview">
+        <div class="edit-header-info">
             <h1>{{ $personaje->nombre }}</h1>
             <div class="subtitulo">
-                {{ $personaje->raza->nombre ?? 'Raza' }} · {{ $personaje->clase->nombre ?? 'Clase' }}
-                @if($personaje->subclase)
-                    ({{ $personaje->subclase->nombre }})
-                @endif
-            </div>
-            <div style="display:flex; flex-wrap:wrap; gap:0.5rem; align-items:center; margin-top:0.3rem;">
-                <span class="badge-nivel" style="background:var(--color-rojo); color:#fff; padding:0.3rem 1.2rem; border-radius:20px; font-weight:bold; font-size:0.95rem;">Nivel {{ $personaje->nivel }}</span>
-                @if($personaje->experiencia)
-                    <span style="color:var(--color-gris); font-size:0.9rem;">⚡ {{ number_format($personaje->experiencia) }} XP</span>
-                @endif
-                @if($personaje->alineamiento)
-                    <span style="background:rgba(255,255,255,0.08); padding:0.3rem 1rem; border-radius:20px; color:var(--color-gris); font-size:0.85rem; border:1px solid rgba(118,133,150,0.2);">⚖️ {{ $personaje->alineamiento }}</span>
-                @endif
+                {{ $personaje->raza->nombre ?? '—' }} · {{ $personaje->clase->nombre ?? '—' }}
             </div>
         </div>
     </div>
 
-    <!-- CUERPO DEL FORMULARIO -->
-    <form action="{{ route('personajes.update', $personaje) }}" method="POST">
+    {{-- FORMULARIO PRINCIPAL --}}
+    <form action="{{ route('personajes.update', $personaje) }}" method="POST"
+          enctype="multipart/form-data" id="formPersonaje">
         @csrf
         @method('PUT')
 
         <div class="edit-body">
 
-            <!-- ====== INFORMACIÓN BÁSICA ====== -->
+            @if($errors->any())
+            <div style="background:rgba(179,3,3,0.12);border:1px solid rgba(179,3,3,0.4);border-radius:6px;padding:1rem 1.3rem;margin-bottom:1.5rem;">
+                <strong style="color:#cc4444">Errores de validación:</strong>
+                <ul style="margin:.5rem 0 0 1.2rem;color:#cc4444;font-size:.9rem">
+                    @foreach($errors->all() as $err)
+                        <li>{{ $err }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+
+            {{-- ======= INFORMACIÓN BÁSICA ======= --}}
             <div class="seccion">
-                <div class="seccion-titulo"><span class="icono">📋</span> Información Básica</div>
+                <div class="seccion-titulo">📋 Información Básica</div>
+
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Nombre <span class="required">*</span></label>
-                        <input type="text" name="nombre" class="form-control @error('nombre') error @enderror" value="{{ old('nombre', $personaje->nombre) }}" required>
-                        @error('nombre') <span class="error-text">{{ $message }}</span> @enderror
+                        <label>Nombre <span class="req">*</span></label>
+                        <input type="text" name="nombre" class="form-control @error('nombre') is-error @enderror"
+                               value="{{ old('nombre', $personaje->nombre) }}" required>
+                        @error('nombre') <span class="error-msg">{{ $message }}</span> @enderror
                     </div>
                     <div class="form-group">
-                        <label>Nivel <span class="required">*</span></label>
-                        <input type="number" name="nivel" class="form-control @error('nivel') error @enderror" value="{{ old('nivel', $personaje->nivel) }}" min="1" max="20" required>
-                        @error('nivel') <span class="error-text">{{ $message }}</span> @enderror
+                        <label>Nivel <span class="req">*</span></label>
+                        <input type="number" name="nivel" class="form-control @error('nivel') is-error @enderror"
+                               value="{{ old('nivel', $personaje->nivel) }}" min="1" max="20" required>
+                        @error('nivel') <span class="error-msg">{{ $message }}</span> @enderror
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Raza <span class="required">*</span></label>
-                        <select name="raza_id" class="form-control @error('raza_id') error @enderror" required>
-                            <option value="">Selecciona una raza</option>
+                        <label>Raza <span class="req">*</span></label>
+                        <select name="raza_id" class="form-control" required>
+                            <option value="">— Selecciona una raza —</option>
                             @foreach($razas as $raza)
-                                <option value="{{ $raza->id }}" {{ old('raza_id', $personaje->raza_id) == $raza->id ? 'selected' : '' }}>
-                                    {{ $raza->nombre }}
-                                </option>
+                            <option value="{{ $raza->id }}" {{ old('raza_id', $personaje->raza_id) == $raza->id ? 'selected' : '' }}>
+                                {{ $raza->nombre }}
+                            </option>
                             @endforeach
                         </select>
-                        @error('raza_id') <span class="error-text">{{ $message }}</span> @enderror
                     </div>
                     <div class="form-group">
-                        <label>Clase <span class="required">*</span></label>
-                        <select name="clase_id" class="form-control @error('clase_id') error @enderror" required>
-                            <option value="">Selecciona una clase</option>
+                        <label>Clase <span class="req">*</span></label>
+                        <select name="clase_id" class="form-control" required>
+                            <option value="">— Selecciona una clase —</option>
                             @foreach($clases as $clase)
-                                <option value="{{ $clase->id }}" {{ old('clase_id', $personaje->clase_id) == $clase->id ? 'selected' : '' }}>
-                                    {{ $clase->nombre }}
-                                </option>
+                            <option value="{{ $clase->id }}" {{ old('clase_id', $personaje->clase_id) == $clase->id ? 'selected' : '' }}>
+                                {{ $clase->nombre }}
+                            </option>
                             @endforeach
                         </select>
-                        @error('clase_id') <span class="error-text">{{ $message }}</span> @enderror
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Trasfondo</label>
+                        <select name="trasfondo_id" class="form-control">
+                            <option value="">— Sin trasfondo —</option>
+                            @foreach($trasfondos as $tf)
+                            <option value="{{ $tf->id }}" {{ old('trasfondo_id', $personaje->trasfondo_id) == $tf->id ? 'selected' : '' }}>
+                                {{ $tf->nombre }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Alineamiento</label>
+                        <select name="alineamiento" class="form-control">
+                            <option value="">— Sin alineamiento —</option>
+                            @foreach(['Legal Bueno','Neutral Bueno','Caótico Bueno','Legal Neutral','Neutral','Caótico Neutral','Legal Malvado','Neutral Malvado','Caótico Malvado'] as $al)
+                            <option value="{{ $al }}" {{ old('alineamiento', $personaje->alineamiento) == $al ? 'selected' : '' }}>
+                                {{ $al }}
+                            </option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
                         <label>Avatar (URL)</label>
-                        <input type="text" name="avatar" class="form-control @error('avatar') error @enderror" placeholder="https://ejemplo.com/imagen.jpg" value="{{ old('avatar', $personaje->avatar) }}">
-                        @error('avatar') <span class="error-text">{{ $message }}</span> @enderror
+                        <input type="url" name="avatar" class="form-control"
+                               placeholder="https://..." value="{{ old('avatar', $personaje->avatar) }}"
+                               onchange="document.getElementById('avatarPreview').src = this.value || '{{ $personaje->avatar_url }}'">
                         @if($personaje->avatar)
-                            <img src="{{ $personaje->avatar }}" alt="Avatar actual" class="avatar-preview">
+                        <img src="{{ $personaje->avatar }}" class="avatar-preview" alt="Avatar actual">
                         @endif
                     </div>
                     <div class="form-group">
-                        <label>Alineamiento</label>
-                        <select name="alineamiento" class="form-control @error('alineamiento') error @enderror">
-                            <option value="">Sin alineamiento</option>
-                            @foreach(['Legal Bueno','Neutral Bueno','Caótico Bueno','Legal Neutral','Neutral','Caótico Neutral','Legal Malvado','Neutral Malvado','Caótico Malvado'] as $al)
-                                <option value="{{ $al }}" {{ old('alineamiento', $personaje->alineamiento) == $al ? 'selected' : '' }}>{{ $al }}</option>
-                            @endforeach
-                        </select>
-                        @error('alineamiento') <span class="error-text">{{ $message }}</span> @enderror
+                        <label>Divinidad / Deidad</label>
+                        <input type="text" name="divinidad" class="form-control"
+                               placeholder="Ej: Torm, Selûne..." value="{{ old('divinidad', $personaje->divinidad) }}">
                     </div>
                 </div>
 
-                <div class="form-group historia-edit">
+                <div class="form-group">
                     <label>Historia del personaje</label>
-                    <textarea name="historia" class="form-control @error('historia') error @enderror" rows="5" placeholder="Cuenta la historia de tu héroe...">{{ old('historia', $personaje->historia) }}</textarea>
-                    @error('historia') <span class="error-text">{{ $message }}</span> @enderror
+                    <textarea name="historia" class="form-control" rows="4"
+                              placeholder="Cuenta el origen y motivaciones de tu héroe...">{{ old('historia', $personaje->historia) }}</textarea>
                 </div>
             </div>
 
-            <!-- ====== ESTADÍSTICAS ====== -->
+            {{-- ======= IMÁGENES ======= --}}
             <div class="seccion">
-                <div class="seccion-titulo"><span class="icono">🎯</span> Características</div>
-                <div class="stats-grid">
-                    @php
-                        $stats = ['FUE'=>'fuerza','DES'=>'destreza','CON'=>'constitucion','INT'=>'inteligencia','SAB'=>'sabiduria','CAR'=>'carisma'];
-                        $est = $personaje->estadisticas ?? null;
-                    @endphp
-                    @foreach($stats as $label => $attr)
-                        @php
-                            $valor = old($attr, $est ? ($est->$attr ?? 10) : 10);
-                            $mod = floor(($valor - 10) / 2);
-                            $modStr = $mod >= 0 ? '+' . $mod : $mod;
-                        @endphp
-                        <div class="stat-edit">
-                            <span class="label">{{ $label }}</span>
-                            <input type="number" name="{{ $attr }}" value="{{ $valor }}" min="1" max="30" required>
-                            <span class="mod">{{ $modStr }}</span>
-                            @error($attr) <span class="error-text">{{ $message }}</span> @enderror
+                <div class="seccion-titulo">🎨 Imágenes</div>
+
+                {{-- Imágenes del personaje --}}
+                <div class="form-group">
+                    <label>Imágenes del Personaje (máx. 5 — {{ count($imgsPersonaje) }}/5 actuales)</label>
+
+                    @if(count($imgsPersonaje) > 0)
+                    <div class="imgs-grid">
+                        @foreach($imgsPersonaje as $i => $img)
+                        <div class="img-existente">
+                            <img src="{{ Storage::url($img) }}" alt="Imagen {{ $i+1 }}">
+                            <form action="{{ route('personajes.eliminarImagen', $personaje) }}" method="POST" style="display:inline">
+                                @csrf
+                                <input type="hidden" name="tipo" value="personaje">
+                                <input type="hidden" name="index" value="{{ $i }}">
+                                <button type="submit" class="btn-del-img" onclick="return confirm('¿Eliminar imagen?')">✕</button>
+                            </form>
                         </div>
+                        @endforeach
+                    </div>
+                    @endif
+
+                    @if(count($imgsPersonaje) < 5)
+                    <div class="upload-zone" onclick="document.getElementById('uploadPersonaje').click()">
+                        <input type="file" id="uploadPersonaje" name="imagenes_personaje[]"
+                               multiple accept="image/jpeg,image/png,image/webp"
+                               onchange="previewImgs(this, 'previewP', {{ 5 - count($imgsPersonaje) }})">
+                        <div class="upload-label">
+                            📁 <span>Selecciona imágenes</span> — JPG, PNG, WEBP · Máx. 2MB por imagen
+                        </div>
+                    </div>
+                    <div id="previewP" class="imgs-grid"></div>
+                    @else
+                    <p style="color:#768596;font-size:.85rem;margin-top:.4rem">Has alcanzado el límite de 5 imágenes. Elimina alguna para añadir más.</p>
+                    @endif
+                </div>
+
+                {{-- Imágenes de armas --}}
+                <div class="form-group">
+                    <label>Imágenes de Armas (máx. 5 — {{ count($imgsArmas) }}/5 actuales)</label>
+
+                    @if(count($imgsArmas) > 0)
+                    <div class="imgs-grid">
+                        @foreach($imgsArmas as $i => $img)
+                        <div class="img-existente">
+                            <img src="{{ Storage::url($img) }}" alt="Arma {{ $i+1 }}">
+                            <form action="{{ route('personajes.eliminarImagen', $personaje) }}" method="POST" style="display:inline">
+                                @csrf
+                                <input type="hidden" name="tipo" value="arma">
+                                <input type="hidden" name="index" value="{{ $i }}">
+                                <button type="submit" class="btn-del-img" onclick="return confirm('¿Eliminar imagen?')">✕</button>
+                            </form>
+                        </div>
+                        @endforeach
+                    </div>
+                    @endif
+
+                    @if(count($imgsArmas) < 5)
+                    <div class="upload-zone" onclick="document.getElementById('uploadArmas').click()">
+                        <input type="file" id="uploadArmas" name="imagenes_armas[]"
+                               multiple accept="image/jpeg,image/png,image/webp"
+                               onchange="previewImgs(this, 'previewA', {{ 5 - count($imgsArmas) }})">
+                        <div class="upload-label">
+                            ⚔️ <span>Selecciona imágenes de armas</span> — JPG, PNG, WEBP · Máx. 2MB
+                        </div>
+                    </div>
+                    <div id="previewA" class="imgs-grid"></div>
+                    @endif
+                </div>
+            </div>
+
+            {{-- ======= ESTADÍSTICAS ======= --}}
+            <div class="seccion">
+                <div class="seccion-titulo">🎯 Características</div>
+                <div class="stats-grid">
+                    @foreach($statsMap as $label => $attr)
+                    @php
+                        $val    = old($attr, $est ? ($est->$attr ?? 10) : 10);
+                        $mod    = floor(($val - 10) / 2);
+                        $modStr = $mod >= 0 ? '+' . $mod : (string)$mod;
+                    @endphp
+                    <div class="stat-edit">
+                        <span class="stat-label">{{ $label }}</span>
+                        <input type="number" name="{{ $attr }}" class="stat-input"
+                               value="{{ $val }}" min="1" max="30" required
+                               oninput="actualizarMod(this)">
+                        <span class="stat-mod" id="mod-{{ $attr }}">{{ $modStr }}</span>
+                        @error($attr) <span class="error-msg" style="font-size:.72rem">{{ $message }}</span> @enderror
+                    </div>
                     @endforeach
                 </div>
             </div>
 
-            <!-- ====== COMBATE ====== -->
-            @if($est)
+            {{-- ======= TIRADAS DE SALVACIÓN ======= --}}
             <div class="seccion">
-                <div class="seccion-titulo"><span class="icono">⚔️</span> Combate</div>
-                <div class="info-grid-edit">
-                    <div class="info-edit">
-                        <label>❤️ Puntos de Golpe</label>
-                        <input type="number" name="pg_actuales" value="{{ old('pg_actuales', $est->pg_actuales ?? 10) }}" min="0">
-                        <input type="number" name="pg_maximos" value="{{ old('pg_maximos', $est->pg_maximos ?? 10) }}" min="1" style="margin-top:0.3rem;" placeholder="Máximos">
+                <div class="seccion-titulo">🛡️ Competencia en Tiradas de Salvación</div>
+                <div class="check-grid">
+                    @foreach($statsMap as $label => $attr)
+                    <label class="check-item">
+                        <input type="checkbox" name="competencias_salvaciones[]"
+                               value="{{ $attr }}"
+                               {{ in_array($attr, $compSal) ? 'checked' : '' }}>
+                        <span>{{ $label }} — {{ ucfirst($attr) }}</span>
+                    </label>
+                    @endforeach
+                </div>
+                <input type="hidden" name="competencias_salvaciones"
+                       id="hiddenSal" value="{{ old('competencias_salvaciones', $personaje->competencias_salvaciones ?? '[]') }}">
+            </div>
+
+            {{-- ======= HABILIDADES ======= --}}
+            <div class="seccion">
+                <div class="seccion-titulo">📋 Competencia en Habilidades</div>
+                <div class="check-grid">
+                    @foreach($habilidades as $nombre => $base)
+                    <label class="check-item">
+                        <input type="checkbox" name="competencias_habilidades[]"
+                               value="{{ $nombre }}"
+                               {{ in_array($nombre, $compHab) ? 'checked' : '' }}>
+                        <span>{{ $nombre }} <span style="opacity:.5;font-size:.8em">({{ strtoupper(substr($base,0,3)) }})</span></span>
+                    </label>
+                    @endforeach
+                </div>
+                <input type="hidden" name="competencias_habilidades"
+                       id="hiddenHab" value="{{ old('competencias_habilidades', $personaje->competencias_habilidades ?? '[]') }}">
+            </div>
+
+            {{-- ======= COMBATE ======= --}}
+            <div class="seccion">
+                <div class="seccion-titulo">⚔️ Combate</div>
+                <div class="combat-grid">
+                    @php $est = $personaje->estadisticas; @endphp
+                    <div class="combat-field">
+                        <label>❤️ PG Actuales</label>
+                        <input type="number" name="pg_actuales"
+                               value="{{ old('pg_actuales', $est->pg_actuales ?? 10) }}" min="0">
                     </div>
-                    <div class="info-edit">
+                    <div class="combat-field">
+                        <label>❤️ PG Máximos</label>
+                        <input type="number" name="pg_maximos"
+                               value="{{ old('pg_maximos', $est->pg_maximos ?? 10) }}" min="1">
+                    </div>
+                    <div class="combat-field">
+                        <label>💙 PG Temporales</label>
+                        <input type="number" name="pg_temporales"
+                               value="{{ old('pg_temporales', $est->pg_temporales ?? 0) }}" min="0">
+                    </div>
+                    <div class="combat-field">
                         <label>🛡️ Clase de Armadura</label>
-                        <input type="number" name="clase_de_armadura" value="{{ old('clase_de_armadura', $est->clase_de_armadura ?? 10) }}" min="0">
+                        <input type="number" name="clase_de_armadura"
+                               value="{{ old('clase_de_armadura', $est->clase_de_armadura ?? 10) }}" min="0">
                     </div>
-                    <div class="info-edit">
-                        <label>⚡ Velocidad</label>
-                        <input type="number" name="velocidad" value="{{ old('velocidad', $est->velocidad ?? 30) }}" min="0">
+                    <div class="combat-field">
+                        <label>⚡ Velocidad (ft)</label>
+                        <input type="number" name="velocidad"
+                               value="{{ old('velocidad', $est->velocidad ?? 30) }}" min="0">
                     </div>
-                    <div class="info-edit">
+                    <div class="combat-field">
                         <label>🎯 Bonus Competencia</label>
-                        <input type="number" name="bonus_competencia" value="{{ old('bonus_competencia', $est->bonus_competencia ?? 2) }}" min="0" max="6">
+                        <input type="number" name="bonus_competencia"
+                               value="{{ old('bonus_competencia', $est->bonus_competencia ?? 2) }}" min="0" max="6">
                     </div>
-                    <div class="info-edit">
-                        <label>⚔️ Iniciativa</label>
-                        <input type="number" name="iniciativa" value="{{ old('iniciativa', $est->iniciativa ?? 0) }}" min="0" max="20">
+                    <div class="combat-field">
+                        <label>⚔️ Iniciativa (mod)</label>
+                        <input type="number" name="iniciativa"
+                               value="{{ old('iniciativa', $est->iniciativa ?? '') }}"
+                               placeholder="Auto">
+                    </div>
+                    <div class="combat-field">
+                        <label>🎲 Dados de Golpe disponibles</label>
+                        <input type="number" name="dados_golpe_disponibles"
+                               value="{{ old('dados_golpe_disponibles', $est->dados_golpe_disponibles ?? '') }}" min="0">
+                    </div>
+                </div>
+
+                {{-- Muerte / inspiración --}}
+                <div style="margin-top:1.2rem;display:flex;gap:2rem;flex-wrap:wrap;align-items:center">
+                    <div>
+                        <label style="color:#768596;font-size:.75rem;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:.5rem">✔ Éxitos de muerte</label>
+                        <input type="number" name="exitos_muerte" min="0" max="3"
+                               value="{{ old('exitos_muerte', $est->exitos_muerte ?? 0) }}"
+                               style="width:70px;padding:.4rem;background:rgba(0,0,0,.3);border:1px solid rgba(118,133,150,.25);border-radius:5px;color:#fff;text-align:center;font-size:1.1rem">
+                    </div>
+                    <div>
+                        <label style="color:#768596;font-size:.75rem;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:.5rem">✖ Fallos de muerte</label>
+                        <input type="number" name="fallos_muerte" min="0" max="3"
+                               value="{{ old('fallos_muerte', $est->fallos_muerte ?? 0) }}"
+                               style="width:70px;padding:.4rem;background:rgba(0,0,0,.3);border:1px solid rgba(118,133,150,.25);border-radius:5px;color:#fff;text-align:center;font-size:1.1rem">
+                    </div>
+                    <div style="margin-top:auto">
+                        <label class="check-item">
+                            <input type="checkbox" name="inspiracion" value="1"
+                                   {{ old('inspiracion', $est->inspiracion ?? false) ? 'checked' : '' }}>
+                            <span>✨ Inspiración activa</span>
+                        </label>
                     </div>
                 </div>
             </div>
-            @endif
 
-            <!-- ====== EQUIPO (editable) ====== -->
+            {{-- ======= ATAQUES ======= --}}
             <div class="seccion">
-                <div class="seccion-titulo"><span class="icono">⚔️</span> Equipo</div>
+                <div class="seccion-titulo">⚔️ Ataques y Conjuros</div>
+                <div style="font-size:.78rem;color:#768596;margin-bottom:.8rem">Nombre · Bonificador de ataque · Daño/Tipo</div>
 
-                @if($personaje->equipo && $personaje->equipo->count() > 0)
-                    <div class="equipo-grid">
-                        @foreach($personaje->equipo as $item)
-                            <div class="equipo-item">
-                                <span class="nombre">{{ $item->nombre }}</span>
-                                @if($item->equipado)
-                                    <span class="badge-equipado">✓ Equipado</span>
-                                @endif
-                                <div class="detalle">{{ $item->tipo }} @if($item->magico) ✨ Mágico @endif</div>
-                                @if($item->cantidad > 1) <div class="detalle">x{{ $item->cantidad }}</div> @endif
-                                @if($item->valor_po) <div class="detalle">💰 {{ $item->valor_po }} PO</div> @endif
-                                @if($item->peso) <div class="detalle">⚖️ {{ $item->peso }} lb</div> @endif
-                                @if($item->descripcion) <div class="detalle" style="font-size:0.8rem;margin-top:0.3rem;">{{ $item->descripcion }}</div> @endif
-                                <form action="{{ route('equipo.destroy', ['personaje' => $personaje, 'equipo' => $item]) }}" method="POST">
-                                    @csrf @method('DELETE')
-                                    <button type="submit" class="eliminar-btn" onclick="return confirm('¿Eliminar {{ $item->nombre }}?')">✕</button>
-                                </form>
-                            </div>
-                        @endforeach
+                <div class="ataques-lista" id="ataquesList">
+                    @foreach($ataques as $i => $ataque)
+                    <div class="ataque-row">
+                        <input type="text" name="ataque_nombre[]"
+                               value="{{ $ataque['nombre'] ?? '' }}" placeholder="Nombre del ataque">
+                        <input type="text" name="ataque_bonif[]"
+                               value="{{ $ataque['bonificador'] ?? '' }}" placeholder="+5">
+                        <input type="text" name="ataque_dano[]"
+                               value="{{ $ataque['daño'] ?? '' }}" placeholder="1d8+3 cortante">
+                        <button type="button" class="btn-del-ataque" onclick="this.closest('.ataque-row').remove()">✕</button>
                     </div>
-                @else
-                    <p style="color: var(--color-gris);">No tiene equipo.</p>
-                @endif
+                    @endforeach
+                </div>
 
-                <!-- Formulario para añadir equipo -->
-                <div class="form-equipo">
-                    <h4 style="color:var(--color-gris); margin:0 0 1rem 0;">➕ Añadir equipo</h4>
-                    <form action="{{ route('equipo.store', $personaje) }}" method="POST">
-                        @csrf
-                        <div class="grid">
-                            <input type="text" name="nombre" placeholder="Nombre *" required>
-                            <input type="text" name="tipo" placeholder="Tipo (arma, armadura...)" required>
-                            <input type="text" name="rareza" placeholder="Rareza (común, raro...)">
-                            <input type="number" name="cantidad" placeholder="Cantidad" value="1" min="1">
-                            <input type="number" name="valor_po" placeholder="Valor en PO">
-                            <input type="number" name="peso" placeholder="Peso (lb)" step="0.01">
-                            <textarea name="descripcion" placeholder="Descripción" rows="2" class="full-width"></textarea>
-                            <div class="checkbox-group">
-                                <label><input type="checkbox" name="magico" value="1"> Mágico</label>
-                                <label><input type="checkbox" name="equipado" value="1"> Equipado</label>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn-agregar-equipo">➕ Añadir</button>
-                    </form>
+                <button type="button" class="btn-add-ataque" onclick="addAtaque()">➕ Añadir ataque</button>
+                <input type="hidden" name="ataques" id="ataquesHidden">
+            </div>
+
+            {{-- ======= PERSONALIDAD ======= --}}
+            <div class="seccion">
+                <div class="seccion-titulo">💭 Personalidad</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Rasgos de personalidad</label>
+                        <textarea name="rasgos_personalidad" class="form-control" rows="3"
+                                  placeholder="¿Cómo se comporta tu personaje?">{{ old('rasgos_personalidad', $personaje->rasgos_personalidad) }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Ideales</label>
+                        <textarea name="ideales" class="form-control" rows="3"
+                                  placeholder="¿En qué cree tu personaje?">{{ old('ideales', $personaje->ideales) }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Vínculos</label>
+                        <textarea name="vinculos" class="form-control" rows="3"
+                                  placeholder="¿Qué conecta a tu personaje con el mundo?">{{ old('vinculos', $personaje->vinculos) }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Defectos</label>
+                        <textarea name="defectos" class="form-control" rows="3"
+                                  placeholder="¿Cuál es la debilidad de tu personaje?">{{ old('defectos', $personaje->defectos) }}</textarea>
+                    </div>
                 </div>
             </div>
 
-            <!-- ====== MONEDAS (editable) ====== -->
+            {{-- ======= APARIENCIA ======= --}}
             <div class="seccion">
-                <div class="seccion-titulo"><span class="icono">💰</span> Tesoro</div>
-
-                @if($est)
-                    <div class="monedas-grid">
-                        <div class="moneda-edit">
-                            <span class="simbolo">🟤</span>
-                            <input type="number" name="monedas_cobre_show" value="{{ $est->monedas_cobre ?? 0 }}" disabled style="opacity:0.6; cursor:not-allowed;">
-                        </div>
-                        <div class="moneda-edit">
-                            <span class="simbolo">⚪</span>
-                            <input type="number" name="monedas_plata_show" value="{{ $est->monedas_plata ?? 0 }}" disabled style="opacity:0.6; cursor:not-allowed;">
-                        </div>
-                        <div class="moneda-edit">
-                            <span class="simbolo">🟡</span>
-                            <input type="number" name="monedas_electrum_show" value="{{ $est->monedas_electrum ?? 0 }}" disabled style="opacity:0.6; cursor:not-allowed;">
-                        </div>
-                        <div class="moneda-edit">
-                            <span class="simbolo">🟠</span>
-                            <input type="number" name="monedas_oro_show" value="{{ $est->monedas_oro ?? 0 }}" disabled style="opacity:0.6; cursor:not-allowed;">
-                        </div>
-                        <div class="moneda-edit">
-                            <span class="simbolo">⚫</span>
-                            <input type="number" name="monedas_platino_show" value="{{ $est->monedas_platino ?? 0 }}" disabled style="opacity:0.6; cursor:not-allowed;">
-                        </div>
+                <div class="seccion-titulo">🧍 Apariencia</div>
+                <div class="form-row-3">
+                    @foreach(['edad' => 'Edad', 'altura' => 'Altura', 'peso' => 'Peso', 'ojos' => 'Ojos', 'piel' => 'Piel', 'pelo' => 'Pelo'] as $campo => $etiq)
+                    <div class="form-group">
+                        <label>{{ $etiq }}</label>
+                        <input type="text" name="{{ $campo }}" class="form-control"
+                               value="{{ old($campo, $personaje->$campo) }}">
                     </div>
-
-                    <div class="form-moneda">
-                        <h4 style="color:var(--color-gris); margin:0 0 1rem 0;">💱 Actualizar monedas</h4>
-                        <form action="{{ route('personajes.actualizar_monedas', $personaje) }}" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <div class="grid">
-                                <div>
-                                    <label>Cobre</label>
-                                    <input type="number" name="monedas_cobre" value="{{ old('monedas_cobre', $est->monedas_cobre ?? 0) }}" min="0">
-                                </div>
-                                <div>
-                                    <label>Plata</label>
-                                    <input type="number" name="monedas_plata" value="{{ old('monedas_plata', $est->monedas_plata ?? 0) }}" min="0">
-                                </div>
-                                <div>
-                                    <label>Electrum</label>
-                                    <input type="number" name="monedas_electrum" value="{{ old('monedas_electrum', $est->monedas_electrum ?? 0) }}" min="0">
-                                </div>
-                                <div>
-                                    <label>Oro</label>
-                                    <input type="number" name="monedas_oro" value="{{ old('monedas_oro', $est->monedas_oro ?? 0) }}" min="0">
-                                </div>
-                                <div>
-                                    <label>Platino</label>
-                                    <input type="number" name="monedas_platino" value="{{ old('monedas_platino', $est->monedas_platino ?? 0) }}" min="0">
-                                </div>
-                            </div>
-                            <button type="submit" class="btn-actualizar-moneda">💾 Actualizar monedas</button>
-                        </form>
-                    </div>
-                @else
-                    <p style="color:var(--color-gris);">No hay información de monedas.</p>
-                @endif
+                    @endforeach
+                </div>
+                <div class="form-group">
+                    <label>Idiomas que habla</label>
+                    <input type="text" name="idiomas" class="form-control"
+                           placeholder="Común, Élfico, Enano..."
+                           value="{{ old('idiomas', $personaje->idiomas) }}">
+                </div>
             </div>
 
-            <!-- ====== BOTONES DE ACCIÓN ====== -->
+            {{-- BOTONES --}}
             <div class="form-actions">
                 <a href="{{ route('personajes.show', $personaje) }}" class="btn-cancel">❌ Cancelar</a>
-                <button type="submit" class="btn-submit">💾 Actualizar Personaje</button>
+                <button type="submit" class="btn-save">💾 Guardar Personaje</button>
             </div>
 
-        </div><!-- /.edit-body -->
+        </div>{{-- /.edit-body --}}
     </form>
-</div><!-- /.edit-wrapper -->
+
+    {{-- ======= EQUIPO (formulario separado) ======= --}}
+    <div class="edit-body" style="padding-top:0">
+        <div class="seccion">
+            <div class="seccion-titulo">🎒 Equipo</div>
+
+            @if($personaje->equipo && $personaje->equipo->count() > 0)
+            <div class="equipo-existente">
+                @foreach($personaje->equipo as $item)
+                <div class="equipo-item">
+                    <span class="equipo-nombre">{{ $item->nombre }}
+                        @if($item->equipado) <span style="color:#9ab090;font-size:.75rem;margin-left:.3rem">✓</span> @endif
+                    </span>
+                    <div class="equipo-det">{{ $item->tipo }}@if($item->magico) · ✨ Mágico @endif</div>
+                    @if($item->cantidad > 1) <div class="equipo-det">×{{ $item->cantidad }}</div> @endif
+                    @if($item->valor_po)     <div class="equipo-det">💰 {{ $item->valor_po }} PO</div> @endif
+                    <form action="{{ route('equipo.destroy', ['personaje' => $personaje, 'equipo' => $item]) }}" method="POST" style="display:inline">
+                        @csrf @method('DELETE')
+                        <button type="submit" class="btn-del-equipo"
+                                onclick="return confirm('¿Eliminar {{ addslashes($item->nombre) }}?')">✕</button>
+                    </form>
+                </div>
+                @endforeach
+            </div>
+            @else
+            <p style="color:#768596;margin-bottom:1rem">No hay equipo todavía.</p>
+            @endif
+
+            <div class="form-equipo">
+                <h4>➕ Añadir objeto</h4>
+                <form action="{{ route('equipo.store', $personaje) }}" method="POST">
+                    @csrf
+                    <div class="equipo-inputs">
+                        <input type="text" name="nombre" placeholder="Nombre *" required>
+                        <input type="text" name="tipo" placeholder="Tipo (arma, armadura, objeto...)" required>
+                        <input type="text" name="rareza" placeholder="Rareza (común, poco común, raro...)">
+                        <input type="number" name="cantidad" placeholder="Cantidad" value="1" min="1">
+                        <input type="number" name="valor_po" placeholder="Valor en PO" min="0">
+                        <input type="number" name="peso" placeholder="Peso (lb)" step="0.1" min="0">
+                        <textarea name="descripcion" placeholder="Descripción breve..." rows="2" class="full"></textarea>
+                        <div class="checks">
+                            <label class="check-item">
+                                <input type="checkbox" name="magico" value="1"> <span>✨ Mágico</span>
+                            </label>
+                            <label class="check-item">
+                                <input type="checkbox" name="equipado" value="1"> <span>✓ Equipado</span>
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-add-equipo">➕ Añadir al inventario</button>
+                </form>
+            </div>
+        </div>
+
+        {{-- ======= MONEDAS (formulario separado) ======= --}}
+        <div class="seccion">
+            <div class="seccion-titulo">💰 Tesoro</div>
+            <form action="{{ route('personajes.actualizar_monedas', $personaje) }}" method="POST">
+                @csrf @method('PUT')
+                @php $est = $personaje->estadisticas; @endphp
+                <div class="monedas-form-grid">
+                    @foreach(['cobre' => ['🟤', 'Cobre'], 'plata' => ['⚪', 'Plata'], 'electrum' => ['🟡', 'Electrum'], 'oro' => ['🟠', 'Oro'], 'platino' => ['⚫', 'Platino']] as $tipo => [$sim, $etiq])
+                    <div class="moneda-field">
+                        <span class="simbolo">{{ $sim }}</span>
+                        <label>{{ $etiq }}</label>
+                        <input type="number" name="monedas_{{ $tipo }}"
+                               value="{{ old('monedas_' . $tipo, $est ? ($est->{'monedas_' . $tipo} ?? 0) : 0) }}" min="0">
+                    </div>
+                    @endforeach
+                </div>
+                <button type="submit" class="btn-monedas">💾 Actualizar monedas</button>
+            </form>
+        </div>
+    </div>
+
+</div>{{-- /.edit-wrapper --}}
+
+<script>
+/* ===== Modificador automático al cambiar stats ===== */
+function actualizarMod(input) {
+    const val  = parseInt(input.value) || 10;
+    const mod  = Math.floor((val - 10) / 2);
+    const str  = mod >= 0 ? '+' + mod : String(mod);
+    const span = document.getElementById('mod-' + input.name);
+    if (span) span.textContent = str;
+}
+
+/* ===== Preview de imágenes antes de subir ===== */
+function previewImgs(input, containerId, max) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    const files = Array.from(input.files).slice(0, max);
+
+    // Actualizar el input con solo los archivos permitidos
+    const dt = new DataTransfer();
+    files.forEach(f => dt.items.add(f));
+    input.files = dt.files;
+
+    files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = e => {
+            const div = document.createElement('div');
+            div.className = 'img-existente';
+            div.innerHTML = `<img src="${e.target.result}" alt="preview">`;
+            container.appendChild(div);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+/* ===== Añadir fila de ataque ===== */
+function addAtaque() {
+    const row = document.createElement('div');
+    row.className = 'ataque-row';
+    row.innerHTML = `
+        <input type="text" name="ataque_nombre[]" placeholder="Nombre del ataque">
+        <input type="text" name="ataque_bonif[]" placeholder="+5">
+        <input type="text" name="ataque_dano[]" placeholder="1d8+3 cortante">
+        <button type="button" class="btn-del-ataque" onclick="this.closest('.ataque-row').remove()">✕</button>
+    `;
+    document.getElementById('ataquesList').appendChild(row);
+}
+
+/* ===== Serializar ataques antes de enviar ===== */
+document.getElementById('formPersonaje').addEventListener('submit', function () {
+    const nombres = [...document.querySelectorAll('input[name="ataque_nombre[]"]')].map(i => i.value);
+    const bonifs  = [...document.querySelectorAll('input[name="ataque_bonif[]"]')].map(i => i.value);
+    const danos   = [...document.querySelectorAll('input[name="ataque_dano[]"]')].map(i => i.value);
+
+    const ataques = nombres.map((n, i) => ({
+        nombre: n,
+        bonificador: bonifs[i],
+        daño: danos[i],
+    })).filter(a => a.nombre);
+
+    document.getElementById('ataquesHidden').value = JSON.stringify(ataques);
+
+    // Serializar competencias desde checkboxes
+    const habChecked = [...document.querySelectorAll('input[name="competencias_habilidades[]"]:checked')].map(c => c.value);
+    document.getElementById('hiddenHab').value = JSON.stringify(habChecked);
+
+    const salChecked = [...document.querySelectorAll('input[name="competencias_salvaciones[]"]:checked')].map(c => c.value);
+    document.getElementById('hiddenSal').value = JSON.stringify(salChecked);
+});
+</script>
 @endsection

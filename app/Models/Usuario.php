@@ -38,11 +38,10 @@ class Usuario extends Authenticatable
         ];
     }
 
-<<<<<<< HEAD
     // Relaciones
     public function personajes()
     {
-        return $this->hasMany(Personaje::class);
+        return $this->hasMany(Personaje::class, 'usuario_id');
     }
 
     public function posts()
@@ -69,16 +68,4 @@ class Usuario extends Authenticatable
     {
         return $this->hasMany(Campana::class, 'dungeon_master_id');
     }
-=======
-    public function personajes()
-{
-    return $this->hasMany(\App\Models\Personaje::class, 'usuario_id');
-}
-
-public function campanas()
-{
-    return $this->hasMany(\App\Models\Campana::class, 'dungeon_master_id');
-}
-
->>>>>>> origin/feature/perfil-campanyas-enemigos
 }

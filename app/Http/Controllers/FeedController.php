@@ -11,9 +11,15 @@ class FeedController extends Controller
 {
     public function index()
     {
-        $posts = Post::with(['usuario', 'comentarios' => function($query) {
-                $query->whereNull('parent_id')->with(['usuario', 'respuestas.usuario', 'likes']);
-            }, 'likes'])
+        $posts = Post::with([
+                'usuario',
+                'comentarios' => function ($query) {
+                    $query->whereNull('parent_id')
+                          ->with(['usuario', 'respuestas.usuario', 'likes'])
+                          ->latest();
+                },
+                'likes',
+            ])
             ->withCount('likes')
             ->latest()
             ->get();
@@ -28,32 +34,10 @@ class FeedController extends Controller
             'etiquetas' => 'nullable|json',
         ]);
 
-        $etiquetas = json_decode($request->etiquetas, true) ?? [];
-
-        // OBTENER EL USUARIO ACTUAL O USAR EL PRIMERO DISPONIBLE
-        $userId = auth()->id();
-        
-        // Si no hay usuario autenticado, usar el primer usuario de la base de datos
-        if (!$userId) {
-            $firstUser = \App\Models\Usuario::first();
-            if ($firstUser) {
-                $userId = $firstUser->id;
-            } else {
-                // Si no hay usuarios, crear uno por defecto
-                $user = \App\Models\Usuario::create([
-                    'nombre' => 'Aventurero Anónimo',
-                    'email' => 'anonimo@dungeons.com',
-                    'password' => bcrypt('password'),
-                    'rol' => 'jugador',
-                ]);
-                $userId = $user->id;
-            }
-        }
-
         Post::create([
-            'user_id' => $userId,
+            'user_id'   => auth()->id(),
             'contenido' => $request->contenido,
-            'etiquetas' => $etiquetas,
+            'etiquetas' => json_decode($request->etiquetas, true) ?? [],
         ]);
 
         return back()->with('success', '¡Tu hazaña ha sido publicada en la taberna!');
@@ -62,22 +46,14 @@ class FeedController extends Controller
     public function storeComentario(Request $request)
     {
         $request->validate([
-            'post_id' => 'required|exists:posts,id',
+            'post_id'   => 'required|exists:posts,id',
             'contenido' => 'required|string|max:500',
             'parent_id' => 'nullable|exists:comentarios,id',
         ]);
 
-        // OBTENER EL USUARIO ACTUAL O USAR EL PRIMERO DISPONIBLE
-        $userId = auth()->id();
-        
-        if (!$userId) {
-            $firstUser = \App\Models\Usuario::first();
-            $userId = $firstUser ? $firstUser->id : 1;
-        }
-
         Comentario::create([
-            'user_id' => $userId,
-            'post_id' => $request->post_id,
+            'user_id'   => auth()->id(),
+            'post_id'   => $request->post_id,
             'parent_id' => $request->parent_id,
             'contenido' => $request->contenido,
         ]);
@@ -88,16 +64,11 @@ class FeedController extends Controller
     public function toggleLike(Request $request)
     {
         $request->validate([
-            'id' => 'required|integer',
+            'id'   => 'required|integer',
             'type' => 'required|string|in:App\Models\Post,App\Models\Comentario',
         ]);
-        
+
         $userId = auth()->id();
-        
-        if (!$userId) {
-            $firstUser = \App\Models\Usuario::first();
-            $userId = $firstUser ? $firstUser->id : 1;
-        }
 
         $like = Like::where('user_id', $userId)
                     ->where('likeable_id', $request->id)
@@ -109,8 +80,8 @@ class FeedController extends Controller
             $message = 'Like eliminado';
         } else {
             Like::create([
-                'user_id' => $userId,
-                'likeable_id' => $request->id,
+                'user_id'       => $userId,
+                'likeable_id'   => $request->id,
                 'likeable_type' => $request->type,
             ]);
             $message = 'Like añadido';
@@ -118,9 +89,13 @@ class FeedController extends Controller
 
         if ($request->ajax()) {
             $count = Like::where('likeable_id', $request->id)
-                        ->where('likeable_type', $request->type)
-                        ->count();
-            return response()->json(['success' => true, 'count' => $count, 'message' => $message]);
+                         ->where('likeable_type', $request->type)
+                         ->count();
+            return response()->json([
+                'success' => true,
+                'count'   => $count,
+                'message' => $message,
+            ]);
         }
 
         return back();

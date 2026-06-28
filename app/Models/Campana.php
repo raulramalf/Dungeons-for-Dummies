@@ -22,7 +22,7 @@ class Campana extends Model
 
     public function dungeonMaster()
     {
-        return $this->belongsTo(User::class, 'dungeon_master_id');
+        return $this->belongsTo(Usuario::class, 'dungeon_master_id');
     }
 
     public function personajes()
