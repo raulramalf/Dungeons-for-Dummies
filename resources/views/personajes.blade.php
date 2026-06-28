@@ -1,73 +1,106 @@
 @extends('layouts.app')
 
-@section('titulo', 'Personajes')
+@section('titulo', 'Ficha de ' . $personaje->nombre)
 
 @section('contenido')
-
-<div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
-    <p style="color: var(--color-gris); font-size: 0.9rem;">Gestiona tus personajes</p>
-    <button style="background: var(--color-rojo); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-family: Georgia, serif;">+ Nuevo Personaje</button>
-</div>
-
-<!-- MIS PERSONAJES -->
-<section style="margin-bottom: 40px;">
-    <h2 style="color: var(--color-gris); font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 15px;">Mis Personajes</h2>
-    <div style="display: flex; flex-direction: column; gap: 12px;">
-
-        <div style="background: #2a0a18; border-radius: 10px; padding: 20px; display: flex; align-items: center; gap: 20px; cursor: pointer; transition: background 0.2s;">
-            <div style="width: 55px; height: 55px; border-radius: 50%; background: var(--color-rojo); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; flex-shrink: 0;">A</div>
-            <div style="flex: 1;">
-                <div style="font-weight: bold; font-size: 1.1rem;">Arathorn</div>
-                <div style="color: var(--color-gris); font-size: 0.85rem; margin-top: 3px;">Guerrero · Humano · Caótico Bueno</div>
-                <div style="margin-top: 8px; display: flex; gap: 8px;">
-                    <span style="background: var(--color-verde); padding: 2px 8px; border-radius: 4px; font-size: 0.75rem;">Nivel 5</span>
-                    <span style="background: rgba(179,3,3,0.2); color: var(--color-rojo); padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; border: 1px solid var(--color-rojo);">Activo</span>
-                </div>
-            </div>
-            <div style="text-align: right; color: var(--color-gris); font-size: 0.85rem;">
-                <div>HP <span style="color: white;">42/52</span></div>
-                <div>CA <span style="color: white;">16</span></div>
-                <div>Init <span style="color: white;">+2</span></div>
-            </div>
-        </div>
-
-        <div style="background: #2a0a18; border-radius: 10px; padding: 20px; display: flex; align-items: center; gap: 20px; cursor: pointer;">
-            <div style="width: 55px; height: 55px; border-radius: 50%; background: var(--color-verde); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; flex-shrink: 0;">Z</div>
-            <div style="flex: 1;">
-                <div style="font-weight: bold; font-size: 1.1rem;">Zyla Darkwhisper</div>
-                <div style="color: var(--color-gris); font-size: 0.85rem; margin-top: 3px;">Maga · Elfa de la Luna · Neutral</div>
-                <div style="margin-top: 8px; display: flex; gap: 8px;">
-                    <span style="background: var(--color-verde); padding: 2px 8px; border-radius: 4px; font-size: 0.75rem;">Nivel 3</span>
-                    <span style="background: rgba(179,3,3,0.2); color: var(--color-rojo); padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; border: 1px solid var(--color-rojo);">Activo</span>
-                </div>
-            </div>
-            <div style="text-align: right; color: var(--color-gris); font-size: 0.85rem;">
-                <div>HP <span style="color: white;">18/18</span></div>
-                <div>CA <span style="color: white;">13</span></div>
-                <div>Init <span style="color: white;">+3</span></div>
-            </div>
-        </div>
-
-    </div>
-</section>
-
-<!-- PERSONAJES ARCHIVADOS -->
-<section>
-    <h2 style="color: var(--color-gris); font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 15px;">Archivados</h2>
-    <div style="background: #2a0a18; border-radius: 10px; padding: 20px; display: flex; align-items: center; gap: 20px; opacity: 0.6;">
-        <div style="width: 55px; height: 55px; border-radius: 50%; background: var(--color-gris); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; flex-shrink: 0;">K</div>
-        <div style="flex: 1;">
-            <div style="font-weight: bold;">Kryx el Sombrío</div>
-            <div style="color: var(--color-gris); font-size: 0.85rem; margin-top: 3px;">Pícaro · Semiorco · Nivel 7</div>
-        </div>
-        <span style="color: var(--color-gris); font-size: 0.8rem; border: 1px solid var(--color-gris); padding: 2px 10px; border-radius: 20px;">Archivado</span>
-    </div>
-</section>
-
 <style>
-    @media (max-width: 600px) {
-        .stats-personaje { display: none; }
+    .ficha-container {
+        max-width: 900px;
+        margin: 0 auto;
+        background-color: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(179, 3, 3, 0.3);
+        border-radius: 8px;
+        overflow: hidden;
     }
+    .ficha-header {
+        display: flex;
+        flex-wrap: wrap;
+        background-color: rgba(0, 0, 0, 0.4);
+        border-bottom: 2px solid var(--color-rojo);
+    }
+    .ficha-avatar {
+        width: 250px;
+        height: 300px;
+        object-fit: cover;
+        border-right: 2px solid var(--color-rojo);
+    }
+    .ficha-info-principal {
+        padding: 2rem;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .ficha-nombre {
+        font-size: 2.5rem;
+        color: #fff;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
+    .ficha-clase-raza {
+        font-size: 1.2rem;
+        color: var(--color-naranja);
+        margin-bottom: 1.5rem;
+    }
+    .ficha-nivel-box {
+        display: inline-block;
+        background-color: var(--color-rojo);
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+    .ficha-cuerpo { padding: 2rem; }
+    .section-title {
+        color: var(--color-gris);
+        border-bottom: 1px solid rgba(118, 133, 150, 0.3);
+        padding-bottom: 0.5rem;
+        margin-bottom: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .stats-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2.5rem;
+    }
+    .stat-box {
+        background-color: rgba(0, 0, 0, 0.3);
+        border: 1px solid var(--color-gris);
+        border-radius: 6px;
+        text-align: center;
+        padding: 1.5rem 1rem;
+    }
+    .stat-label { display: block; color: var(--color-gris); font-size: 0.9rem; font-weight: bold; margin-bottom: 0.5rem; }
+    .stat-value { display: block; color: #fff; font-size: 2rem; font-weight: bold; }
 </style>
 
+<div class="ficha-container">
+    <div class="ficha-header">
+        <img src="{{ $personaje->avatar ?? $personaje->imagen_url ?? 'https://via.placeholder.com/250x300/20050E/B30303?text=Heroe' }}" alt="{{ $personaje->nombre }}" class="ficha-avatar">
+        <div class="ficha-info-principal">
+            <h2 class="ficha-nombre">{{ $personaje->nombre }}</h2>
+            <div class="ficha-clase-raza">
+                {{ $personaje->raza->nombre ?? 'Raza Desconocida' }} | {{ $personaje->clase->nombre ?? 'Clase Desconocida' }}
+            </div>
+            <div><span class="ficha-nivel-box">Nivel {{ $personaje->nivel }}</span></div>
+        </div>
+    </div>
+
+    <div class="ficha-cuerpo">
+        <h3 class="section-title">Atributos Principales</h3>
+        <div class="stats-container">
+            @foreach(['FUE'=>'fuerza', 'DES'=>'destreza', 'CON'=>'constitucion', 'INT'=>'inteligencia', 'SAB'=>'sabiduria', 'CAR'=>'carisma'] as $label => $attr)
+            <div class="stat-box">
+                <span class="stat-label">{{ $label }}</span>
+                <span class="stat-value">{{ $personaje->$attr ?? 10 }}</span>
+            </div>
+            @endforeach
+        </div>
+        <a href="{{ route('personajes.index') }}" style="color: var(--color-gris);">← Volver al Gremio</a>
+    </div>
+</div>
 @endsection

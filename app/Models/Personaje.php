@@ -3,18 +3,23 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Personaje extends Model
 {
-    use SoftDeletes;
-
-    protected $table = 'personajes';
-
+    // Esta línea es obligatoria para que el formulario pueda guardar estos datos
     protected $fillable = [
-        'usuario_id', 'raza_id', 'clase_id', 'subclase_id',
-        'trasfondo_id', 'nombre', 'alineamiento',
-        'nivel', 'experiencia', 'avatar', 'activo',
+        'usuario_id',
+        'nombre',
+        'nivel',
+        'raza_id',
+        'clase_id',
+        'imagen_url',
+        'fuerza',
+        'destreza',
+        'constitucion',
+        'inteligencia',
+        'sabiduria',
+        'carisma'
     ];
 
     protected $casts = [
