@@ -6,20 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('perfil', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('usuario_id')->constrained('usuarios')->onDelete('cascade');
+            $table->string('nombre_display')->nullable();
+            $table->text('biografia')->nullable();
+            $table->string('avatar')->nullable();
+            $table->string('pais')->nullable();
+            $table->string('idioma_preferido')->default('es');
+            $table->json('preferencias')->nullable();           // Tema, notificaciones, etc.
+            $table->integer('partidas_jugadas')->default(0);
+            $table->integer('partidas_dm')->default(0);
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('perfil');
