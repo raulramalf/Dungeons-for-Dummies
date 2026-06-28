@@ -2,37 +2,82 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Personaje extends Model
 {
-    // Esta línea es obligatoria para que el formulario pueda guardar estos datos
+    use HasFactory, SoftDeletes;
+
+    protected $table = 'personajes';
+
     protected $fillable = [
         'usuario_id',
-        'nombre',
-        'nivel',
         'raza_id',
         'clase_id',
-        'imagen_url',
-        'fuerza',
-        'destreza',
-        'constitucion',
-        'inteligencia',
-        'sabiduria',
-        'carisma'
+        'subclase_id',
+        'trasfondo_id',
+        'nombre',
+        'alineamiento',
+        'nivel',
+        'experiencia',
+        'avatar',
+        'historia',
+        'activo',
     ];
 
-    protected $casts = [
-        'activo' => 'boolean',
-    ];
+    // Relaciones
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class);
+    }
 
-    public function usuario()   { return $this->belongsTo(User::class, 'usuario_id'); }
-    public function raza()      { return $this->belongsTo(Raza::class); }
-    public function clase()     { return $this->belongsTo(Clase::class); }
-    public function subclase()  { return $this->belongsTo(Subclase::class); }
-    public function trasfondo() { return $this->belongsTo(Trasfondo::class); }
-    public function estadisticas() { return $this->hasOne(Estadistica::class); }
-    public function equipo()    { return $this->hasMany(Equipo::class); }
-    public function trucos()    { return $this->hasMany(Truco::class); }
-    public function campanas()  { return $this->belongsToMany(Campana::class, 'personaje_campana'); }
+    public function raza()
+    {
+        return $this->belongsTo(Raza::class);
+    }
+
+    public function clase()
+    {
+        return $this->belongsTo(Clase::class);
+    }
+
+    public function subclase()
+    {
+        return $this->belongsTo(Subclase::class);
+    }
+
+    public function trasfondo()
+    {
+        return $this->belongsTo(Trasfondo::class);
+    }
+
+    public function estadisticas()
+    {
+        return $this->hasOne(Estadistica::class);
+    }
+
+    public function equipo()
+    {
+        return $this->hasMany(Equipo::class);
+    }
+
+    public function trucos()
+    {
+        return $this->hasMany(Truco::class);
+    }
+
+    public function campanas()
+    {
+        return $this->belongsToMany(Campana::class, 'personaje_campana')
+                    ->withPivot('estado', 'fecha_ingreso', 'fecha_salida', 'notas')
+                    ->withTimestamps();
+    }
+
+    // Método para obtener la URL del avatar
+    public function getAvatarUrlAttribute()
+    {
+        return $this->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode($this->nombre) . '&background=B30303&color=fff&size=200';
+    }
 }
