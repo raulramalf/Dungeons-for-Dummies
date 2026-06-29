@@ -12,12 +12,23 @@ class CampanaController extends Controller
 {
     public function index()
     {
-        $campanas = Campana::where('dungeon_master_id', Auth::id())
+        $campanasDM = Campana::where('dungeon_master_id', Auth::id())
                             ->withCount('sesiones')
                             ->orderBy('created_at', 'desc')
                             ->get();
 
-        return view('campanyas', compact('campanas'));
+        $campanasJugador = Campana::whereHas('usuarios', function($q) {
+                                        $q->where('usuario_id', Auth::id());
+                                })
+                                ->withCount('sesiones')
+                                ->orderBy('created_at', 'desc')
+                                ->get();
+
+        $misPersonajes = \App\Models\Personaje::where('usuario_id', Auth::id())
+                                            ->where('activo', 1)
+                                            ->get();
+
+        return view('campanyas', compact('campanasDM', 'campanasJugador', 'misPersonajes'));
     }
 
     public function store(Request $request)
@@ -45,16 +56,24 @@ class CampanaController extends Controller
         return redirect('/campanyas')->with('success', 'Campaña creada correctamente.');
     }
 
-    public function show($id)
+   public function show($id)
     {
         $campana = Campana::where('id', $id)
-                   ->with(['sesiones', 'enemigos', 'personajes', 'usuarios'])
-                   ->firstOrFail();
+            ->with(['sesiones', 'enemigos', 'personajes.usuario', 'usuarios', 'notas'])
+            ->firstOrFail();
 
         $esDM = $campana->dungeon_master_id === Auth::id();
         $enemigos = $esDM ? Enemigo::where('usuario_id', Auth::id())->get() : collect();
+        
+        // Personajes agrupados por usuario
+        $personajesPorUsuario = $campana->personajes->groupBy('usuario_id');
+        
+        // Mis personajes disponibles para añadir (si soy jugador)
+        $misPersonajes = !$esDM ? \App\Models\Personaje::where('usuario_id', Auth::id())
+                                                        ->where('activo', 1)
+                                                        ->get() : collect();
 
-        return view('campana-detalle', compact('campana', 'enemigos', 'esDM'));
+        return view('campana-detalle', compact('campana', 'enemigos', 'esDM', 'personajesPorUsuario', 'misPersonajes'));
     }
 
     public function update(Request $request, $id)
@@ -94,6 +113,7 @@ class CampanaController extends Controller
     {
         $request->validate([
             'codigo_invitacion' => ['required', 'string', 'max:6'],
+            'personaje_id'      => ['nullable', 'exists:personajes,id'],
         ]);
 
         $campana = Campana::where('codigo_invitacion', strtoupper(trim($request->codigo_invitacion)))
@@ -104,7 +124,6 @@ class CampanaController extends Controller
             return back()->withErrors(['codigo_invitacion' => 'Código inválido o campaña finalizada.']);
         }
 
-        // No unirse si ya eres miembro o el DM
         if ($campana->dungeon_master_id === Auth::id()) {
             return back()->withErrors(['codigo_invitacion' => 'Ya eres el Dungeon Master de esta campaña.']);
         }
@@ -112,6 +131,13 @@ class CampanaController extends Controller
         $campana->usuarios()->syncWithoutDetaching([
             Auth::id() => ['rol' => 'jugador']
         ]);
+
+        // Vincular personaje si se seleccionó uno
+        if ($request->personaje_id) {
+            $campana->personajes()->syncWithoutDetaching([
+                $request->personaje_id => ['estado' => 'activo']
+            ]);
+        }
 
         return redirect('/campanyas/' . $campana->id)->with('success', 'Te has unido a la campaña.');
     }
@@ -213,5 +239,82 @@ class CampanaController extends Controller
         $campana->usuarios()->detach($usuario_id);
 
         return back()->with('success', 'Jugador expulsado de la campaña.');
+    }
+
+    public function añadirPersonaje(Request $request, $id)
+    {
+        $campana = Campana::findOrFail($id);
+
+        $request->validate([
+            'personaje_id' => ['required', 'exists:personajes,id'],
+        ]);
+
+        $campana->personajes()->syncWithoutDetaching([
+            $request->personaje_id => ['estado' => 'activo']
+        ]);
+
+        return back()->with('success', 'Personaje añadido a la campaña.');
+    }
+
+    public function guardarNotas(Request $request, $id)
+    {
+        $campana = Campana::where('id', $id)
+                        ->where('dungeon_master_id', Auth::id())
+                        ->firstOrFail();
+
+        $campana->update(['notas_dm' => $request->notas_dm]);
+
+        return back()->with('success', 'Notas guardadas correctamente.');
+    }
+
+    public function crearNota(Request $request, $id)
+{
+    $campana = Campana::where('id', $id)
+                      ->where('dungeon_master_id', Auth::id())
+                      ->firstOrFail();
+
+    $request->validate([
+        'titulo'    => ['required', 'string', 'max:255'],
+        'contenido' => ['required', 'string'],
+    ]);
+
+    $campana->notas()->create([
+            'titulo'             => $request->titulo,
+            'contenido'          => $request->contenido,
+            'visible_jugadores'  => $request->has('visible_jugadores'),
+        ]);
+
+        return back()->with('success', 'Nota añadida correctamente.');
+    }
+
+    public function eliminarNota($id, $nota_id)
+    {
+        $campana = Campana::where('id', $id)
+                        ->where('dungeon_master_id', Auth::id())
+                        ->firstOrFail();
+
+        $campana->notas()->findOrFail($nota_id)->delete();
+
+        return back()->with('success', 'Nota eliminada.');
+    }
+
+    public function editarNota(Request $request, $id, $nota_id)
+    {
+        $campana = Campana::where('id', $id)
+                        ->where('dungeon_master_id', Auth::id())
+                        ->firstOrFail();
+
+        $request->validate([
+            'titulo'    => ['required', 'string', 'max:255'],
+            'contenido' => ['required', 'string'],
+        ]);
+
+        $campana->notas()->findOrFail($nota_id)->update([
+            'titulo'            => $request->titulo,
+            'contenido'         => $request->contenido,
+            'visible_jugadores' => $request->has('visible_jugadores'),
+        ]);
+
+        return back()->with('success', 'Nota actualizada correctamente.');
     }
 }

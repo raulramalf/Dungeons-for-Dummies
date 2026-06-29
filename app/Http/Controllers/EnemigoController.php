@@ -31,7 +31,13 @@ class EnemigoController extends Controller
             'inteligencia'        => ['required', 'integer'],
             'sabiduria'           => ['required', 'integer'],
             'carisma'             => ['required', 'integer'],
+            'imagen'              => ['nullable', 'image', 'max:2048'],
         ]);
+
+        $imagenPath = null;
+        if ($request->hasFile('imagen')) {
+            $imagenPath = $request->file('imagen')->store('enemigos', 'public');
+        }
 
         Enemigo::create([
             'usuario_id'            => Auth::id(),
@@ -67,6 +73,8 @@ class EnemigoController extends Controller
             'reacciones'            => $request->reacciones,
             'acciones_legendarias'  => $request->acciones_legendarias,
             'visible_jugadores'     => $request->has('visible_jugadores'),
+            'es_boss'               => $request->has('es_boss'),
+            'imagen'                => $imagenPath,
         ]);
 
         return redirect('/enemigos')->with('success', 'Enemigo creado correctamente.');
@@ -104,7 +112,16 @@ class EnemigoController extends Controller
             'inteligencia'          => ['required', 'integer'],
             'sabiduria'             => ['required', 'integer'],
             'carisma'               => ['required', 'integer'],
+            'imagen'                => ['nullable', 'image', 'max:2048'],
         ]);
+
+        $imagenPath = $enemigo->imagen;
+        if ($request->hasFile('imagen')) {
+            if ($enemigo->imagen) {
+                \Storage::disk('public')->delete($enemigo->imagen);
+            }
+            $imagenPath = $request->file('imagen')->store('enemigos', 'public');
+        }
 
         $enemigo->update([
             'nombre'                => $request->nombre,
@@ -131,6 +148,8 @@ class EnemigoController extends Controller
             'acciones'              => $request->acciones,
             'rasgos_especiales'     => $request->rasgos_especiales,
             'visible_jugadores'     => $request->has('visible_jugadores'),
+            'es_boss'               => $request->has('es_boss'),
+            'imagen'                => $imagenPath,
         ]);
 
         return redirect('/enemigos')->with('success', 'Enemigo actualizado correctamente.');

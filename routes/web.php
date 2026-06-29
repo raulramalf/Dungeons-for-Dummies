@@ -61,7 +61,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/enemigos', [EnemigoController::class, 'index'])->name('enemigos.index');
     Route::post('/enemigos', [EnemigoController::class, 'store'])->name('enemigos.store');
     Route::delete('/enemigos/{id}', [EnemigoController::class, 'destroy'])->name('enemigos.destroy');
-    Route::patch('/enemigos/{id}', [EnemigoController::class, 'update'])->name('enemigos.update');
+    Route::post('/enemigos/{id}/update', [EnemigoController::class, 'update'])->name('enemigos.update');
 });
 
 // Ver enemigo individual (público)
@@ -97,6 +97,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/campanyas/{id}/sesiones/{sesion_id}', [CampanaController::class, 'editarSesion']);
     Route::delete('/campanyas/{id}/sesiones/{sesion_id}', [CampanaController::class, 'eliminarSesion']);
     Route::delete('/campanyas/{id}/usuarios/{usuario_id}', [CampanaController::class, 'expulsarJugador']);
+    Route::post('/campanyas/{id}/personaje', [CampanaController::class, 'añadirPersonaje']);
+    Route::get('/personajes/{id}/json', [PersonajeController::class, 'json'])->middleware('auth');
+    Route::post('/campanyas/{id}/notas', [CampanaController::class, 'guardarNotas']);
+    Route::post('/campanyas/{id}/notas', [CampanaController::class, 'crearNota']);
+    Route::delete('/campanyas/{id}/notas/{nota_id}', [CampanaController::class, 'eliminarNota']);
+    Route::patch('/campanyas/{id}/notas/{nota_id}', [CampanaController::class, 'editarNota']);
 });
 
 require __DIR__.'/auth.php';

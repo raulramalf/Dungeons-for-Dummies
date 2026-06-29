@@ -13,12 +13,12 @@
 @endif
 
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-    <p style="color: var(--t-secundario);">{{ $campanas->count() }} campañas como Dungeon Master</p>
+    <p style="color: var(--t-secundario);">{{ $campanasDM->count() }} campañas como Dungeon Master</p>
     <button onclick="abrirModalCrear()" class="btn btn-primario">+ Crear Campaña</button>
 </div>
 
 <!-- CAMPAÑAS ACTIVAS -->
-@php $activas = $campanas->where('estado', 'activa'); @endphp
+@php $activas = $campanasDM->where('estado', 'activa'); @endphp
 @if($activas->count() > 0)
 <section style="margin-bottom: 2.5rem;">
     <div class="seccion-titulo">⚔ Campañas Activas</div>
@@ -53,7 +53,7 @@
 @endif
 
 <!-- CAMPAÑAS PAUSADAS -->
-@php $pausadas = $campanas->where('estado', 'pausada'); @endphp
+@php $pausadas = $campanasDM->where('estado', 'pausada'); @endphp
 @if($pausadas->count() > 0)
 <section style="margin-bottom: 2.5rem;">
     <div class="seccion-titulo">⏸ Pausadas</div>
@@ -79,7 +79,7 @@
 @endif
 
 <!-- CAMPAÑAS FINALIZADAS -->
-@php $finalizadas = $campanas->where('estado', 'finalizada'); @endphp
+@php $finalizadas = $campanasDM->where('estado', 'finalizada'); @endphp
 @if($finalizadas->count() > 0)
 <section style="margin-bottom: 2.5rem;">
     <div class="seccion-titulo">✓ Finalizadas</div>
@@ -95,7 +95,7 @@
 @endif
 
 <!-- ESTADO VACÍO -->
-@if($campanas->count() === 0)
+@if($campanasDM->count() === 0)
 <div class="vacio">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 60px; height: 60px; stroke: var(--c-rojo); fill: none; stroke-width: 1.5; opacity: 0.5; margin: 0 auto 1rem; display: block;">
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"/>
@@ -106,19 +106,69 @@
 </div>
 @endif
 
+<!-- CAMPAÑAS COMO JUGADOR -->
+@if($campanasJugador->count() > 0)
+<section style="margin-top: 2.5rem; margin-bottom: 2.5rem;">
+    <div class="seccion-titulo">🎲 Campañas en las que juegas</div>
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+        @foreach($campanasJugador as $campana)
+        <div class="tarjeta" style="border-left: 4px solid var(--c-naranja); cursor: pointer;" onclick="window.location='/campanyas/{{ $campana->id }}'">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div style="flex: 1;">
+                    <div style="font-size: 1.15rem; font-weight: bold; margin-bottom: 4px;">{{ $campana->nombre }}</div>
+                    <div style="color: var(--t-secundario); font-size: 0.85rem; margin-bottom: 8px;">
+                        DM: {{ $campana->dungeonMaster->nombre }} · {{ $campana->ambientacion ?? 'Sin ambientación' }} · {{ $campana->sesiones_count }} sesiones
+                    </div>
+                    @if($campana->descripcion)
+                    <div style="color: var(--t-tenue); font-size: 0.9rem;">{{ Str::limit($campana->descripcion, 120) }}</div>
+                    @endif
+                    <div style="margin-top: 10px;">
+                        @if($campana->estado === 'activa')
+                        <span style="background: rgba(179,3,3,0.1); color: var(--c-rojo-claro); border: 1px solid var(--b-medio); padding: 2px 10px; border-radius: 20px; font-size: 0.78rem; font-family: var(--f-titulo); letter-spacing: 1px;">ACTIVA</span>
+                        @elseif($campana->estado === 'pausada')
+                        <span style="background: rgba(118,133,150,0.1); color: var(--t-secundario); border: 1px solid var(--b-neutro); padding: 2px 10px; border-radius: 20px; font-size: 0.78rem; font-family: var(--f-titulo); letter-spacing: 1px;">PAUSADA</span>
+                        @else
+                        <span style="background: rgba(64,72,52,0.2); color: var(--c-verde-claro); border: 1px solid var(--c-verde); padding: 2px 10px; border-radius: 20px; font-size: 0.78rem; font-family: var(--f-titulo); letter-spacing: 1px;">FINALIZADA</span>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endforeach
+    </div>
+</section>
+@endif
+
 <!-- UNIRSE A CAMPAÑA -->
 <section style="margin-top: 2rem;">
     <div class="seccion-titulo">🔑 Unirse a una campaña</div>
     <div class="tarjeta" style="max-width: 500px;">
-        <form method="POST" action="/unirse-campana" style="display: flex; gap: 10px; align-items: flex-start;">
+        <form method="POST" action="/unirse-campana" style="display: flex; flex-direction: column; gap: 12px;">
             @csrf
-            <div style="flex: 1;">
-                <input type="text" name="codigo_invitacion" placeholder="Introduce el código de invitación..." maxlength="6" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 3px;" onfocus="this.style.letterSpacing='3px'" onblur="this.style.letterSpacing='3px'">
-                @error('codigo_invitacion')
-                    <span style="color: var(--c-rojo-claro); font-size: 0.8rem;">{{ $message }}</span>
-                @enderror
+            <div style="display: flex; gap: 10px; align-items: flex-start;">
+                <div style="flex: 1;">
+                    <input type="text" name="codigo_invitacion" placeholder="Código de invitación..." maxlength="6" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 3px;">
+                    @error('codigo_invitacion')
+                        <span style="color: var(--c-rojo-claro); font-size: 0.8rem;">{{ $message }}</span>
+                    @enderror
+                </div>
             </div>
-            <button type="submit" class="btn btn-primario">Unirse →</button>
+            @if($misPersonajes->count() > 0)
+            <div>
+                <label style="color: var(--t-secundario); font-size: 0.8rem; display: block; margin-bottom: 6px; font-family: var(--f-titulo); text-transform: uppercase; letter-spacing: 1px;">Personaje con el que juegas</label>
+                <select name="personaje_id" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo);">
+                    <option value="">Sin personaje por ahora</option>
+                    @foreach($misPersonajes as $personaje)
+                    <option value="{{ $personaje->id }}">{{ $personaje->nombre }} (Nivel {{ $personaje->nivel }})</option>
+                    @endforeach
+                </select>
+            </div>
+            @else
+            <p style="color: var(--t-tenue); font-size: 0.85rem;">No tienes personajes activos. Puedes unirte sin personaje y añadirlo después.</p>
+            @endif
+            <div style="display: flex; justify-content: flex-end;">
+                <button type="submit" class="btn btn-primario">Unirse →</button>
+            </div>
         </form>
     </div>
 </section>

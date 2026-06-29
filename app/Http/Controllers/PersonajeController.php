@@ -332,4 +332,47 @@ class PersonajeController extends Controller
 
         return back()->with('success', 'Imagen eliminada.');
     }
+
+    public function json($id)
+    {
+        $personaje = \App\Models\Personaje::with(['clase', 'raza', 'subclase', 'trasfondo', 'estadisticas', 'equipo'])->findOrFail($id);
+
+        $ataques = json_decode($personaje->ataques ?? '[]', true) ?? [];
+
+        return response()->json([
+            'nombre'            => $personaje->nombre,
+            'avatar_url'        => $personaje->avatar_url,
+            'clase'             => $personaje->clase->nombre ?? null,
+            'raza'              => $personaje->raza->nombre ?? null,
+            'subclase'          => $personaje->subclase->nombre ?? null,
+            'trasfondo'         => $personaje->trasfondo->nombre ?? null,
+            'alineamiento'      => $personaje->alineamiento,
+            'nivel'             => $personaje->nivel,
+            'historia'          => $personaje->historia,
+            'rasgos_personalidad' => $personaje->rasgos_personalidad,
+            'ideales'           => $personaje->ideales,
+            'vinculos'          => $personaje->vinculos,
+            'defectos'          => $personaje->defectos,
+            'idiomas'           => $personaje->idiomas,
+            'fuerza'            => $personaje->estadisticas->fuerza ?? 10,
+            'destreza'          => $personaje->estadisticas->destreza ?? 10,
+            'constitucion'      => $personaje->estadisticas->constitucion ?? 10,
+            'inteligencia'      => $personaje->estadisticas->inteligencia ?? 10,
+            'sabiduria'         => $personaje->estadisticas->sabiduria ?? 10,
+            'carisma'           => $personaje->estadisticas->carisma ?? 10,
+            'pg_actuales'       => $personaje->estadisticas->pg_actuales ?? null,
+            'pg_maximos'        => $personaje->estadisticas->pg_maximos ?? null,
+            'clase_de_armadura' => $personaje->estadisticas->clase_de_armadura ?? null,
+            'iniciativa'        => $personaje->estadisticas->iniciativa ?? null,
+            'velocidad'         => $personaje->estadisticas->velocidad ?? 30,
+            'bonus_competencia' => $personaje->estadisticas->bonus_competencia ?? 2,
+            'equipo'            => $personaje->equipo->map(fn($e) => [
+                'nombre'   => $e->nombre,
+                'tipo'     => $e->tipo,
+                'equipado' => $e->equipado,
+                'cantidad' => $e->cantidad,
+            ]),
+            'ataques' => $ataques,
+        ]);
+    }
 }

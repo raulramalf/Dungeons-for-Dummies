@@ -30,7 +30,12 @@
         <div class="tarjeta-enemigo" data-cr="{{ $enemigo->clase_de_desafio }}" style="background: #2a0a18; border-radius: 10px; padding: 20px; cursor: pointer;" onclick="verEnemigo({{ $enemigo->id }})">
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
                 <div>
-                    <div style="font-weight: bold; font-size: 1.05rem;">{{ $enemigo->nombre }}</div>
+                    <div style="font-weight: bold; font-size: 1.05rem;">
+                        @if($enemigo->es_boss)
+                        <span style="color: #B30303; font-size: 0.75rem; margin-right: 4px;">⚠️ BOSS</span>
+                        @endif
+                        {{ $enemigo->nombre }}
+                    </div>
                     <div style="color: var(--color-gris); font-size: 0.8rem;">{{ $enemigo->tipo }} · {{ $enemigo->tamaño }}</div>
                 </div>
                @php
@@ -47,6 +52,11 @@
                 @endphp
                 <span style="background: {{ $crBg }}; color: {{ $crColor }}; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; border: 1px solid {{ $crColor }}; white-space: nowrap;">CR {{ $enemigo->clase_de_desafio }}</span>
             </div>
+
+            @if($enemigo->imagen)
+                <img src="{{ Storage::url($enemigo->imagen) }}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 6px; margin-bottom: 12px;">
+            @endif
+
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; text-align: center;">
                 <div style="background: #120309; border-radius: 6px; padding: 8px;">
                     <div style="font-size: 1rem; font-weight: bold;">{{ $enemigo->puntos_de_golpe }}</div>
@@ -95,7 +105,7 @@
             <button onclick="document.getElementById('modal-enemigo').style.display='none'" style="background: none; border: none; color: var(--color-gris); font-size: 1.5rem; cursor: pointer;">✕</button>
         </div>
 
-        <form method="POST" action="/enemigos">
+        <form method="POST" action="/enemigos" enctype="multipart/form-data">
             @csrf
 
             <!-- BÁSICOS -->
@@ -198,6 +208,23 @@
                 </div>
             </div>
 
+            <div>
+                <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Imagen</label>
+                <img id="ver-imagen-preview" src="" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(179,3,3,0.3); display: none; margin-bottom: 8px;">
+                <label style="display: flex; align-items: center; gap: 10px; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; cursor: pointer;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 18px; height: 18px; stroke: var(--color-gris); fill: none; stroke-width: 2; flex-shrink: 0;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    <span style="color: var(--color-gris); font-size: 0.85rem;" id="label-imagen-nuevo">Seleccionar imagen...</span>
+                    <input type="file" name="imagen" accept="image/*" style="display: none;" onchange="this.previousElementSibling.textContent = this.files[0]?.name || 'Seleccionar imagen...'">
+                </label>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 10px; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px;">
+                <input type="checkbox" name="es_boss" id="ver-boss" style="width: 18px; height: 18px; accent-color: #B30303; cursor: pointer;">
+                <label for="ver-boss" style="color: var(--color-gris); font-size: 0.9rem; cursor: pointer;">Es un Boss</label>
+            </div>
+
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
                 <div style="display: flex; gap: 10px;">
                     <button type="button" onclick="document.getElementById('modal-enemigo').style.display='none'" class="btn btn-secundario">Cancelar</button>
@@ -216,9 +243,8 @@
             <button onclick="document.getElementById('modal-ver-enemigo').style.display='none'" style="background: none; border: none; color: var(--color-gris); font-size: 1.5rem; cursor: pointer;">✕</button>
         </div>
 
-        <form id="form-editar-enemigo" method="POST">
+        <form id="form-editar-enemigo" method="POST" enctype="multipart/form-data">
             @csrf
-            @method('PATCH')
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
                 <div style="grid-column: 1/-1;">
@@ -316,6 +342,23 @@
                 </div>
             </div>
 
+            <div>
+                <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Imagen</label>
+                <img id="ver-imagen-preview" src="" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(179,3,3,0.3); display: none; margin-bottom: 8px;">
+                <label style="display: flex; align-items: center; gap: 10px; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; cursor: pointer;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 18px; height: 18px; stroke: var(--color-gris); fill: none; stroke-width: 2; flex-shrink: 0;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                    </svg>
+                    <span style="color: var(--color-gris); font-size: 0.85rem;" id="label-imagen-editar">Seleccionar imagen...</span>
+                    <input type="file" name="imagen" accept="image/*" style="display: none;" onchange="this.previousElementSibling.textContent = this.files[0]?.name || 'Seleccionar imagen...'">
+                </label>
+            </div>
+
+            <div style="display: flex; align-items: center; gap: 10px; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px;">
+                <input type="checkbox" name="es_boss" id="ver-boss" style="width: 18px; height: 18px; accent-color: #B30303; cursor: pointer;">
+                <label for="ver-boss" style="color: var(--color-gris); font-size: 0.9rem; cursor: pointer;">Es un Boss</label>
+            </div>
+
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
                 <div style="display: flex; gap: 10px;">
                     <button type="button" onclick="document.getElementById('modal-ver-enemigo').style.display='none'" class="btn btn-secundario">Cancelar</button>
@@ -340,7 +383,7 @@
             .then(r => r.json())
             .then(e => {
                 document.getElementById('ver-titulo').textContent = e.nombre;
-                document.getElementById('form-editar-enemigo').action = `/enemigos/${id}`;
+                document.getElementById('form-editar-enemigo').action = `/enemigos/${id}/update`;
                 document.getElementById('ver-nombre').value = e.nombre;
                 document.getElementById('ver-tipo').value = e.tipo;
                 document.getElementById('ver-tamaño').value = e.tamaño;
@@ -364,6 +407,14 @@
                 document.getElementById('ver-idiomas').value = e.idiomas || '';
                 document.getElementById('ver-acciones').value = e.acciones || '';
                 document.getElementById('ver-rasgos').value = e.rasgos_especiales || '';
+                document.getElementById('ver-boss').checked = e.es_boss == 1;
+                const preview = document.getElementById('ver-imagen-preview');
+                if (e.imagen) {
+                    preview.src = '/storage/' + e.imagen;
+                    preview.style.display = 'block';
+                } else {
+                    preview.style.display = 'none';
+                }
                 setTimeout(() => {
                     document.getElementById('modal-ver-enemigo').scrollTop = 0;
                 }, 10);

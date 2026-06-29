@@ -19,7 +19,7 @@ class Campana extends Model
     ];
 
     protected $casts = [
-        'notas_dm' => 'array',
+        'notas_dm' => 'string',
     ];
 
     public function dungeonMaster()
@@ -58,5 +58,10 @@ class Campana extends Model
         return $this->belongsToMany(Usuario::class, 'campana_usuario', 'campana_id', 'usuario_id')
                     ->withPivot('rol')
                     ->withTimestamps();
+    }
+
+    public function notas()
+    {
+        return $this->hasMany(NotaCampana::class);
     }
 }
