@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\PersonajeController;
 use App\Http\Controllers\EquipoController;
+use App\Http\Controllers\CampanaController;
 
 // ==========================================
 // RUTA DE INICIO (pública — muestra personajes y campañas)
@@ -54,13 +55,6 @@ Route::middleware('auth')->group(function () {
 });
 
 // ==========================================
-// RUTAS DE CAMPAÑAS (pública — vista estática)
-// ==========================================
-Route::get('/campanyas', function () {
-    return view('campanyas');
-})->name('campanyas.index');
-
-// ==========================================
 // RUTAS DE ENEMIGOS (requieren auth)
 // ==========================================
 Route::middleware('auth')->group(function () {
@@ -85,6 +79,24 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// ==========================================
+// RUTAS DE CAMPAÑAS (requiere auth)
+// ==========================================
+Route::middleware('auth')->group(function () {
+    Route::get('/campanyas', [CampanaController::class, 'index'])->name('campanyas');
+    Route::post('/campanyas', [CampanaController::class, 'store']);
+    Route::post('/unirse-campana', [CampanaController::class, 'unirse'])->name('campana.unirse');
+    Route::get('/campanyas/{id}', [CampanaController::class, 'show'])->name('campana.show');
+    Route::patch('/campanyas/{id}', [CampanaController::class, 'update']);
+    Route::delete('/campanyas/{id}', [CampanaController::class, 'destroy']);
+    Route::post('/campanyas/{id}/enemigos', [CampanaController::class, 'añadirEnemigo']);
+    Route::delete('/campanyas/{id}/enemigos/{enemigo_id}', [CampanaController::class, 'quitarEnemigo']);
+    Route::post('/campanyas/{id}/sesiones', [CampanaController::class, 'añadirSesion']);
+    Route::patch('/campanyas/{id}/sesiones/{sesion_id}', [CampanaController::class, 'editarSesion']);
+    Route::delete('/campanyas/{id}/sesiones/{sesion_id}', [CampanaController::class, 'eliminarSesion']);
+    Route::delete('/campanyas/{id}/usuarios/{usuario_id}', [CampanaController::class, 'expulsarJugador']);
 });
 
 require __DIR__.'/auth.php';

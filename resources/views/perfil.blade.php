@@ -57,7 +57,7 @@
                     <input type="email" name="email" value="{{ auth()->user()->email }}" style="width: 100%; background: #120309; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px; color: white; font-family: Georgia, serif; font-size: 0.9rem;">
                     @error('email') <span style="color: var(--color-naranja); font-size: 0.8rem;">{{ $message }}</span> @enderror
                 </div>
-                <button type="submit" style="background: var(--color-rojo); color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-family: Georgia, serif; font-size: 1rem; letter-spacing: 1px; margin-top: 5px;">Guardar Cambios</button>
+                <button type="submit" class="btn btn-primario" style="width: 100%; margin-top: 5px;">Guardar Cambios</button>
             </div>
         </form>
     </div>
@@ -83,7 +83,7 @@
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Confirmar nueva contraseña</label>
                     <input type="password" name="password_confirmation" style="width: 100%; background: #120309; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px; color: white; font-family: Georgia, serif; font-size: 0.9rem;">
                 </div>
-                <button type="submit" style="background: var(--color-rojo); color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-family: Georgia, serif; font-size: 1rem; letter-spacing: 1px; margin-top: 5px;">Cambiar Contraseña</button>
+                <button type="submit" class="btn btn-primario" style="width: 100%; margin-top: 5px;">Cambiar Contraseña</button>
             </div>
         </form>
     </div>
@@ -92,9 +92,7 @@
     <div style="display: flex; flex-direction: column; gap: 10px;">
         <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <button type="submit" style="width: 100%; background: #2a0a18; border: none; border-radius: 10px; padding: 18px 20px; cursor: pointer; color: var(--color-rojo); font-family: Georgia, serif; font-size: 1rem; text-align: left;">
-                Cerrar sesión
-            </button>
+            <button type="submit" class="btn btn-peligro" style="width: 100%;">Cerrar sesión</button>
         </form>
     </div>
 

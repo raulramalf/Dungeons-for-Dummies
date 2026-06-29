@@ -12,14 +12,14 @@
 
 <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
     <p style="color: var(--color-gris); font-size: 0.9rem;">{{ $enemigos->count() }} enemigos creados</p>
-    <button onclick="abrirModalNuevo()" style="background: var(--color-rojo); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-family: Georgia, serif;">+ Añadir Enemigo</button>
+    <button onclick="abrirModalNuevo()" class="btn btn-primario">+ Añadir Enemigo</button>
 </div>
 
 <!-- BUSCADOR Y FILTROS -->
 <div style="margin-bottom: 25px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
     <input type="text" id="buscador" onkeyup="buscarEnemigo()" placeholder="Buscar enemigo..." style="background: #2a0a18; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px; color: white; font-family: Georgia, serif; font-size: 0.9rem; flex: 1; min-width: 200px; max-width: 400px;">
-    <button onclick="ordenarPorCR()" id="btn-orden" style="background: transparent; color: var(--color-gris); border: 1px solid var(--color-gris); padding: 12px 16px; border-radius: 8px; cursor: pointer; font-family: Georgia, serif; font-size: 0.85rem;">↑↓ Ordenar por CR</button>
-    <button onclick="ordenarPorNombre()" id="btn-nombre" style="background: transparent; color: var(--color-gris); border: 1px solid var(--color-gris); padding: 12px 16px; border-radius: 8px; cursor: pointer; font-family: Georgia, serif; font-size: 0.85rem;">↑↓ Ordenar por Nombre</button>
+    <button onclick="ordenarPorCR()" id="btn-orden" class="btn btn-secundario">↑↓ Ordenar por CR</button>
+    <button onclick="ordenarPorNombre()" id="btn-nombre" class="btn btn-secundario">↑↓ Ordenar por Nombre</button>
 </div>
 
 <!-- LISTA -->
@@ -65,13 +65,22 @@
                 <form method="POST" action="/enemigos/{{ $enemigo->id }}" onsubmit="return confirm('¿Eliminar este enemigo?')">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" style="background: none; border: none; color: var(--color-gris); cursor: pointer; font-size: 0.8rem;">🗑 Eliminar</button>
+                    <button type="submit" class="btn btn-peligro btn-sm">🗑 Eliminar</button>
                 </form>
             </div>
         </div>
-        @empty
-        <div style="grid-column: 1/-1; text-align: center; color: var(--color-gris); padding: 40px;">
-            No tienes enemigos creados aún. ¡Añade el primero!
+       @empty
+        <div style="grid-column: 1/-1;" class="vacio">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 60px; height: 60px; stroke: var(--c-rojo); fill: none; stroke-width: 1.5; opacity: 0.5; margin: 0 auto 1rem; display: block;">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 2a7 7 0 0 1 7 7c0 2.5-1.3 4.7-3.3 6l-.7 3H9l-.7-3A7 7 0 0 1 5 9a7 7 0 0 1 7-7z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v2a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-2"/>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.5 11a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zM14.5 11a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
+            </svg>
+            <h3 style="text-align: center; margin-bottom: 0.5rem;">Bestiario vacío</h3>
+            <p style="text-align: center; margin-bottom: 1.5rem;">Aún no has registrado ningún enemigo. ¡Crea el primero!</p>
+            <div style="text-align: center;">
+                <button onclick="abrirModalNuevo()" class="btn btn-primario">+ Añadir primer enemigo</button>
+            </div>
         </div>
         @endforelse
 
@@ -191,8 +200,8 @@
 
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
                 <div style="display: flex; gap: 10px;">
-                    <button type="button" onclick="document.getElementById('modal-enemigo').style.display='none'" style="background: transparent; color: var(--color-gris); border: 1px solid var(--color-gris); padding: 12px 20px; border-radius: 8px; cursor: pointer; font-family: Georgia, serif;">Cancelar</button>
-                    <button type="submit" style="background: var(--color-rojo); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-family: Georgia, serif;">Crear Enemigo</button>
+                    <button type="button" onclick="document.getElementById('modal-enemigo').style.display='none'" class="btn btn-secundario">Cancelar</button>
+                    <button type="submit" class="btn btn-primario">Crear Enemigo</button>
                 </div>
             </div>
         </form>
@@ -309,8 +318,8 @@
 
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
                 <div style="display: flex; gap: 10px;">
-                    <button type="button" onclick="document.getElementById('modal-ver-enemigo').style.display='none'" style="background: transparent; color: var(--color-gris); border: 1px solid var(--color-gris); padding: 12px 20px; border-radius: 8px; cursor: pointer; font-family: Georgia, serif;">Cancelar</button>
-                    <button type="submit" style="background: var(--color-rojo); color: white; border: none; padding: 12px 24px; border-radius: 8px; cursor: pointer; font-family: Georgia, serif;">Guardar Cambios</button>
+                    <button type="button" onclick="document.getElementById('modal-ver-enemigo').style.display='none'" class="btn btn-secundario">Cancelar</button>
+                    <button type="submit" class="btn btn-primario">Guardar Cambios</button>
                 </div>
             </div>
         </form>
