@@ -10,6 +10,14 @@
     </div>
 @endif
 
+@if ($errors->any())
+    <div style="background: rgba(107,26,26,0.5); border: 1px solid #B30303; border-radius: 8px; padding: 12px 20px; margin-bottom: 20px; color: #ff9999;">
+        @foreach ($errors->all() as $error)
+            <div>{{ $error }}</div>
+        @endforeach
+    </div>
+@endif
+
 <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
     <p style="color: var(--color-gris); font-size: 0.9rem;">{{ $enemigos->count() }} enemigos creados</p>
     <button onclick="abrirModalNuevo()" class="btn btn-primario">+ Añadir Enemigo</button>
@@ -111,7 +119,13 @@
             <!-- BÁSICOS -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
                 <div style="grid-column: 1/-1;">
-                    <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Nombre *</label>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <label style="color: var(--color-gris); font-size: 0.8rem;">Nombre *</label>
+                        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--color-gris); font-size: 0.85rem;">
+                            <input type="checkbox" name="es_boss" id="nuevo-boss" style="width: 16px; height: 16px; accent-color: #B30303; cursor: pointer;">
+                            ⚠️ Es un Boss
+                        </label>
+                    </div>
                     <input type="text" name="nombre" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
                 </div>
                 <div>
@@ -208,21 +222,18 @@
                 </div>
             </div>
 
-            <div>
-                <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Imagen</label>
-                <img id="ver-imagen-preview" src="" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(179,3,3,0.3); display: none; margin-bottom: 8px;">
-                <label style="display: flex; align-items: center; gap: 10px; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; cursor: pointer;">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 18px; height: 18px; stroke: var(--color-gris); fill: none; stroke-width: 2; flex-shrink: 0;">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                    <span style="color: var(--color-gris); font-size: 0.85rem;" id="label-imagen-nuevo">Seleccionar imagen...</span>
-                    <input type="file" name="imagen" accept="image/*" style="display: none;" onchange="this.previousElementSibling.textContent = this.files[0]?.name || 'Seleccionar imagen...'">
-                </label>
-            </div>
-
-            <div style="display: flex; align-items: center; gap: 10px; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px;">
-                <input type="checkbox" name="es_boss" id="ver-boss" style="width: 18px; height: 18px; accent-color: #B30303; cursor: pointer;">
-                <label for="ver-boss" style="color: var(--color-gris); font-size: 0.9rem; cursor: pointer;">Es un Boss</label>
+            <div style="display: grid; grid-template-columns: 1fr auto; gap: 15px; align-items: end; margin-bottom: 15px;">
+                <div>
+                    <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Imagen</label>
+                    <img id="nuevo-imagen-preview" src="" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(179,3,3,0.3); display: none; margin-bottom: 8px;">
+                    <label style="display: flex; align-items: center; gap: 10px; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; cursor: pointer;">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 18px; height: 18px; stroke: var(--color-gris); fill: none; stroke-width: 2; flex-shrink: 0;">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span style="color: var(--color-gris); font-size: 0.85rem;" id="label-imagen-editar">Seleccionar imagen...</span>
+                        <input type="file" name="imagen" accept="image/*" style="display: none;" onchange="this.previousElementSibling.textContent = this.files[0]?.name || 'Seleccionar imagen...'">
+                    </label>
+                </div>
             </div>
 
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
@@ -248,7 +259,13 @@
 
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
                 <div style="grid-column: 1/-1;">
-                    <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Nombre *</label>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <label style="color: var(--color-gris); font-size: 0.8rem;">Nombre *</label>
+                        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--color-gris); font-size: 0.85rem;">
+                            <input type="checkbox" name="es_boss" id="ver-boss" style="width: 16px; height: 16px; accent-color: #B30303; cursor: pointer;">
+                            ⚠️ Es un Boss
+                        </label>
+                    </div>
                     <input type="text" name="nombre" id="ver-nombre" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
                 </div>
                 <div>
@@ -342,21 +359,18 @@
                 </div>
             </div>
 
-            <div>
-                <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Imagen</label>
-                <img id="ver-imagen-preview" src="" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(179,3,3,0.3); display: none; margin-bottom: 8px;">
-                <label style="display: flex; align-items: center; gap: 10px; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; cursor: pointer;">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 18px; height: 18px; stroke: var(--color-gris); fill: none; stroke-width: 2; flex-shrink: 0;">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                    </svg>
-                    <span style="color: var(--color-gris); font-size: 0.85rem;" id="label-imagen-editar">Seleccionar imagen...</span>
-                    <input type="file" name="imagen" accept="image/*" style="display: none;" onchange="this.previousElementSibling.textContent = this.files[0]?.name || 'Seleccionar imagen...'">
-                </label>
-            </div>
-
-            <div style="display: flex; align-items: center; gap: 10px; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px;">
-                <input type="checkbox" name="es_boss" id="ver-boss" style="width: 18px; height: 18px; accent-color: #B30303; cursor: pointer;">
-                <label for="ver-boss" style="color: var(--color-gris); font-size: 0.9rem; cursor: pointer;">Es un Boss</label>
+           <div style="display: grid; grid-template-columns: 1fr auto; gap: 15px; align-items: end; margin-bottom: 15px;">
+                <div>
+                    <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Imagen</label>
+                    <img id="ver-imagen-preview" src="" style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; border: 1px solid rgba(179,3,3,0.3); display: none; margin-bottom: 8px; cursor: zoom-in;" onclick="document.getElementById('lightbox-enemigo-img').src=this.src; document.getElementById('lightbox-enemigo').style.display='flex';">
+                    <label style="display: flex; align-items: center; gap: 10px; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; cursor: pointer;">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 18px; height: 18px; stroke: var(--color-gris); fill: none; stroke-width: 2; flex-shrink: 0;">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        <span style="color: var(--color-gris); font-size: 0.85rem;" id="label-imagen-editar">Seleccionar imagen...</span>
+                        <input type="file" name="imagen" accept="image/*" style="display: none;" onchange="this.previousElementSibling.textContent = this.files[0]?.name || 'Seleccionar imagen...'">
+                    </label>
+                </div>
             </div>
 
             <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
@@ -367,6 +381,10 @@
             </div>
         </form>
     </div>
+</div>
+
+<div id="lightbox-enemigo" onclick="this.style.display='none'" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:2000; align-items:center; justify-content:center; cursor:zoom-out;">
+    <img id="lightbox-enemigo-img" src="" style="max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 8px; border: 2px solid rgba(179,3,3,0.3);">
 </div>
 
 <script>
@@ -408,8 +426,10 @@
                 document.getElementById('ver-acciones').value = e.acciones || '';
                 document.getElementById('ver-rasgos').value = e.rasgos_especiales || '';
                 document.getElementById('ver-boss').checked = e.es_boss == 1;
-                const preview = document.getElementById('ver-imagen-preview');
+                const preview = document.getElementById('ver-imagen-preview') || document.getElementById('ver-imagen-preview');
                 if (e.imagen) {
+                    console.log('Imagen:', e.imagen);
+                    console.log('URL:', '/storage/' + e.imagen);
                     preview.src = '/storage/' + e.imagen;
                     preview.style.display = 'block';
                 } else {

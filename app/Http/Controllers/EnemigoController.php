@@ -31,7 +31,7 @@ class EnemigoController extends Controller
             'inteligencia'        => ['required', 'integer'],
             'sabiduria'           => ['required', 'integer'],
             'carisma'             => ['required', 'integer'],
-            'imagen'              => ['nullable', 'image', 'max:2048'],
+            'imagen'              => ['nullable', 'file', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'],
         ]);
 
         $imagenPath = null;
@@ -112,7 +112,7 @@ class EnemigoController extends Controller
             'inteligencia'          => ['required', 'integer'],
             'sabiduria'             => ['required', 'integer'],
             'carisma'               => ['required', 'integer'],
-            'imagen'                => ['nullable', 'image', 'max:2048'],
+            'imagen'                => ['nullable', 'file', 'mimes:jpg,jpeg,png,gif,webp', 'max:2048'],
         ]);
 
         $imagenPath = $enemigo->imagen;

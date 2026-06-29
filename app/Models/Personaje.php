@@ -25,6 +25,27 @@ class Personaje extends Model
         'avatar',
         'historia',
         'activo',
+        // Personalidad
+        'rasgos_personalidad',
+        'ideales',
+        'vinculos',
+        'defectos',
+        // Apariencia
+        'edad',
+        'altura',
+        'peso',
+        'ojos',
+        'piel',
+        'pelo',
+        'divinidad',
+        'idiomas',
+        // Imágenes
+        'imagenes_personaje',
+        'imagenes_armas',
+        // Competencias y ataques
+        'competencias_habilidades',
+        'competencias_salvaciones',
+        'ataques',
     ];
 
     // Relaciones
@@ -71,7 +92,7 @@ class Personaje extends Model
     public function campanas()
     {
         return $this->belongsToMany(Campana::class, 'personaje_campana')
-                    ->withPivot('estado', 'fecha_ingreso', 'fecha_salida', 'notas')
+                    ->withPivot('estado', 'fecha_ingreso', 'fecha_salida', 'notas', 'historia_visible')
                     ->withTimestamps();
     }
 

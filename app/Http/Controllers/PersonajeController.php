@@ -335,9 +335,24 @@ class PersonajeController extends Controller
 
     public function json($id)
     {
-        $personaje = \App\Models\Personaje::with(['clase', 'raza', 'subclase', 'trasfondo', 'estadisticas', 'equipo'])->findOrFail($id);
+        $personaje = \App\Models\Personaje::with(['clase', 'raza', 'subclase', 'trasfondo', 'estadisticas', 'equipo', 'campanas'])->findOrFail($id);
 
         $ataques = json_decode($personaje->ataques ?? '[]', true) ?? [];
+
+        // Determinar si la historia es visible
+        $campanaId = request('campana_id');
+        $historiaVisible = true; // por defecto visible (vista propia o sin contexto de campaña)
+
+       if ($campanaId && $personaje->usuario_id !== auth()->id()) {
+            // Comprobar si el usuario actual es DM de la campaña
+            $campana = \App\Models\Campana::find($campanaId);
+            $esDM = $campana && $campana->dungeon_master_id === auth()->id();
+            
+            if (!$esDM) {
+                $pivot = $personaje->campanas->where('id', $campanaId)->first()?->pivot;
+                $historiaVisible = $pivot?->historia_visible ?? false;
+            }
+        }
 
         return response()->json([
             'nombre'            => $personaje->nombre,
@@ -348,7 +363,7 @@ class PersonajeController extends Controller
             'trasfondo'         => $personaje->trasfondo->nombre ?? null,
             'alineamiento'      => $personaje->alineamiento,
             'nivel'             => $personaje->nivel,
-            'historia'          => $personaje->historia,
+            'historia'          => $historiaVisible ? $personaje->historia : null,
             'rasgos_personalidad' => $personaje->rasgos_personalidad,
             'ideales'           => $personaje->ideales,
             'vinculos'          => $personaje->vinculos,

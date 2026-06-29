@@ -100,10 +100,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/campanyas/{id}/usuarios/{usuario_id}', [CampanaController::class, 'expulsarJugador']);
     Route::post('/campanyas/{id}/personaje', [CampanaController::class, 'añadirPersonaje']);
     Route::get('/personajes/{id}/json', [PersonajeController::class, 'json'])->middleware('auth');
-    Route::post('/campanyas/{id}/notas', [CampanaController::class, 'guardarNotas']);
     Route::post('/campanyas/{id}/notas', [CampanaController::class, 'crearNota']);
     Route::delete('/campanyas/{id}/notas/{nota_id}', [CampanaController::class, 'eliminarNota']);
     Route::patch('/campanyas/{id}/notas/{nota_id}', [CampanaController::class, 'editarNota']);
+    Route::post('/campanyas/{id}/personaje/historia-visible', [CampanaController::class, 'toggleHistoriaVisible'])->name('campanyas.historia_visible');
 });
 
 require __DIR__.'/auth.php';

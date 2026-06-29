@@ -1193,6 +1193,7 @@ function addAtaque() {
 
 /* ===== Serializar ataques antes de enviar ===== */
 document.getElementById('formPersonaje').addEventListener('submit', function () {
+    // Serializar ataques
     const nombres = [...document.querySelectorAll('input[name="ataque_nombre[]"]')].map(i => i.value);
     const bonifs  = [...document.querySelectorAll('input[name="ataque_bonif[]"]')].map(i => i.value);
     const danos   = [...document.querySelectorAll('input[name="ataque_dano[]"]')].map(i => i.value);
@@ -1205,12 +1206,15 @@ document.getElementById('formPersonaje').addEventListener('submit', function () 
 
     document.getElementById('ataquesHidden').value = JSON.stringify(ataques);
 
-    // Serializar competencias desde checkboxes
+    // Serializar competencias habilidades
     const habChecked = [...document.querySelectorAll('input[name="competencias_habilidades[]"]:checked')].map(c => c.value);
     document.getElementById('hiddenHab').value = JSON.stringify(habChecked);
+    document.querySelectorAll('input[name="competencias_habilidades[]"]').forEach(c => c.disabled = true);
 
+    // Serializar competencias salvaciones
     const salChecked = [...document.querySelectorAll('input[name="competencias_salvaciones[]"]:checked')].map(c => c.value);
     document.getElementById('hiddenSal').value = JSON.stringify(salChecked);
+    document.querySelectorAll('input[name="competencias_salvaciones[]"]').forEach(c => c.disabled = true);
 });
 </script>
 @endsection

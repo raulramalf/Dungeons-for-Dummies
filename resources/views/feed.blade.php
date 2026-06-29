@@ -598,8 +598,7 @@
             <span class="post-tiempo">{{ $post->created_at->diffForHumans() }}</span>
         </div>
 
-        {{-- Saltos de línea respetados con nl2br + Blade escaping seguro --}}
-        <div class="post-contenido">{!! nl2br(e($post->contenido)) !!}</div>
+        <div class="post-contenido">{{ $post->contenido }}</div>
 
         @if($post->etiquetas && count($post->etiquetas) > 0)
         <div class="post-tags">
@@ -653,7 +652,7 @@
                     </span>
                     <span>{{ $comentario->created_at->diffForHumans() }}</span>
                 </div>
-                <div class="comment-body">{!! nl2br(e($comentario->contenido)) !!}</div>
+                <div class="comment-body">{{ $comentario->contenido }}</div>
 
                 <div class="comment-acciones">
                     @auth
@@ -713,7 +712,7 @@
                         </span>
                         <span>{{ $respuesta->created_at->diffForHumans() }}</span>
                     </div>
-                    <div class="comment-body">{!! nl2br(e($respuesta->contenido)) !!}</div>
+                    <div class="comment-body">{{ $respuesta->contenido }}</div>
                     <div class="comment-acciones">
                         @auth
                         <button type="button"

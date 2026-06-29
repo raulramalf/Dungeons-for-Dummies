@@ -59,7 +59,16 @@ class CampanaController extends Controller
    public function show($id)
     {
         $campana = Campana::where('id', $id)
-            ->with(['sesiones', 'enemigos', 'personajes.usuario', 'usuarios', 'notas'])
+            ->with([
+                'sesiones',
+                'enemigos',
+                'personajes' => function($q) {
+                    $q->withPivot('estado', 'historia_visible')->with(['usuario', 'clase', 'raza']);
+                },
+                'usuarios',
+                'notas',
+                'dungeonMaster',
+            ])
             ->firstOrFail();
 
         $esDM = $campana->dungeon_master_id === Auth::id();
@@ -316,5 +325,27 @@ class CampanaController extends Controller
         ]);
 
         return back()->with('success', 'Nota actualizada correctamente.');
+    }
+
+    public function toggleHistoriaVisible(Request $request, $id)
+    {
+        $campana = Campana::findOrFail($id);
+        
+        $misPersonajesIds = \App\Models\Personaje::where('usuario_id', auth()->id())
+            ->pluck('id');
+
+        $personaje = $campana->personajes()
+            ->withPivot('historia_visible', 'estado')
+            ->whereIn('personaje_campana.personaje_id', $misPersonajesIds)
+            ->first();
+
+        if (!$personaje) abort(403);
+
+        $actual = $personaje->pivot->historia_visible;
+        $campana->personajes()->updateExistingPivot($personaje->id, [
+            'historia_visible' => !$actual,
+        ]);
+
+        return back()->with('success', $actual ? 'Historia ocultada.' : 'Historia visible para todos.');
     }
 }
