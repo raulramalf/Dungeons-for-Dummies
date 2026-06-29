@@ -9,8 +9,23 @@ use App\Models\Like;
 
 class FeedController extends Controller
 {
-    public function index()
+    // Salas disponibles en la Taberna
+    const SALAS = [
+        'general'     => ['label' => 'Barra Principal',    'desc' => 'Conversación libre para todo aventurero'],
+        'hazanas'     => ['label' => 'Sala de Hazañas',    'desc' => 'Comparte tus victorias (y tus derrotas épicas)'],
+        'dm'          => ['label' => 'Rincón del DM',       'desc' => 'Consejos, mapas y lamentos de Dungeon Masters'],
+        'personajes'  => ['label' => 'Mesa de Personajes',  'desc' => 'Presenta tu héroe o pide ayuda para crearlo'],
+        'reglas'      => ['label' => 'Archivo de Reglas',   'desc' => 'Dudas, aclaraciones y debates de reglamento'],
+        'campanas'    => ['label' => 'Sala de Campañas',    'desc' => 'Busca grupo, comparte tu campaña o pide jugadores'],
+    ];
+
+    public function index(Request $request)
     {
+        $salaActual = $request->get('sala', 'general');
+        if (!array_key_exists($salaActual, self::SALAS)) {
+            $salaActual = 'general';
+        }
+
         $posts = Post::with([
                 'usuario',
                 'comentarios' => function ($query) {
@@ -21,10 +36,15 @@ class FeedController extends Controller
                 'likes',
             ])
             ->withCount('likes')
+            ->where('sala', $salaActual)
             ->latest()
             ->get();
 
-        return view('feed', compact('posts'));
+        return view('feed', [
+            'posts'      => $posts,
+            'salas'      => self::SALAS,
+            'salaActual' => $salaActual,
+        ]);
     }
 
     public function store(Request $request)
@@ -32,12 +52,19 @@ class FeedController extends Controller
         $request->validate([
             'contenido' => 'required|string|max:1000',
             'etiquetas' => 'nullable|json',
+            'sala'      => 'nullable|string',
         ]);
+
+        $sala = $request->sala;
+        if (!array_key_exists($sala, self::SALAS)) {
+            $sala = 'general';
+        }
 
         Post::create([
             'user_id'   => auth()->id(),
             'contenido' => $request->contenido,
             'etiquetas' => json_decode($request->etiquetas, true) ?? [],
+            'sala'      => $sala,
         ]);
 
         return back()->with('success', '¡Tu hazaña ha sido publicada en la taberna!');
@@ -61,6 +88,21 @@ class FeedController extends Controller
         return back()->with('success', 'Comentario añadido correctamente.');
     }
 
+    public function destroyComentario(Comentario $comentario)
+    {
+        if ($comentario->user_id !== auth()->id()) {
+            abort(403, 'No puedes borrar comentarios ajenos.');
+        }
+
+        $comentario->delete();
+
+        if (request()->ajax()) {
+            return response()->json(['success' => true]);
+        }
+
+        return back()->with('success', 'Comentario eliminado.');
+    }
+
     public function toggleLike(Request $request)
     {
         $request->validate([
@@ -77,6 +119,7 @@ class FeedController extends Controller
 
         if ($like) {
             $like->delete();
+            $liked   = false;
             $message = 'Like eliminado';
         } else {
             Like::create([
@@ -84,16 +127,19 @@ class FeedController extends Controller
                 'likeable_id'   => $request->id,
                 'likeable_type' => $request->type,
             ]);
+            $liked   = true;
             $message = 'Like añadido';
         }
 
+        $count = Like::where('likeable_id', $request->id)
+                     ->where('likeable_type', $request->type)
+                     ->count();
+
         if ($request->ajax()) {
-            $count = Like::where('likeable_id', $request->id)
-                         ->where('likeable_type', $request->type)
-                         ->count();
             return response()->json([
                 'success' => true,
                 'count'   => $count,
+                'liked'   => $liked,
                 'message' => $message,
             ]);
         }

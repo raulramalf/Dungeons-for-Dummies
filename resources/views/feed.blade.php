@@ -8,7 +8,7 @@
        LAYOUT
     ============================================= */
     .feed-wrap {
-        max-width: 780px;
+        max-width: 820px;
         margin: 0 auto;
     }
 
@@ -16,7 +16,7 @@
         display: flex;
         align-items: center;
         gap: 1rem;
-        margin-bottom: 2rem;
+        margin-bottom: 1.5rem;
     }
 
     .feed-header h2 {
@@ -24,12 +24,62 @@
         font-size: 1.5rem;
         color: #fff;
         letter-spacing: 2px;
+        white-space: nowrap;
     }
 
     .feed-linea {
         flex: 1;
         height: 1px;
         background: linear-gradient(90deg, rgba(179,3,3,0.5), transparent);
+    }
+
+    /* =============================================
+       SALAS / TABS
+    ============================================= */
+    .salas-nav {
+        display: flex;
+        gap: 0.4rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.8rem;
+        background: rgba(0,0,0,0.2);
+        border: 1px solid rgba(179,3,3,0.15);
+        border-radius: 10px;
+        padding: 0.5rem;
+    }
+
+    .sala-tab {
+        display: flex;
+        flex-direction: column;
+        padding: 0.55rem 1rem;
+        border-radius: 7px;
+        text-decoration: none;
+        font-size: 0.88rem;
+        color: #768596;
+        transition: all 0.2s;
+        border: 1px solid transparent;
+        flex: 1;
+        min-width: 120px;
+        text-align: center;
+    }
+
+    .sala-tab:hover {
+        background: rgba(179,3,3,0.08);
+        color: #d0d5da;
+        border-color: rgba(179,3,3,0.2);
+    }
+
+    .sala-tab.active {
+        background: rgba(179,3,3,0.15);
+        color: #fff;
+        border-color: rgba(179,3,3,0.4);
+        font-weight: 600;
+    }
+
+    .sala-tab-label { font-size: 0.88rem; }
+    .sala-tab-desc  { font-size: 0.72rem; opacity: 0.65; margin-top: 0.15rem; display: none; }
+
+    @media (min-width: 640px) {
+        .sala-tab-desc { display: block; }
     }
 
     /* =============================================
@@ -253,6 +303,7 @@
         line-height: 1.75;
         margin-bottom: 1rem;
         color: #d0d5da;
+        white-space: pre-line;
     }
 
     .post-tags {
@@ -360,12 +411,14 @@
         line-height: 1.55;
         color: #c0c8d0;
         margin-bottom: 0.5rem;
+        white-space: pre-line;
     }
 
     .comment-acciones {
         display: flex;
         gap: 0.8rem;
         flex-wrap: wrap;
+        align-items: center;
     }
 
     .btn-comentario-accion {
@@ -387,6 +440,15 @@
     }
 
     .btn-comentario-accion.liked {
+        color: #B30303;
+    }
+
+    .btn-eliminar-comentario {
+        margin-left: auto;
+        color: rgba(179,3,3,0.45);
+    }
+
+    .btn-eliminar-comentario:hover {
         color: #B30303;
     }
 
@@ -456,26 +518,42 @@
         .comment-item.reply { margin-left: 0.8rem; }
         .reply-form-wrap { margin-left: 0.8rem; }
         .post-meta { flex-direction: column; align-items: flex-start; }
+        .salas-nav { gap: 0.3rem; }
+        .sala-tab { min-width: calc(50% - 0.3rem); font-size: 0.82rem; }
     }
 </style>
 
 <div class="feed-wrap">
 
     <div class="feed-header">
-        <h2>🍺 La Taberna</h2>
-        <div class="feed-linea"></div>
+        <h2>La Taberna</h2>
     </div>
 
+    <div class="feed-layout">
+
+    {{-- NAVEGACIÓN DE SALAS — lateral --}}
+    <nav class="salas-nav" aria-label="Salas de la Taberna">
+        @foreach($salas as $clave => $sala)
+        <a href="{{ route('feed.index', ['sala' => $clave]) }}"
+           class="sala-tab {{ $salaActual === $clave ? 'active' : '' }}">
+            <span class="sala-tab-label">{{ $sala['label'] }}</span>
+        </a>
+        @endforeach
+    </nav>
+
+    <div class="feed-posts-area" style="flex:1;min-width:0;">
+
     @if(session('success'))
-        <div class="alert alert-success">✔ {{ session('success') }}</div>
+        <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
     {{-- FORMULARIO DE NUEVO POST — solo para usuarios logueados --}}
     @auth
-    <div class="card">
-        <div class="card-titulo">📝 Publicar hazaña</div>
+    <div class="card card-publicar">
+        <div class="card-titulo">Publicar en {{ $salas[$salaActual]['label'] }}</div>
         <form action="{{ route('feed.store') }}" method="POST" id="postForm">
             @csrf
+            <input type="hidden" name="sala" value="{{ $salaActual }}">
             <textarea
                 name="contenido"
                 class="form-control"
@@ -488,19 +566,19 @@
                 <input type="text" id="tagInput" class="tag-input"
                        placeholder="Añadir etiqueta..."
                        onkeydown="if(event.key==='Enter'){event.preventDefault();addTag();}">
-                <button type="button" class="btn-tag-add" onclick="addTag()">➕ Etiqueta</button>
+                <button type="button" class="btn-tag-add" onclick="addTag()">+ Etiqueta</button>
             </div>
             <div class="tags-display" id="tagsDisplay"></div>
             <input type="hidden" name="etiquetas" id="etiquetasHidden" value="[]">
 
             <div class="form-footer">
-                <button type="submit" class="btn-publicar">📜 Publicar</button>
+                <button type="submit" class="btn-publicar">Publicar</button>
             </div>
         </form>
     </div>
     @else
     <div class="alert-login">
-        🔒 <a href="{{ route('login') }}">Inicia sesión</a> o <a href="{{ route('register') }}">regístrate</a>
+        <a href="{{ route('login') }}">Inicia sesión</a> o <a href="{{ route('register') }}">regístrate</a>
         para publicar en la Taberna y participar en la comunidad.
     </div>
     @endauth
@@ -520,7 +598,8 @@
             <span class="post-tiempo">{{ $post->created_at->diffForHumans() }}</span>
         </div>
 
-        <div class="post-contenido">{{ $post->contenido }}</div>
+        {{-- Saltos de línea respetados con nl2br + Blade escaping seguro --}}
+        <div class="post-contenido">{!! nl2br(e($post->contenido)) !!}</div>
 
         @if($post->etiquetas && count($post->etiquetas) > 0)
         <div class="post-tags">
@@ -532,14 +611,14 @@
 
         <div class="post-acciones">
             @auth
-            <form action="{{ route('like.toggle') }}" method="POST" style="display:inline">
-                @csrf
-                <input type="hidden" name="id" value="{{ $post->id }}">
-                <input type="hidden" name="type" value="App\Models\Post">
-                <button type="submit" class="btn-accion-post btn-like {{ $post->isLikedBy(auth()->id()) ? 'liked' : '' }}">
-                    ❤️ <span>{{ $post->likes_count }}</span>
-                </button>
-            </form>
+            {{-- LIKE AJAX --}}
+            <button type="button"
+                    class="btn-accion-post btn-like {{ $post->isLikedBy(auth()->id()) ? 'liked' : '' }}"
+                    data-id="{{ $post->id }}"
+                    data-type="App\Models\Post"
+                    onclick="toggleLike(this)">
+                ❤️ <span class="like-count">{{ $post->likes_count }}</span>
+            </button>
             @else
             <span class="btn-accion-post" style="cursor:default">
                 ❤️ {{ $post->likes_count }}
@@ -547,13 +626,13 @@
             @endauth
 
             <button class="btn-accion-post" onclick="toggleComments({{ $post->id }})">
-                💬 {{ $post->comentarios->count() }}
+                💬 <span id="comment-count-{{ $post->id }}">{{ $post->comentarios->count() }}</span>
                 {{ $post->comentarios->count() === 1 ? 'comentario' : 'comentarios' }}
             </button>
 
             @auth
             <button class="btn-accion-post" onclick="enfocarComentario({{ $post->id }})">
-                📝 Responder
+                Responder
             </button>
             @endauth
         </div>
@@ -574,21 +653,32 @@
                     </span>
                     <span>{{ $comentario->created_at->diffForHumans() }}</span>
                 </div>
-                <div class="comment-body">{{ $comentario->contenido }}</div>
+                <div class="comment-body">{!! nl2br(e($comentario->contenido)) !!}</div>
 
                 <div class="comment-acciones">
                     @auth
-                    <form action="{{ route('like.toggle') }}" method="POST" style="display:inline">
-                        @csrf
-                        <input type="hidden" name="id" value="{{ $comentario->id }}">
-                        <input type="hidden" name="type" value="App\Models\Comentario">
-                        <button type="submit" class="btn-comentario-accion {{ $comentario->isLikedBy(auth()->id()) ? 'liked' : '' }}">
-                            ❤️ {{ $comentario->likes_count }}
-                        </button>
-                    </form>
+                    {{-- Like comentario AJAX --}}
+                    <button type="button"
+                            class="btn-comentario-accion {{ $comentario->isLikedBy(auth()->id()) ? 'liked' : '' }}"
+                            data-id="{{ $comentario->id }}"
+                            data-type="App\Models\Comentario"
+                            onclick="toggleLike(this)">
+                        ❤️ <span class="like-count">{{ $comentario->likes_count }}</span>
+                    </button>
+
                     <button class="btn-comentario-accion" onclick="toggleReply('reply-{{ $post->id }}-{{ $comentario->id }}')">
                         ↩ Responder
                     </button>
+
+                    {{-- Botón eliminar solo si es el autor --}}
+                    @if(auth()->id() === $comentario->user_id)
+                    <button class="btn-comentario-accion btn-eliminar-comentario"
+                            onclick="eliminarComentario({{ $comentario->id }}, this)"
+                            title="Eliminar comentario">
+                        Eliminar
+                    </button>
+                    @endif
+
                     @else
                     <span class="btn-comentario-accion" style="cursor:default">❤️ {{ $comentario->likes_count }}</span>
                     @endauth
@@ -601,9 +691,10 @@
                         @csrf
                         <input type="hidden" name="post_id" value="{{ $post->id }}">
                         <input type="hidden" name="parent_id" value="{{ $comentario->id }}">
-                        <input type="text" name="contenido" class="form-control"
+                        <textarea name="contenido" class="form-control"
                                placeholder="Tu respuesta..." required
-                               style="padding:0.5rem 0.7rem;font-size:0.88rem;">
+                               rows="2"
+                               style="padding:0.5rem 0.7rem;font-size:0.88rem;"></textarea>
                         <button type="submit" class="btn-enviar-comentario">Enviar</button>
                     </form>
                 </div>
@@ -611,7 +702,7 @@
 
                 {{-- Respuestas anidadas --}}
                 @foreach($comentario->respuestas as $respuesta)
-                <div class="comment-item reply" style="margin-top:0.6rem">
+                <div class="comment-item reply" style="margin-top:0.6rem" id="comment-{{ $respuesta->id }}">
                     <div class="comment-meta">
                         <span class="comment-autor">
                             <img src="{{ $respuesta->usuario->avatar
@@ -622,17 +713,25 @@
                         </span>
                         <span>{{ $respuesta->created_at->diffForHumans() }}</span>
                     </div>
-                    <div class="comment-body">{{ $respuesta->contenido }}</div>
+                    <div class="comment-body">{!! nl2br(e($respuesta->contenido)) !!}</div>
                     <div class="comment-acciones">
                         @auth
-                        <form action="{{ route('like.toggle') }}" method="POST" style="display:inline">
-                            @csrf
-                            <input type="hidden" name="id" value="{{ $respuesta->id }}">
-                            <input type="hidden" name="type" value="App\Models\Comentario">
-                            <button type="submit" class="btn-comentario-accion {{ $respuesta->isLikedBy(auth()->id()) ? 'liked' : '' }}">
-                                ❤️ {{ $respuesta->likes_count }}
-                            </button>
-                        </form>
+                        <button type="button"
+                                class="btn-comentario-accion {{ $respuesta->isLikedBy(auth()->id()) ? 'liked' : '' }}"
+                                data-id="{{ $respuesta->id }}"
+                                data-type="App\Models\Comentario"
+                                onclick="toggleLike(this)">
+                            ❤️ <span class="like-count">{{ $respuesta->likes_count }}</span>
+                        </button>
+
+                        @if(auth()->id() === $respuesta->user_id)
+                        <button class="btn-comentario-accion btn-eliminar-comentario"
+                                onclick="eliminarComentario({{ $respuesta->id }}, this)"
+                                title="Eliminar comentario">
+                            Eliminar
+                        </button>
+                        @endif
+
                         @else
                         <span class="btn-comentario-accion" style="cursor:default">❤️ {{ $respuesta->likes_count }}</span>
                         @endauth
@@ -647,8 +746,10 @@
             <form action="{{ route('comentarios.store') }}" method="POST" class="comment-form" id="comment-form-{{ $post->id }}">
                 @csrf
                 <input type="hidden" name="post_id" value="{{ $post->id }}">
-                <input type="text" name="contenido" class="form-control"
-                       placeholder="Escribe un comentario..." required>
+                <textarea name="contenido" class="form-control"
+                       placeholder="Escribe un comentario..." required
+                       rows="2"
+                       style="padding:0.6rem 0.8rem;font-size:0.9rem;"></textarea>
                 <button type="submit" class="btn-enviar-comentario">Enviar</button>
             </form>
             @else
@@ -661,14 +762,17 @@
     </div>
     @empty
     <div class="feed-vacio">
-        <p>🍺 La taberna está en silencio...</p>
-        <small>¡Sé el primero en compartir una hazaña!</small>
+        <p>Esta sala está en silencio...</p>
+        <small>¡Sé el primero en hablar aquí!</small>
     </div>
     @endforelse
 
 </div>
 
 <script>
+/* Token CSRF para peticiones AJAX */
+const CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}';
+
 /* ===== Etiquetas en el formulario de post ===== */
 let tags = [];
 
@@ -711,7 +815,7 @@ function enfocarComentario(postId) {
     if (section) section.style.display = 'block';
     const form = document.getElementById('comment-form-' + postId);
     if (form) {
-        const input = form.querySelector('input[name="contenido"]');
+        const input = form.querySelector('textarea[name="contenido"]');
         if (input) {
             input.focus();
             input.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -725,8 +829,82 @@ function toggleReply(id) {
     if (!el) return;
     el.classList.toggle('active');
     if (el.classList.contains('active')) {
-        const input = el.querySelector('input[name="contenido"]');
+        const input = el.querySelector('textarea[name="contenido"]');
         if (input) input.focus();
+    }
+}
+
+/* ===== LIKE AJAX — sin refresco de página ===== */
+async function toggleLike(btn) {
+    const id   = btn.dataset.id;
+    const type = btn.dataset.type;
+    if (!id || !type) return;
+
+    btn.disabled = true;
+
+    try {
+        const res = await fetch('{{ route("like.toggle") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': CSRF_TOKEN,
+                'Accept':       'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: JSON.stringify({ id, type }),
+        });
+
+        if (!res.ok) throw new Error('Error en la respuesta');
+
+        const data = await res.json();
+
+        if (data.success) {
+            const countEl = btn.querySelector('.like-count');
+            if (countEl) countEl.textContent = data.count;
+
+            if (data.liked) {
+                btn.classList.add('liked');
+            } else {
+                btn.classList.remove('liked');
+            }
+        }
+    } catch (e) {
+        console.error('Error al hacer like:', e);
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+/* ===== Eliminar comentario propio AJAX ===== */
+async function eliminarComentario(id, btn) {
+    if (!confirm('¿Seguro que quieres borrar este comentario?')) return;
+
+    btn.disabled = true;
+
+    try {
+        const res = await fetch(`/comentarios/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': CSRF_TOKEN,
+                'Accept':       'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        });
+
+        if (!res.ok) throw new Error('Error eliminando');
+
+        const data = await res.json();
+        if (data.success) {
+            const el = document.getElementById('comment-' + id);
+            if (el) {
+                el.style.transition = 'opacity 0.3s';
+                el.style.opacity = '0';
+                setTimeout(() => el.remove(), 300);
+            }
+        }
+    } catch (e) {
+        console.error('Error al eliminar comentario:', e);
+        btn.disabled = false;
     }
 }
 
@@ -738,4 +916,8 @@ document.querySelectorAll('textarea').forEach(ta => {
     });
 });
 </script>
+
+    </div>{{-- /feed-posts-area --}}
+    </div>{{-- /feed-layout --}}
+
 @endsection

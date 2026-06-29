@@ -51,6 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/feed', [FeedController::class, 'index'])->name('feed.index');
     Route::post('/feed', [FeedController::class, 'store'])->name('feed.store');
     Route::post('/comentarios', [FeedController::class, 'storeComentario'])->name('comentarios.store');
+    Route::delete('/comentarios/{comentario}', [FeedController::class, 'destroyComentario'])->name('comentarios.destroy');
     Route::post('/like', [FeedController::class, 'toggleLike'])->name('like.toggle');
 });
 

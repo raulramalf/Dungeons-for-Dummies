@@ -4,17 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Personaje;
 use App\Models\Campana;
+use App\Models\Post;
 
 class InicioController extends Controller
 {
     public function index()
     {
-        $personajesDestacados = Personaje::with(['raza', 'clase'])
+        // Últimas hazañas publicadas en la Taberna
+        $ultimasHazanas = Post::with(['usuario', 'likes'])
+            ->withCount('likes')
             ->latest()
-            ->take(10)
+            ->take(5)
             ->get();
 
-        // La tabla campanas usa columna 'estado' (string), no boolean 'activa'
+        // Campañas activas
         $campanasActivas = Campana::with('dungeonMaster')
             ->where('estado', 'activa')
             ->latest()
@@ -23,31 +26,31 @@ class InicioController extends Controller
 
         $datosCuriosos = [
             [
-                'titulo' => 'El primer D&D',
-                'texto'  => 'Se publicó en 1974, creado por Gary Gygax y Dave Arneson a partir del wargame Chainmail.',
-            ],
-            [
-                'titulo' => 'El d20',
-                'texto'  => 'Un 20 natural es un éxito crítico. ¡El dado más temido y deseado de la mesa!',
+                'titulo' => 'Un dado, todo un destino',
+                'texto'  => 'Gary Gygax diseñó el d20 en 1974 y sin querer inventó el objeto más odiado y amado de cualquier mesa. Un 1 natural todavía duele más que un dragón.',
             ],
             [
                 'titulo' => 'El Ojo de Vecna',
-                'texto'  => 'Uno de los artefactos más poderosos. Para usarlo debes arrancar tu propio ojo... ¿te atreves?',
+                'texto'  => 'Para usar este artefacto tienes que arrancarte el ojo y meter el de Vecna en la cuenca. Lo que nadie te cuenta es lo que ves después... ni siquiera el DM lo sabe seguro.',
             ],
             [
-                'titulo' => 'Drizzt Do\'Urden',
-                'texto'  => 'El elfo oscuro más famoso del multiverso, aparecido por primera vez en la novela de 1988.',
+                'titulo' => 'Drizzt, el elfo que rompió moldes',
+                'texto'  => 'Apareció en 1988 como secundario de un libro de Forgotten Realms y terminó siendo tan popular que su autor lleva décadas escribiendo solo sobre él. Ahí lo tienes.',
             ],
             [
-                'titulo' => '+500 conjuros',
-                'texto'  => 'D&D 5ª edición tiene más de 500 conjuros distintos entre todas sus fuentes oficiales.',
+                'titulo' => 'La regla del "sí, y..."',
+                'texto'  => 'Los mejores DM no dicen "no". Dicen "sí, y además..." y de ahí salen las sesiones que se recuerdan veinte años después alrededor de una cerveza.',
             ],
             [
-                'titulo' => 'Tiamat',
-                'texto'  => 'La Reina de los Dragones Malvados tiene cinco cabezas, una por cada color cromático.',
+                'titulo' => 'Tiamat tiene cinco malas noticias',
+                'texto'  => 'Una cabeza de cada color cromático: roja, azul, negra, blanca y verde. No elijas un favorito. Todas quieren verte muerto por razones distintas.',
+            ],
+            [
+                'titulo' => '+500 conjuros en 5ª Ed.',
+                'texto'  => 'Y aun así el mago de tu grupo siempre lanza Bola de Fuego. Sin falta. En cada sesión. Aunque el dungeon sea de madera.',
             ],
         ];
 
-        return view('inicio', compact('personajesDestacados', 'campanasActivas', 'datosCuriosos'));
+        return view('inicio', compact('ultimasHazanas', 'campanasActivas', 'datosCuriosos'));
     }
 }
