@@ -428,8 +428,7 @@
                         {{ $c->nombre }}
                         <span class="desc-conjuro-meta">{{ $c->nivel == 0 ? 'Truco' : 'Nivel ' . $c->nivel }} · {{ $c->escuela }}{{ ($c->duracion ?? null) ? ' · Duración: ' . $c->duracion : '' }}</span>
                     </div>
-                    <div class="desc-conjuro-texto">{{ $c->descripcion }}</div>
-                    @if($c->a_niveles_superiores)
+                        <div class="desc-conjuro-texto">{!! $c->descripcion !!}</div>                    @if($c->a_niveles_superiores)
                     <div class="desc-conjuro-texto"><strong>A niveles superiores.</strong> {{ $c->a_niveles_superiores }}</div>
                     @endif
                 </div>

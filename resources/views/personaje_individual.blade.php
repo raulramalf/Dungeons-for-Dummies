@@ -830,8 +830,7 @@
                     @if($item->cantidad > 1) <div class="equipo-det">×{{ $item->cantidad }}</div> @endif
                     @if($item->valor_po)     <div class="equipo-det">💰 {{ $item->valor_po }} PO</div> @endif
                     @if($item->peso)         <div class="equipo-det">⚖️ {{ $item->peso }} lb</div> @endif
-                    @if($item->descripcion)  <div class="equipo-det" style="font-size:.8rem;margin-top:.3rem">{{ $item->descripcion }}</div> @endif
-                </div>
+                    @if($item->descripcion)  <div class="equipo-det" style="font-size:.8rem;margin-top:.3rem">{!! $item->descripcion !!}</div> @endif                </div>
                 @endforeach
             </div>
             @else
