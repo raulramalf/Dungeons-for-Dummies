@@ -31,10 +31,10 @@
     </div>
     <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
         @if($esDM)
-            <button onclick="abrirModalEditar()" class="btn btn-secundario btn-sm">✏️ Editar campaña</button>
+            <button onclick="abrirModalEditar()" class="btn btn-secundario btn-sm">@include('partials.icon', ['name' => 'edit', 'class' => 'icon-sm']) Editar campaña</button>
             <form method="POST" action="/campanyas/{{ $campana->id }}" onsubmit="return confirm('¿Eliminar esta campaña?')" style="display:inline">
                 @csrf @method('DELETE')
-                <button type="submit" class="btn btn-peligro btn-sm">🗑 Eliminar</button>
+                <button type="submit" class="btn btn-peligro btn-sm">@include('partials.icon', ['name' => 'trash', 'class' => 'icon-sm']) Eliminar</button>
             </form>
         @endif
         <a href="/campanyas" class="btn btn-secundario btn-sm">← Volver</a>
@@ -50,7 +50,7 @@
 
     <!-- SESIONES -->
     <section>
-        <div class="seccion-titulo">📜 Sesiones ({{ $campana->sesiones->count() }})</div>
+        <div class="seccion-titulo">@include('partials.icon', ['name' => 'scroll']) Sesiones ({{ $campana->sesiones->count() }})</div>
         @forelse($campana->sesiones->sortByDesc('numero_sesion') as $sesion)
         <div class="tarjeta" style="margin-bottom: 10px;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -78,7 +78,7 @@
 
     <!-- ENEMIGOS -->
     <section>
-        <div class="seccion-titulo">💀 Enemigos ({{ $campana->enemigos->count() }})</div>
+        <div class="seccion-titulo">@include('partials.icon', ['name' => 'skull']) Enemigos ({{ $campana->enemigos->count() }})</div>
         @forelse($campana->enemigos as $enemigo)
         <div class="tarjeta" style="margin-bottom: 10px;">
             <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -135,7 +135,7 @@
 
 <!-- JUGADORES DM -->
 <section style="margin-top: 1.5rem;">
-    <div class="seccion-titulo">👥 Jugadores ({{ $campana->usuarios->count() }})</div>
+    <div class="seccion-titulo">@include('partials.icon', ['name' => 'user']) Jugadores ({{ $campana->usuarios->count() }})</div>
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem;">
         <div class="tarjeta" style="border-top: 3px solid var(--c-rojo);">
             <div style="display: flex; align-items: center; gap: 12px;">
@@ -190,7 +190,7 @@
 <!-- NOTAS DM -->
 <section style="margin-top: 1.5rem;">
     <div class="seccion-titulo" style="display: flex; justify-content: space-between; align-items: center;">
-        <span>📋 Notas de la campaña ({{ $campana->notas->count() }})</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;">@include('partials.icon', ['name' => 'book']) Notas de la campaña ({{ $campana->notas->count() }})</span>
         <button onclick="abrirModalNota()" class="btn btn-secundario btn-sm">+ Añadir nota</button>
     </div>
     @forelse($campana->notas->sortByDesc('created_at') as $nota)
@@ -238,7 +238,7 @@
 
 {{-- 1. MI PERSONAJE --}}
 <section style="margin-bottom: 2rem;">
-    <div class="seccion-titulo">⚔️ Tu personaje</div>
+    <div class="seccion-titulo">@include('partials.icon', ['name' => 'sword']) Tu personaje</div>
     @if($miPersonaje)
     <div class="tarjeta" style="display: flex; gap: 20px; align-items: center; border-left: 4px solid var(--c-rojo); flex-wrap: wrap;">
         <img src="{{ $miPersonaje->avatar_url }}" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--c-rojo); box-shadow: 0 0 20px rgba(179,3,3,0.3); flex-shrink: 0; cursor: pointer;" onclick="verPersonaje({{ $miPersonaje->id }})">
@@ -258,7 +258,7 @@
         <form method="POST" action="/campanyas/{{ $campana->id }}/personaje/historia-visible" style="display:inline;">
             @csrf
             <button type="submit" class="btn btn-secundario btn-sm" style="border-color: {{ $historiaVisible ? 'var(--c-verde)' : 'var(--b-neutro)' }}; color: {{ $historiaVisible ? 'var(--c-verde-claro)' : 'var(--t-secundario)' }};">
-                {{ $historiaVisible ? '👁 Historia visible' : '🔒 Historia privada' }}
+                {!! $historiaVisible ? view('partials.icon', ['name' => 'eye', 'class' => 'icon-sm'])->render().' Historia visible' : view('partials.icon', ['name' => 'lock', 'class' => 'icon-sm'])->render().' Historia privada' !!}
             </button>
         </form>
         <button onclick="verPersonaje({{ $miPersonaje->id }})" class="btn btn-secundario btn-sm">Ver ficha completa →</button>
@@ -285,7 +285,7 @@
 
 {{-- 2. COMPAÑEROS --}}
 <section style="margin-bottom: 2rem;">
-    <div class="seccion-titulo">👥 Compañeros de aventura</div>
+    <div class="seccion-titulo">@include('partials.icon', ['name' => 'user']) Compañeros de aventura</div>
     <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start;">
 
         {{-- DM --}}
@@ -329,7 +329,7 @@
 {{-- 3. NOTAS DEL DM --}}
 @if($notasVisibles->count() > 0)
 <section style="margin-bottom: 2rem;">
-    <div class="seccion-titulo">📋 Notas del Dungeon Master</div>
+    <div class="seccion-titulo">@include('partials.icon', ['name' => 'book']) Notas del Dungeon Master</div>
     @foreach($notasVisibles->sortByDesc('created_at') as $nota)
     <div style="background: rgba(0,0,0,0.25); border-left: 4px solid var(--c-oro); border-radius: 0 10px 10px 0; padding: 18px 22px; margin-bottom: 14px;">
         <div style="font-family: var(--f-titulo); font-size: 0.9rem; color: var(--c-oro); margin-bottom: 8px; letter-spacing: 1px;">{{ $nota->titulo }}</div>
@@ -343,7 +343,7 @@
 {{-- 4. SESIONES --}}
 @if($campana->sesiones->count() > 0)
 <section style="margin-bottom: 2rem;">
-    <div class="seccion-titulo">📜 Crónicas de la campaña</div>
+    <div class="seccion-titulo">@include('partials.icon', ['name' => 'scroll']) Crónicas de la campaña</div>
     @foreach($campana->sesiones->sortByDesc('numero_sesion') as $sesion)
     <div class="tarjeta" style="margin-bottom: 12px; border-left: 3px solid var(--b-medio);">
         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap;">
@@ -367,7 +367,7 @@
 {{-- 5. ENEMIGOS VISIBLES --}}
 @if($enemigosVisibles->count() > 0)
 <section style="margin-bottom: 2rem;">
-    <div class="seccion-titulo">💀 Amenazas conocidas</div>
+    <div class="seccion-titulo">@include('partials.icon', ['name' => 'skull']) Amenazas conocidas</div>
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 12px;">
         @foreach($enemigosVisibles as $enemigo)
         <div class="tarjeta" style="padding: 0; overflow: hidden; cursor: {{ $enemigo->imagen ? 'zoom-in' : 'default' }};"

@@ -28,63 +28,70 @@
     <input type="text" id="buscador" onkeyup="buscarEnemigo()" placeholder="Buscar enemigo..." style="background: #2a0a18; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px; color: white; font-family: Georgia, serif; font-size: 0.9rem; flex: 1; min-width: 200px; max-width: 400px;">
     <button onclick="ordenarPorCR()" id="btn-orden" class="btn btn-secundario">↑↓ Ordenar por CR</button>
     <button onclick="ordenarPorNombre()" id="btn-nombre" class="btn btn-secundario">↑↓ Ordenar por Nombre</button>
+    <button onclick="filtrarBoss()" id="btn-boss" class="btn btn-secundario">⚠️ Solo Boss</button>
 </div>
 
 <!-- LISTA -->
 <section>
-    <div id="lista-enemigos" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px;">
+    <div id="lista-enemigos" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 22px;">
 
         @forelse($enemigos as $enemigo)
-        <div class="tarjeta-enemigo" data-cr="{{ $enemigo->clase_de_desafio }}" style="background: #2a0a18; border-radius: 10px; padding: 20px; cursor: pointer;" onclick="verEnemigo({{ $enemigo->id }})">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
-                <div>
-                    <div style="font-weight: bold; font-size: 1.05rem;">
-                        @if($enemigo->es_boss)
-                        <span style="color: #B30303; font-size: 0.75rem; margin-right: 4px;">⚠️ BOSS</span>
-                        @endif
-                        {{ $enemigo->nombre }}
-                    </div>
-                    <div style="color: var(--color-gris); font-size: 0.8rem;">{{ $enemigo->tipo }} · {{ $enemigo->tamaño }}</div>
-                </div>
-               @php
+        <div class="tarjeta-enemigo" data-cr="{{ $enemigo->clase_de_desafio }}" data-boss="{{ $enemigo->es_boss ? '1' : '0' }}" data-nombre="{{ $enemigo->nombre }}" style="background: #2a0a18; border-radius: 12px; overflow: hidden; cursor: pointer; border: 1px solid rgba(179,3,3,0.18); transition: transform 0.2s, border-color 0.2s;" onmouseover="this.style.transform='translateY(-3px)';this.style.borderColor='rgba(179,3,3,0.5)'" onmouseout="this.style.transform='translateY(0)';this.style.borderColor='rgba(179,3,3,0.18)'" onclick="verEnemigo({{ $enemigo->id }})">
+
+            <!-- IMAGEN PÓSTER -->
+            <div style="position: relative; width: 100%; height: 200px; background: linear-gradient(160deg, #3a0d1c, #1a0509);">
+                @if($enemigo->imagen)
+                <img src="{{ Storage::url($enemigo->imagen) }}" style="width: 100%; height: 100%; object-fit: cover;">
+                @else
+                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 3rem; opacity: 0.3;">💀</div>
+                @endif
+
+                <!-- Degradado inferior para legibilidad -->
+                <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(18,3,9,0.95) 0%, rgba(18,3,9,0.3) 45%, transparent 75%);"></div>
+
+                @if($enemigo->es_boss)
+                <span style="position: absolute; top: 10px; left: 10px; background: #B30303; color: white; padding: 3px 10px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; letter-spacing: 1px; box-shadow: 0 2px 8px rgba(0,0,0,0.5);">⚠️ BOSS</span>
+                @endif
+
+                @php
                     $cr = $enemigo->clase_de_desafio;
-                    if ($cr <= 3) {
-                        $crColor = '#4caf50'; $crBg = 'rgba(76,175,80,0.2)';        // Verde — fácil
-                    } elseif ($cr <= 7) {
-                        $crColor = '#768596'; $crBg = 'rgba(118,133,150,0.2)';      // Gris — medio
-                    } elseif ($cr <= 12) {
-                        $crColor = '#D46043'; $crBg = 'rgba(212,96,67,0.2)';        // Naranja — difícil
-                    } else {
-                        $crColor = '#B30303'; $crBg = 'rgba(179,3,3,0.2)';          // Rojo — letal
-                    }
+                    if ($cr <= 3) { $crColor = '#4caf50'; }
+                    elseif ($cr <= 7) { $crColor = '#768596'; }
+                    elseif ($cr <= 12) { $crColor = '#D46043'; }
+                    else { $crColor = '#B30303'; }
                 @endphp
-                <span style="background: {{ $crBg }}; color: {{ $crColor }}; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; border: 1px solid {{ $crColor }}; white-space: nowrap;">CR {{ $enemigo->clase_de_desafio }}</span>
+                <span style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.6); color: {{ $crColor }}; padding: 3px 10px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; border: 1px solid {{ $crColor }};">CR {{ $enemigo->clase_de_desafio }}</span>
+
+                <!-- Nombre sobre la imagen -->
+                <div style="position: absolute; bottom: 10px; left: 14px; right: 14px;">
+                    <div style="font-weight: bold; font-size: 1.15rem; color: white; text-shadow: 0 2px 6px rgba(0,0,0,0.8);">{{ $enemigo->nombre }}</div>
+                    <div style="color: rgba(255,255,255,0.75); font-size: 0.8rem;">{{ $enemigo->tipo }} · {{ $enemigo->tamaño }}</div>
+                </div>
             </div>
 
-            @if($enemigo->imagen)
-                <img src="{{ Storage::url($enemigo->imagen) }}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 6px; margin-bottom: 12px;">
-            @endif
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; text-align: center;">
-                <div style="background: #120309; border-radius: 6px; padding: 8px;">
-                    <div style="font-size: 1rem; font-weight: bold;">{{ $enemigo->puntos_de_golpe }}</div>
-                    <div style="color: var(--color-gris); font-size: 0.7rem;">HP</div>
+            <!-- STATS -->
+            <div style="padding: 14px;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; text-align: center; margin-bottom: 12px;">
+                    <div style="background: #120309; border-radius: 6px; padding: 8px;">
+                        <div style="font-size: 1rem; font-weight: bold;">{{ $enemigo->puntos_de_golpe }}</div>
+                        <div style="color: var(--color-gris); font-size: 0.7rem;">HP</div>
+                    </div>
+                    <div style="background: #120309; border-radius: 6px; padding: 8px;">
+                        <div style="font-size: 1rem; font-weight: bold;">{{ $enemigo->clase_de_armadura }}</div>
+                        <div style="color: var(--color-gris); font-size: 0.7rem;">CA</div>
+                    </div>
+                    <div style="background: #120309; border-radius: 6px; padding: 8px;">
+                        <div style="font-size: 1rem; font-weight: bold;">+{{ floor(($enemigo->destreza - 10) / 2) }}</div>
+                        <div style="color: var(--color-gris); font-size: 0.7rem;">Init</div>
+                    </div>
                 </div>
-                <div style="background: #120309; border-radius: 6px; padding: 8px;">
-                    <div style="font-size: 1rem; font-weight: bold;">{{ $enemigo->clase_de_armadura }}</div>
-                    <div style="color: var(--color-gris); font-size: 0.7rem;">CA</div>
+                <div style="display: flex; justify-content: flex-end;">
+                    <form method="POST" action="/enemigos/{{ $enemigo->id }}" onsubmit="event.stopPropagation(); return confirm('¿Eliminar este enemigo?')" onclick="event.stopPropagation()">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-peligro btn-sm">🗑 Eliminar</button>
+                    </form>
                 </div>
-                <div style="background: #120309; border-radius: 6px; padding: 8px;">
-                    <div style="font-size: 1rem; font-weight: bold;">+{{ floor(($enemigo->destreza - 10) / 2) }}</div>
-                    <div style="color: var(--color-gris); font-size: 0.7rem;">Init</div>
-                </div>
-            </div>
-            <div style="margin-top: 12px; display: flex; justify-content: flex-end;">
-                <form method="POST" action="/enemigos/{{ $enemigo->id }}" onsubmit="return confirm('¿Eliminar este enemigo?')">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-peligro btn-sm">🗑 Eliminar</button>
-                </form>
             </div>
         </div>
        @empty
@@ -391,9 +398,21 @@
     function buscarEnemigo() {
         const texto = document.getElementById('buscador').value.toLowerCase();
         document.querySelectorAll('.tarjeta-enemigo').forEach(tarjeta => {
-            const nombre = tarjeta.querySelector('div > div').textContent.toLowerCase();
-            tarjeta.style.display = nombre.includes(texto) ? 'block' : 'none';
+            const nombre = tarjeta.dataset.nombre.toLowerCase();
+            const coincide = nombre.includes(texto);
+            const filtroOk = !filtroBossActivo || tarjeta.dataset.boss === '1';
+            tarjeta.style.display = (coincide && filtroOk) ? 'block' : 'none';
         });
+    }
+
+    let filtroBossActivo = false;
+
+    function filtrarBoss() {
+        filtroBossActivo = !filtroBossActivo;
+        const btn = document.getElementById('btn-boss');
+        btn.style.background = filtroBossActivo ? 'rgba(179,3,3,0.25)' : '';
+        btn.style.borderColor = filtroBossActivo ? 'var(--color-rojo)' : '';
+        buscarEnemigo();
     }
 
     function verEnemigo(id) {
@@ -476,8 +495,8 @@
         const tarjetas = Array.from(lista.querySelectorAll('.tarjeta-enemigo'));
 
         tarjetas.sort((a, b) => {
-            const nombreA = a.querySelector('div > div').textContent.trim().toLowerCase();
-            const nombreB = b.querySelector('div > div').textContent.trim().toLowerCase();
+            const nombreA = a.dataset.nombre.toLowerCase();
+            const nombreB = b.dataset.nombre.toLowerCase();
             return ordenNombreAsc ? nombreA.localeCompare(nombreB) : nombreB.localeCompare(nombreA);
         });
 

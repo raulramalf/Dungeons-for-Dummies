@@ -667,7 +667,7 @@
 
             {{-- ======= INFORMACIÓN BÁSICA ======= --}}
             <div class="seccion">
-                <div class="seccion-titulo">📋 Información Básica</div>
+                <div class="seccion-titulo">@include('partials.icon', ['name' => 'scroll']) Información Básica</div>
 
                 <div class="form-row">
                     <div class="form-group">
@@ -760,7 +760,7 @@
 
             {{-- ======= IMÁGENES ======= --}}
             <div class="seccion">
-                <div class="seccion-titulo">🎨 Imágenes</div>
+                <div class="seccion-titulo">@include('partials.icon', ['name' => 'image']) Imágenes</div>
 
                 {{-- Imágenes del personaje --}}
                 <div class="form-group">
@@ -833,7 +833,7 @@
 
             {{-- ======= ESTADÍSTICAS ======= --}}
             <div class="seccion">
-                <div class="seccion-titulo">🎯 Características</div>
+                <div class="seccion-titulo">@include('partials.icon', ['name' => 'star']) Características</div>
                 <div class="stats-grid">
                     @foreach($statsMap as $label => $attr)
                     @php
@@ -855,7 +855,7 @@
 
             {{-- ======= TIRADAS DE SALVACIÓN ======= --}}
             <div class="seccion">
-                <div class="seccion-titulo">🛡️ Competencia en Tiradas de Salvación</div>
+                <div class="seccion-titulo">@include('partials.icon', ['name' => 'shield']) Competencia en Tiradas de Salvación</div>
                 <div class="check-grid">
                     @foreach($statsMap as $label => $attr)
                     <label class="check-item">
@@ -872,7 +872,7 @@
 
             {{-- ======= HABILIDADES ======= --}}
             <div class="seccion">
-                <div class="seccion-titulo">📋 Competencia en Habilidades</div>
+                <div class="seccion-titulo">@include('partials.icon', ['name' => 'book']) Competencia en Habilidades</div>
                 <div class="check-grid">
                     @foreach($habilidades as $nombre => $base)
                     <label class="check-item">
@@ -889,7 +889,7 @@
 
             {{-- ======= COMBATE ======= --}}
             <div class="seccion">
-                <div class="seccion-titulo">⚔️ Combate</div>
+                <div class="seccion-titulo">@include('partials.icon', ['name' => 'sword']) Combate</div>
                 <div class="combat-grid">
                     @php $est = $personaje->estadisticas; @endphp
                     <div class="combat-field">
@@ -961,7 +961,7 @@
 
             {{-- ======= ARMAS Y ATAQUES ======= --}}
             <div class="seccion">
-                <div class="seccion-titulo">⚔️ Armas y Ataques</div>
+                <div class="seccion-titulo">@include('partials.icon', ['name' => 'swords']) Armas y Ataques</div>
                 <div style="font-size:.78rem;color:#768596;margin-bottom:.8rem">Nombre · Bonificador de ataque · Daño/Tipo</div>
 
                 @if($personaje->equipo && $personaje->equipo->count() > 0)
@@ -990,13 +990,13 @@
                     @endforeach
                 </div>
 
-                <button type="button" class="btn-add-ataque" onclick="addAtaque()">➕ Añadir ataque</button>
+                <button type="button" class="btn-add-ataque" onclick="addAtaque()">@include('partials.icon', ['name' => 'plus', 'class' => 'icon-sm']) Añadir ataque</button>
                 <input type="hidden" name="ataques" id="ataquesHidden">
             </div>
 
             {{-- ======= CONJUROS Y TRUCOS ======= --}}
             <div class="seccion">
-                <div class="seccion-titulo">📖 Conjuros y Trucos</div>
+                <div class="seccion-titulo">@include('partials.icon', ['name' => 'book']) Conjuros y Trucos</div>
 
                 @if($personaje->trucos && $personaje->trucos->count() > 0)
                 <div class="equipo-existente" style="margin-bottom:1rem">
@@ -1057,7 +1057,7 @@
 
             {{-- ======= PERSONALIDAD ======= --}}
             <div class="seccion">
-                <div class="seccion-titulo">💭 Personalidad</div>
+                <div class="seccion-titulo">@include('partials.icon', ['name' => 'user']) Personalidad</div>
                 <div class="form-row">
                     <div class="form-group">
                         <label>Rasgos de personalidad</label>
@@ -1084,7 +1084,7 @@
 
             {{-- ======= APARIENCIA ======= --}}
             <div class="seccion">
-                <div class="seccion-titulo">🧍 Apariencia</div>
+                <div class="seccion-titulo">@include('partials.icon', ['name' => 'helmet']) Apariencia</div>
                 <div class="form-row-3">
                     @foreach(['edad' => 'Edad', 'altura' => 'Altura', 'peso' => 'Peso', 'ojos' => 'Ojos', 'piel' => 'Piel', 'pelo' => 'Pelo'] as $campo => $etiq)
                     <div class="form-group">
@@ -1104,8 +1104,8 @@
 
             {{-- BOTONES --}}
             <div class="form-actions">
-                <a href="{{ route('personajes.show', $personaje) }}" class="btn-cancel">❌ Cancelar</a>
-                <button type="submit" class="btn-save">💾 Guardar Personaje</button>
+                <a href="{{ route('personajes.show', $personaje) }}" class="btn-cancel">@include('partials.icon', ['name' => 'x', 'class' => 'icon-sm']) Cancelar</a>
+                <button type="submit" class="btn-save">@include('partials.icon', ['name' => 'check', 'class' => 'icon-sm']) Guardar Personaje</button>
             </div>
 
         </div>{{-- /.edit-body --}}
@@ -1114,7 +1114,7 @@
     {{-- ======= EQUIPO (formulario separado) ======= --}}
     <div class="edit-body" style="padding-top:0">
         <div class="seccion">
-            <div class="seccion-titulo">🎒 Equipo</div>
+            <div class="seccion-titulo">@include('partials.icon', ['name' => 'coins']) Equipo</div>
 
             @if($personaje->equipo && $personaje->equipo->count() > 0)
             <div class="equipo-existente">
@@ -1139,7 +1139,7 @@
             @endif
 
             <div class="form-equipo">
-                <h4>➕ Añadir objeto</h4>
+                <h4>@include('partials.icon', ['name' => 'plus', 'class' => 'icon-sm']) Añadir objeto</h4>
                 <form action="{{ route('equipo.store', $personaje) }}" method="POST">
                     @csrf
                     <div class="equipo-inputs">
@@ -1159,14 +1159,14 @@
                             </label>
                         </div>
                     </div>
-                    <button type="submit" class="btn-add-equipo">➕ Añadir al inventario</button>
+                    <button type="submit" class="btn-add-equipo">@include('partials.icon', ['name' => 'plus', 'class' => 'icon-sm']) Añadir al inventario</button>
                 </form>
             </div>
         </div>
 
         {{-- ======= MONEDAS (formulario separado) ======= --}}
         <div class="seccion">
-            <div class="seccion-titulo">💰 Tesoro</div>
+            <div class="seccion-titulo">@include('partials.icon', ['name' => 'coins']) Tesoro</div>
             <form action="{{ route('personajes.actualizar_monedas', $personaje) }}" method="POST">
                 @csrf @method('PUT')
                 @php $est = $personaje->estadisticas; @endphp
@@ -1180,7 +1180,7 @@
                     </div>
                     @endforeach
                 </div>
-                <button type="submit" class="btn-monedas">💾 Actualizar monedas</button>
+                <button type="submit" class="btn-monedas">@include('partials.icon', ['name' => 'coins', 'class' => 'icon-sm']) Actualizar monedas</button>
             </form>
         </div>
     </div>

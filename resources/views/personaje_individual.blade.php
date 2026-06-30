@@ -541,27 +541,27 @@
             <div class="ficha-badges">
                 <span class="badge badge-nivel">Nivel {{ $personaje->nivel }}</span>
                 @if($personaje->experiencia)
-                    <span class="badge badge-exp">⚡ {{ number_format($personaje->experiencia) }} XP</span>
+                    <span class="badge badge-exp">@include('partials.icon', ['name' => 'star', 'class' => 'icon-sm']) {{ number_format($personaje->experiencia) }} XP</span>
                 @endif
                 @if($personaje->alineamiento)
-                    <span class="badge badge-align">⚖️ {{ $personaje->alineamiento }}</span>
+                    <span class="badge badge-align">@include('partials.icon', ['name' => 'scroll', 'class' => 'icon-sm']) {{ $personaje->alineamiento }}</span>
                 @endif
                 @if($personaje->divinidad)
-                    <span class="badge badge-divinidad">🙏 {{ $personaje->divinidad }}</span>
+                    <span class="badge badge-divinidad">@include('partials.icon', ['name' => 'shield', 'class' => 'icon-sm']) {{ $personaje->divinidad }}</span>
                 @endif
                 @if($est && $est->inspiracion)
-                    <span class="badge" style="background:rgba(212,96,67,0.2);color:#D46043;border:1px solid rgba(212,96,67,0.3)">✨ Inspiración</span>
+                    <span class="badge" style="background:rgba(212,96,67,0.2);color:#D46043;border:1px solid rgba(212,96,67,0.3)">@include('partials.icon', ['name' => 'star', 'class' => 'icon-sm']) Inspiración</span>
                 @endif
             </div>
             <div class="ficha-acciones">
-                <a href="{{ route('personajes.index') }}" class="btn btn-volver">← Volver</a>
-                <a href="{{ route('personajes.edit', $personaje) }}" class="btn btn-editar">✏️ Editar</a>
-                <a href="{{ route('personajes.exportar', $personaje) }}" class="btn btn-editar">📄 Exportar Ficha</a>
+                <a href="{{ route('personajes.index') }}" class="btn btn-volver">@include('partials.icon', ['name' => 'arrow-left', 'class' => 'icon-sm']) Volver</a>
+                <a href="{{ route('personajes.edit', $personaje) }}" class="btn btn-editar">@include('partials.icon', ['name' => 'edit', 'class' => 'icon-sm']) Editar</a>
+                <a href="{{ route('personajes.exportar', $personaje) }}" class="btn btn-editar">@include('partials.icon', ['name' => 'scroll', 'class' => 'icon-sm']) Exportar Ficha</a>
                 <form action="{{ route('personajes.destroy', $personaje) }}" method="POST"
                       style="display:inline"
                       onsubmit="return confirm('¿Eliminar a {{ addslashes($personaje->nombre) }}? Esta acción no se puede deshacer.')">
                     @csrf @method('DELETE')
-                    <button type="submit" class="btn btn-eliminar">🗑️ Eliminar</button>
+                    <button type="submit" class="btn btn-eliminar">@include('partials.icon', ['name' => 'trash', 'class' => 'icon-sm']) Eliminar</button>
                 </form>
             </div>
         </div>
@@ -571,7 +571,7 @@
 
         {{-- ESTADÍSTICAS PRINCIPALES --}}
         <div class="seccion">
-            <div class="seccion-titulo">🎯 Características</div>
+            <div class="seccion-titulo">@include('partials.icon', ['name' => 'star']) Características</div>
             <div class="stats-grid">
                 @foreach($stats as $label => $attr)
                     @php
@@ -591,7 +591,7 @@
         {{-- SALVACIONES --}}
         @if(count($compSal) > 0)
         <div class="seccion">
-            <div class="seccion-titulo">🛡️ Tiradas de Salvación (competencia)</div>
+            <div class="seccion-titulo">@include('partials.icon', ['name' => 'shield']) Tiradas de Salvación (competencia)</div>
             <div class="competencias-grid">
                 @foreach($stats as $label => $attr)
                     @php $activa = in_array($attr, $compSal); @endphp
@@ -607,7 +607,7 @@
         {{-- HABILIDADES --}}
         @if(count($compHab) > 0)
         <div class="seccion">
-            <div class="seccion-titulo">📋 Competencias en Habilidades</div>
+            <div class="seccion-titulo">@include('partials.icon', ['name' => 'book']) Competencias en Habilidades</div>
             <div class="competencias-grid">
                 @foreach($habilidades as $nombre => $base)
                     @php $activa = in_array($nombre, $compHab); @endphp
@@ -623,7 +623,7 @@
         {{-- COMBATE --}}
         @if($est)
         <div class="seccion">
-            <div class="seccion-titulo">⚔️ Combate</div>
+            <div class="seccion-titulo">@include('partials.icon', ['name' => 'sword']) Combate</div>
             <div class="info-combat">
                 <div class="combat-card">
                     <span class="combat-label">❤️ PG Actuales / Máx</span>
@@ -691,7 +691,7 @@
         {{-- ARMAS Y ATAQUES --}}
         @if(count($ataques) > 0)
         <div class="seccion">
-            <div class="seccion-titulo">⚔️ Armas y Ataques</div>
+            <div class="seccion-titulo">@include('partials.icon', ['name' => 'swords']) Armas y Ataques</div>
             <table class="tabla-ataques">
                 <thead>
                     <tr>
@@ -716,7 +716,7 @@
         {{-- HISTORIA --}}
         @if($personaje->historia)
         <div class="seccion">
-            <div class="seccion-titulo">📖 Historia</div>
+            <div class="seccion-titulo">@include('partials.icon', ['name' => 'book']) Historia</div>
             <div class="historia-box">{{ $personaje->historia }}</div>
         </div>
         @endif
@@ -724,7 +724,7 @@
         {{-- RASGOS DE PERSONALIDAD --}}
         @if($personaje->rasgos_personalidad || $personaje->ideales || $personaje->vinculos || $personaje->defectos)
         <div class="seccion">
-            <div class="seccion-titulo">💭 Personalidad</div>
+            <div class="seccion-titulo">@include('partials.icon', ['name' => 'user']) Personalidad</div>
             <div class="rasgos-grid">
                 @if($personaje->rasgos_personalidad)
                 <div class="rasgo-card">
@@ -767,7 +767,7 @@
         @endphp
         @if(count($apariencia) > 0)
         <div class="seccion">
-            <div class="seccion-titulo">🧍 Apariencia</div>
+            <div class="seccion-titulo">@include('partials.icon', ['name' => 'helmet']) Apariencia</div>
             <div class="apariencia-grid">
                 @foreach($apariencia as $label => $valor)
                 <div class="apariencia-item">
@@ -782,7 +782,7 @@
         {{-- IDIOMAS --}}
         @if($personaje->idiomas)
         <div class="seccion">
-            <div class="seccion-titulo">🌍 Idiomas</div>
+            <div class="seccion-titulo">@include('partials.icon', ['name' => 'map']) Idiomas</div>
             <p style="color:#a8b0b8;font-size:0.95rem">{{ $personaje->idiomas }}</p>
         </div>
         @endif
@@ -790,7 +790,7 @@
         {{-- GALERÍA — PERSONAJE --}}
         @if(count($imgsPersonaje) > 0)
         <div class="seccion">
-            <div class="seccion-titulo">🎨 Imágenes del Personaje</div>
+            <div class="seccion-titulo">@include('partials.icon', ['name' => 'image']) Imágenes del Personaje</div>
             <div class="galeria">
                 @foreach($imgsPersonaje as $img)
                     <img src="{{ Storage::url($img) }}"
@@ -804,7 +804,7 @@
         {{-- GALERÍA — ARMAS --}}
         @if(count($imgsArmas) > 0)
         <div class="seccion">
-            <div class="seccion-titulo">⚔️ Imágenes de Armas</div>
+            <div class="seccion-titulo">@include('partials.icon', ['name' => 'swords']) Imágenes de Armas</div>
             <div class="galeria">
                 @foreach($imgsArmas as $img)
                     <img src="{{ Storage::url($img) }}"
@@ -817,7 +817,7 @@
 
         {{-- EQUIPO --}}
         <div class="seccion">
-            <div class="seccion-titulo">🎒 Equipo</div>
+            <div class="seccion-titulo">@include('partials.icon', ['name' => 'coins']) Equipo</div>
             @if($personaje->equipo && $personaje->equipo->count() > 0)
             <div class="equipo-grid">
                 @foreach($personaje->equipo as $item)
@@ -842,7 +842,7 @@
         {{-- MONEDAS --}}
         @if($est)
         <div class="seccion">
-            <div class="seccion-titulo">💰 Tesoro</div>
+            <div class="seccion-titulo">@include('partials.icon', ['name' => 'coins']) Tesoro</div>
             <div class="monedas-grid">
                 <div class="moneda-card">
                     <span class="moneda-simbolo">🟤</span>
@@ -876,7 +876,7 @@
         {{-- TRUCOS Y CONJUROS (al final de la página) --}}
         @if($trucosOrdenados->count() > 0)
         <div class="seccion">
-            <div class="seccion-titulo">📖 Trucos y Conjuros</div>
+            <div class="seccion-titulo">@include('partials.icon', ['name' => 'book']) Trucos y Conjuros</div>
             <table class="tabla-ataques">
                 <thead>
                     <tr>

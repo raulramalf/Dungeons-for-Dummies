@@ -17,13 +17,32 @@
     <button onclick="abrirModalCrear()" class="btn btn-primario">+ Crear Campaña</button>
 </div>
 
-<!-- CAMPAÑAS ACTIVAS -->
-@php $activas = $campanasDM->where('estado', 'activa'); @endphp
-@if($activas->count() > 0)
+<!-- TABS DE ESTADO -->
+@php
+    $activas = $campanasDM->where('estado', 'activa');
+    $pausadas = $campanasDM->where('estado', 'pausada');
+    $finalizadas = $campanasDM->where('estado', 'finalizada');
+@endphp
+@if($campanasDM->count() > 0)
 <section style="margin-bottom: 2.5rem;">
-    <div class="seccion-titulo">⚔ Campañas Activas</div>
-    <div style="display: flex; flex-direction: column; gap: 1rem;">
-        @foreach($activas as $campana)
+    <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--b-neutro);">
+        <button onclick="cambiarTabCampana('activas')" id="tab-activas" class="tab-campana" style="display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; background: none; border: none; border-bottom: 2px solid var(--c-rojo); color: white; font-family: var(--f-titulo); font-size: 0.9rem; letter-spacing: 1px; cursor: pointer; text-transform: uppercase;">
+            @include('partials.icon', ['name' => 'swords', 'class' => 'icon-sm']) Activas ({{ $activas->count() }})
+        </button>
+        @if($pausadas->count() > 0)
+        <button onclick="cambiarTabCampana('pausadas')" id="tab-pausadas" class="tab-campana" style="padding: 10px 20px; background: none; border: none; border-bottom: 2px solid transparent; color: var(--t-secundario); font-family: var(--f-titulo); font-size: 0.9rem; letter-spacing: 1px; cursor: pointer; text-transform: uppercase;">
+            ⏸ Pausadas ({{ $pausadas->count() }})
+        </button>
+        @endif
+        @if($finalizadas->count() > 0)
+        <button onclick="cambiarTabCampana('finalizadas')" id="tab-finalizadas" class="tab-campana" style="padding: 10px 20px; background: none; border: none; border-bottom: 2px solid transparent; color: var(--t-secundario); font-family: var(--f-titulo); font-size: 0.9rem; letter-spacing: 1px; cursor: pointer; text-transform: uppercase;">
+            ✓ Finalizadas ({{ $finalizadas->count() }})
+        </button>
+        @endif
+    </div>
+
+    <div id="panel-activas" class="panel-campana" style="display: flex; flex-direction: column; gap: 1rem;">
+        @forelse($activas as $campana)
         <div class="tarjeta" style="border-left: 4px solid var(--c-rojo); cursor: pointer;" onclick="window.location='/campanyas/{{ $campana->id }}'">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                 <div style="flex: 1;">
@@ -47,17 +66,12 @@
                 </div>
             </div>
         </div>
-        @endforeach
+        @empty
+        <p style="color: var(--t-tenue);">No tienes campañas activas.</p>
+        @endforelse
     </div>
-</section>
-@endif
 
-<!-- CAMPAÑAS PAUSADAS -->
-@php $pausadas = $campanasDM->where('estado', 'pausada'); @endphp
-@if($pausadas->count() > 0)
-<section style="margin-bottom: 2.5rem;">
-    <div class="seccion-titulo">⏸ Pausadas</div>
-    <div style="display: flex; flex-direction: column; gap: 1rem;">
+    <div id="panel-pausadas" class="panel-campana" style="display: none; flex-direction: column; gap: 1rem;">
         @foreach($pausadas as $campana)
         <div class="tarjeta" style="border-left: 4px solid var(--t-secundario); cursor: pointer; opacity: 0.85;" onclick="window.location='/campanyas/{{ $campana->id }}'">
             <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -75,15 +89,8 @@
         </div>
         @endforeach
     </div>
-</section>
-@endif
 
-<!-- CAMPAÑAS FINALIZADAS -->
-@php $finalizadas = $campanasDM->where('estado', 'finalizada'); @endphp
-@if($finalizadas->count() > 0)
-<section style="margin-bottom: 2.5rem;">
-    <div class="seccion-titulo">✓ Finalizadas</div>
-    <div style="display: flex; flex-direction: column; gap: 1rem;">
+    <div id="panel-finalizadas" class="panel-campana" style="display: none; flex-direction: column; gap: 1rem;">
         @foreach($finalizadas as $campana)
         <div class="tarjeta" style="opacity: 0.6; cursor: pointer;" onclick="window.location='/campanyas/{{ $campana->id }}'">
             <div style="font-weight: bold;">{{ $campana->nombre }}</div>
@@ -92,10 +99,7 @@
         @endforeach
     </div>
 </section>
-@endif
-
-<!-- ESTADO VACÍO -->
-@if($campanasDM->count() === 0)
+@else
 <div class="vacio">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 60px; height: 60px; stroke: var(--c-rojo); fill: none; stroke-width: 1.5; opacity: 0.5; margin: 0 auto 1rem; display: block;">
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"/>
@@ -109,7 +113,7 @@
 <!-- CAMPAÑAS COMO JUGADOR -->
 @if($campanasJugador->count() > 0)
 <section style="margin-top: 2.5rem; margin-bottom: 2.5rem;">
-    <div class="seccion-titulo">🎲 Campañas en las que juegas</div>
+    <div class="seccion-titulo">@include('partials.icon', ['name' => 'dice']) Campañas en las que juegas</div>
     <div style="display: flex; flex-direction: column; gap: 1rem;">
         @foreach($campanasJugador as $campana)
         <div class="tarjeta" style="border-left: 4px solid var(--c-naranja); cursor: pointer;" onclick="window.location='/campanyas/{{ $campana->id }}'">
@@ -141,7 +145,7 @@
 
 <!-- UNIRSE A CAMPAÑA -->
 <section style="margin-top: 2rem;">
-    <div class="seccion-titulo">🔑 Unirse a una campaña</div>
+    <div class="seccion-titulo">@include('partials.icon', ['name' => 'lock']) Unirse a una campaña</div>
     <div class="tarjeta" style="max-width: 500px;">
         <form method="POST" action="/unirse-campana" style="display: flex; flex-direction: column; gap: 12px;">
             @csrf
@@ -224,6 +228,19 @@
 </div>
 
 <script>
+    function cambiarTabCampana(tab) {
+        document.querySelectorAll('.panel-campana').forEach(p => p.style.display = 'none');
+        document.querySelectorAll('.tab-campana').forEach(t => {
+            t.style.borderBottomColor = 'transparent';
+            t.style.color = 'var(--t-secundario)';
+        });
+
+        document.getElementById('panel-' + tab).style.display = 'flex';
+        const tabBtn = document.getElementById('tab-' + tab);
+        tabBtn.style.borderBottomColor = 'var(--c-rojo)';
+        tabBtn.style.color = 'white';
+    }
+    
     function abrirModalCrear() {
         document.getElementById('modal-crear-campana').scrollTop = 0;
         document.getElementById('modal-crear-campana').style.display = 'flex';

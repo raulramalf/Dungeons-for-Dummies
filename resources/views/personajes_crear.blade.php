@@ -134,7 +134,7 @@
 </style>
 
 <div class="form-container">
-    <h2>⚔️ Crear Nuevo Personaje</h2>
+    <h2 style="display:flex;align-items:center;justify-content:center;gap:10px;">@include('partials.icon', ['name' => 'swords']) Crear Nuevo Personaje</h2>
 
     <form action="{{ route('personajes.store') }}" method="POST">
         @csrf
@@ -205,7 +205,7 @@
             @enderror
         </div>
 
-        <h3 style="color: var(--color-gris); margin-top: 2rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px;">🎯 Estadísticas</h3>
+        <h3 style="color: var(--color-gris); margin-top: 2rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px; display:flex; align-items:center; gap:8px;">@include('partials.icon', ['name' => 'star']) Estadísticas</h3>
         
         <div class="form-row">
             @foreach(['fuerza', 'destreza', 'constitucion', 'inteligencia', 'sabiduria', 'carisma'] as $stat)
@@ -220,8 +220,8 @@
         </div>
 
         <div class="form-actions">
-            <a href="{{ route('personajes.index') }}" class="btn-cancel">❌ Cancelar</a>
-            <button type="submit" class="btn-submit">⚔️ Crear Personaje</button>
+            <a href="{{ route('personajes.index') }}" class="btn-cancel">@include('partials.icon', ['name' => 'x', 'class' => 'icon-sm']) Cancelar</a>
+            <button type="submit" class="btn-submit">@include('partials.icon', ['name' => 'sword', 'class' => 'icon-sm']) Crear Personaje</button>
         </div>
     </form>
 </div>

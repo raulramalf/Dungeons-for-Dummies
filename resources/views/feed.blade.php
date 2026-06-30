@@ -5,7 +5,7 @@
 @section('contenido')
 
 <video autoplay muted loop playsinline id="bg-video-taberna">
-    <source src="{{ asset('videos/tavern.mp4') }}" type="video/mp4">
+    <source src="{{ asset('videos/Tavern.mp4') }}" type="video/mp4">
 </video>
 
 <style>

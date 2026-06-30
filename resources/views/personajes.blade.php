@@ -363,9 +363,9 @@
     @endif
 
     <div class="header-actions">
-        <h2>⚔️ Gremio de Héroes</h2>
+        <h2 style="display:flex;align-items:center;gap:10px;">@include('partials.icon', ['name' => 'swords']) Gremio de Héroes</h2>
         <a href="{{ route('personajes.create') }}" class="btn-crear">
-            ➕ Crear Nuevo Personaje
+            @include('partials.icon', ['name' => 'plus', 'class' => 'icon-sm']) Crear Nuevo Personaje
         </a>
     </div>
 
@@ -392,13 +392,13 @@
                             {{ $personaje->raza->nombre ?? '—' }} · {{ $personaje->clase->nombre ?? '—' }}
                         </div>
                         <div class="slide-acciones">
-                            <a href="{{ route('personajes.show', $personaje) }}" class="slide-btn slide-btn-ver">👁️ Ver ficha</a>
-                            <a href="{{ route('personajes.edit', $personaje) }}" class="slide-btn slide-btn-edit">✏️ Editar</a>
+                            <a href="{{ route('personajes.show', $personaje) }}" class="slide-btn slide-btn-ver">@include('partials.icon', ['name' => 'eye', 'class' => 'icon-sm']) Ver ficha</a>
+                            <a href="{{ route('personajes.edit', $personaje) }}" class="slide-btn slide-btn-edit">@include('partials.icon', ['name' => 'edit', 'class' => 'icon-sm']) Editar</a>
                             <form action="{{ route('personajes.destroy', $personaje) }}" method="POST"
                                   style="display:inline"
                                   onsubmit="return confirm('¿Eliminar a {{ addslashes($personaje->nombre) }}?')">
                                 @csrf @method('DELETE')
-                                <button type="submit" class="slide-btn slide-btn-del">🗑️</button>
+                                <button type="submit" class="slide-btn slide-btn-del">@include('partials.icon', ['name' => 'trash', 'class' => 'icon-sm'])</button>
                             </form>
                         </div>
                     </div>
@@ -430,12 +430,12 @@
                 <h3>{{ $p->nombre }}</h3>
                 <div class="clase-raza">{{ $p->raza->nombre ?? 'Raza' }} | {{ $p->clase->nombre ?? 'Clase' }}</div>
                 <div class="single-card-actions">
-                    <a href="{{ route('personajes.show', $p) }}" class="btn-ver">👁️ Ver</a>
-                    <a href="{{ route('personajes.edit', $p) }}" class="btn-editar">✏️ Editar</a>
+                    <a href="{{ route('personajes.show', $p) }}" class="btn-ver">@include('partials.icon', ['name' => 'eye', 'class' => 'icon-sm']) Ver</a>
+                    <a href="{{ route('personajes.edit', $p) }}" class="btn-editar">@include('partials.icon', ['name' => 'edit', 'class' => 'icon-sm']) Editar</a>
                     <form action="{{ route('personajes.destroy', $p) }}" method="POST" style="display:inline"
                           onsubmit="return confirm('¿Eliminar a {{ addslashes($p->nombre) }}?')">
                         @csrf @method('DELETE')
-                        <button type="submit" class="btn-eliminar">🗑️ Eliminar</button>
+                        <button type="submit" class="btn-eliminar">@include('partials.icon', ['name' => 'trash', 'class' => 'icon-sm']) Eliminar</button>
                     </form>
                 </div>
             </div>
@@ -444,11 +444,11 @@
 
     @else
     <div class="empty-state">
-        <span class="icon">🏰</span>
+        <span class="icon">@include('partials.icon', ['name' => 'shield', 'class' => 'icon-xl'])</span>
         <h3>No hay personajes aún</h3>
         <p>¡Crea tu primer héroe y comienza tu aventura!</p>
         <a href="{{ route('personajes.create') }}" class="btn-crear" style="display:inline-flex">
-            ⚔️ Crear mi primer personaje
+            @include('partials.icon', ['name' => 'sword', 'class' => 'icon-sm']) Crear mi primer personaje
         </a>
     </div>
     @endif
