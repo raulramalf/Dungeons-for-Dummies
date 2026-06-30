@@ -95,16 +95,62 @@ class PersonajeController extends Controller
             'trasfondo',
             'estadisticas',
             'equipo',
-            'trucos',
+            'trucos.conjuro',
         ]);
 
         return view('personaje_individual', compact('personaje'));
     }
 
-    public function exportarFicha(Personaje $personaje)
+    // Plantillas de ficha PDF disponibles
+    const PLANTILLAS_PDF = [
+        'clasica' => [
+            'label' => 'Clásica',
+            'vista' => 'personajes.ficha_pdf',
+            'desc'  => 'Orden y claridad. Tablas limpias en granate sobre fondo claro, una sola página.',
+        ],
+        'oficial' => [
+            'label' => 'Estilo Oficial',
+            'vista' => 'personajes.ficha_pdf_oficial',
+            'desc'  => 'Calcada de la maquetación oficial de 2024: características a la izquierda, conjuros en página aparte.',
+        ],
+        'pergamino' => [
+            'label' => 'Pergamino Dracónico',
+            'vista' => 'personajes.ficha_pdf_pergamino',
+            'desc'  => 'Fondo envejecido, medallones circulares para cada característica y marco ornamental.',
+        ],
+        'gotica' => [
+            'label' => 'Oscura Gótica',
+            'vista' => 'personajes.ficha_pdf_gotica',
+            'desc'  => 'Fondo negro, oro y granate. Para fichas que dan tanto miedo como el dungeon.',
+        ],
+        'minimalista' => [
+            'label' => 'Minimalista',
+            'vista' => 'personajes.ficha_pdf_minimalista',
+            'desc'  => 'Una columna, mucho blanco, líneas finas. La más rápida de leer e imprimir.',
+        ],
+    ];
+
+    public function elegirPlantilla(Personaje $personaje)
+    {
+        if ($personaje->usuario_id !== auth()->id()) {
+            abort(403);
+        }
+
+        return view('personajes.exportar_elegir', [
+            'personaje'  => $personaje,
+            'plantillas' => self::PLANTILLAS_PDF,
+        ]);
+    }
+
+    public function exportarFicha(Request $request, Personaje $personaje)
     {
         if ($personaje->usuario_id !== auth()->id()) {
             abort(403, 'No tienes permiso para exportar este personaje.');
+        }
+
+        $plantilla = $request->query('plantilla', 'clasica');
+        if (!array_key_exists($plantilla, self::PLANTILLAS_PDF)) {
+            $plantilla = 'clasica';
         }
 
         $personaje->load([
@@ -114,10 +160,12 @@ class PersonajeController extends Controller
             'trasfondo',
             'estadisticas',
             'equipo',
-            'trucos',
+            'trucos.conjuro',
         ]);
 
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('personajes.ficha_pdf', compact('personaje'))
+        $vista = self::PLANTILLAS_PDF[$plantilla]['vista'];
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView($vista, compact('personaje'))
             ->setPaper('a4', 'portrait');
 
         $nombreArchivo = 'ficha-' . \Illuminate\Support\Str::slug($personaje->nombre) . '.pdf';
@@ -131,13 +179,25 @@ class PersonajeController extends Controller
             abort(403);
         }
 
-        $personaje->load(['estadisticas', 'equipo', 'raza', 'clase', 'trasfondo']);
+        $personaje->load(['estadisticas', 'equipo', 'raza', 'clase', 'trasfondo', 'trucos.conjuro']);
 
         $razas      = Raza::all();
         $clases     = Clase::all();
         $trasfondos = Trasfondo::all();
 
-        return view('personajes_editar', compact('personaje', 'razas', 'clases', 'trasfondos'));
+        // Catálogo de conjuros para el desplegable, filtrado por la clase del personaje cuando es posible
+        $conjurosCatalogo = \App\Models\Conjuro::orderBy('nivel')
+            ->orderBy('nombre')
+            ->get()
+            ->when($personaje->clase, function ($conjuros) use ($personaje) {
+                $filtrados = $conjuros->filter(function ($c) use ($personaje) {
+                    return in_array($personaje->clase->nombre, $c->clases ?? []);
+                });
+                // Si el filtro deja la lista vacía (nombres de clase no coinciden), mostramos el catálogo completo
+                return $filtrados->isNotEmpty() ? $filtrados : $conjuros;
+            });
+
+        return view('personajes_editar', compact('personaje', 'razas', 'clases', 'trasfondos', 'conjurosCatalogo'));
     }
 
     public function update(Request $request, Personaje $personaje)
@@ -198,6 +258,8 @@ class PersonajeController extends Controller
             'idiomas'                  => 'nullable|string',
             // Ataques (JSON)
             'ataques' => 'nullable|json',
+            // Conjuros nuevos seleccionados desde el catálogo (JSON con ids)
+            'conjuros_nuevos' => 'nullable|json',
         ]);
 
         // ——— Actualizar datos básicos del personaje ———
@@ -273,6 +335,20 @@ class PersonajeController extends Controller
             $estadisticas->update($statsData);
         } else {
             $personaje->estadisticas()->create($statsData);
+        }
+
+        // ——— Añadir conjuros seleccionados en el desplegable ———
+        $conjurosNuevos = json_decode($validated['conjuros_nuevos'] ?? '[]', true) ?? [];
+        if (count($conjurosNuevos) > 0) {
+            $yaTiene = $personaje->trucos()->pluck('conjuro_id')->filter()->toArray();
+            $aAnadir = \App\Models\Conjuro::whereIn('id', array_diff($conjurosNuevos, $yaTiene))->get();
+
+            foreach ($aAnadir as $conjuro) {
+                $personaje->trucos()->create([
+                    'conjuro_id' => $conjuro->id,
+                    'nombre'     => $conjuro->nombre,
+                ]);
+            }
         }
 
         return redirect()->route('personajes.show', $personaje)

@@ -314,38 +314,7 @@
 
     .combat-field input:focus { border-color: #B30303; outline: none; }
 
-    /* =============================================
-       COMPETENCIAS (checkboxes)
-    ============================================= */
-    .check-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-        gap: 0.5rem;
-    }
-
-    .check-item {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.4rem 0.6rem;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background 0.2s;
-    }
-
-    .check-item:hover { background: rgba(0,0,0,0.2); }
-
-    .check-item input[type="checkbox"] {
-        width: 16px;
-        height: 16px;
-        accent-color: #B30303;
-        flex-shrink: 0;
-    }
-
-    .check-item span {
-        color: #a8b0b8;
-        font-size: 0.88rem;
-    }
+    /* check-grid / check-item: estilos globales en app.css */
 
     /* =============================================
        ATAQUES
@@ -990,10 +959,22 @@
                 </div>
             </div>
 
-            {{-- ======= ATAQUES ======= --}}
+            {{-- ======= ARMAS Y ATAQUES ======= --}}
             <div class="seccion">
-                <div class="seccion-titulo">⚔️ Ataques y Conjuros</div>
+                <div class="seccion-titulo">⚔️ Armas y Ataques</div>
                 <div style="font-size:.78rem;color:#768596;margin-bottom:.8rem">Nombre · Bonificador de ataque · Daño/Tipo</div>
+
+                @if($personaje->equipo && $personaje->equipo->count() > 0)
+                <div class="form-group" style="margin-bottom:.8rem">
+                    <label>Añadir rápido desde tu equipo</label>
+                    <select class="form-control" id="armaDesdeEquipo" onchange="addAtaqueDesdeEquipo(this)">
+                        <option value="">— Elige un objeto de tu inventario —</option>
+                        @foreach($personaje->equipo as $item)
+                            <option value="{{ $item->nombre }}">{{ $item->nombre }} ({{ $item->tipo }})</option>
+                        @endforeach
+                    </select>
+                </div>
+                @endif
 
                 <div class="ataques-lista" id="ataquesList">
                     @foreach($ataques as $i => $ataque)
@@ -1011,6 +992,67 @@
 
                 <button type="button" class="btn-add-ataque" onclick="addAtaque()">➕ Añadir ataque</button>
                 <input type="hidden" name="ataques" id="ataquesHidden">
+            </div>
+
+            {{-- ======= CONJUROS Y TRUCOS ======= --}}
+            <div class="seccion">
+                <div class="seccion-titulo">📖 Conjuros y Trucos</div>
+
+                @if($personaje->trucos && $personaje->trucos->count() > 0)
+                <div class="equipo-existente" style="margin-bottom:1rem">
+                    @foreach($personaje->trucos as $truco)
+                    <div class="equipo-item">
+                        <span class="equipo-nombre">{{ $truco->conjuro->nombre ?? $truco->nombre }}</span>
+                        <div class="equipo-det">
+                            {{ $truco->conjuro ? 'Nivel ' . $truco->conjuro->nivel . ' · ' . $truco->conjuro->escuela : 'Conjuro propio' }}
+                        </div>
+                        <form action="{{ route('trucos.destroy', ['personaje' => $personaje, 'truco' => $truco]) }}" method="POST" style="display:inline">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="btn-del-equipo"
+                                    onclick="return confirm('¿Eliminar {{ addslashes($truco->conjuro->nombre ?? $truco->nombre) }}?')">✕</button>
+                        </form>
+                    </div>
+                    @endforeach
+                </div>
+                @else
+                <p style="color:#768596;margin-bottom:1rem">Este personaje no tiene conjuros ni trucos todavía.</p>
+                @endif
+
+                @php $idsExistentes = $personaje->trucos->pluck('conjuro_id')->filter()->values(); @endphp
+
+                <div class="conjuro-picker">
+                    <div class="conjuro-picker-cab">Añadir conjuros del catálogo</div>
+                    <input type="text" class="form-control conjuro-buscador"
+                           placeholder="Buscar conjuro por nombre..."
+                           oninput="filtrarConjuros(this.value)">
+
+                    <div class="conjuro-chips" id="conjuroChips">
+                        <span class="conjuro-chips-vacio">Ningún conjuro seleccionado todavía — haz click en uno de la lista</span>
+                    </div>
+
+                    <div class="conjuro-lista" id="conjuroLista">
+                        @foreach($conjurosCatalogo->groupBy('nivel') as $nivel => $grupo)
+                            @php $yaTiene = $grupo->filter(fn($c) => $idsExistentes->contains($c->id))->count() === $grupo->count(); @endphp
+                            @if(!$yaTiene)
+                            <div class="conjuro-grupo">
+                                <div class="conjuro-grupo-titulo">{{ $nivel == 0 ? 'Trucos' : 'Nivel ' . $nivel }}</div>
+                                @foreach($grupo as $c)
+                                    @if(!$idsExistentes->contains($c->id))
+                                    <div class="conjuro-row" data-nombre="{{ strtolower($c->nombre) }}"
+                                         data-id="{{ $c->id }}" data-nombre-mostrar="{{ $c->nombre }}"
+                                         onclick="toggleConjuro(this)">
+                                        <span class="conjuro-row-nombre">{{ $c->nombre }}</span>
+                                        <span class="conjuro-row-escuela">{{ $c->escuela }}</span>
+                                    </div>
+                                    @endif
+                                @endforeach
+                            </div>
+                            @endif
+                        @endforeach
+                    </div>
+                </div>
+
+                <input type="hidden" name="conjuros_nuevos" id="conjurosNuevosHidden">
             </div>
 
             {{-- ======= PERSONALIDAD ======= --}}
@@ -1191,6 +1233,21 @@ function addAtaque() {
     document.getElementById('ataquesList').appendChild(row);
 }
 
+/* ===== Añadir ataque precargado desde un objeto del equipo ===== */
+function addAtaqueDesdeEquipo(select) {
+    if (!select.value) return;
+    const row = document.createElement('div');
+    row.className = 'ataque-row';
+    row.innerHTML = `
+        <input type="text" name="ataque_nombre[]" value="${select.value}" placeholder="Nombre del ataque">
+        <input type="text" name="ataque_bonif[]" placeholder="+5">
+        <input type="text" name="ataque_dano[]" placeholder="1d8+3 cortante">
+        <button type="button" class="btn-del-ataque" onclick="this.closest('.ataque-row').remove()">✕</button>
+    `;
+    document.getElementById('ataquesList').appendChild(row);
+    select.value = '';
+}
+
 /* ===== Serializar ataques antes de enviar ===== */
 document.getElementById('formPersonaje').addEventListener('submit', function () {
     // Serializar ataques
@@ -1215,6 +1272,60 @@ document.getElementById('formPersonaje').addEventListener('submit', function () 
     const salChecked = [...document.querySelectorAll('input[name="competencias_salvaciones[]"]:checked')].map(c => c.value);
     document.getElementById('hiddenSal').value = JSON.stringify(salChecked);
     document.querySelectorAll('input[name="competencias_salvaciones[]"]').forEach(c => c.disabled = true);
+
+    // Serializar conjuros nuevos seleccionados en el picker
+    document.getElementById('conjurosNuevosHidden').value = JSON.stringify(conjurosSeleccionados);
 });
+
+/* ===== Picker de conjuros: click para seleccionar/deseleccionar ===== */
+let conjurosSeleccionados = [];
+
+function toggleConjuro(row) {
+    const id = parseInt(row.dataset.id);
+    const nombre = row.dataset.nombreMostrar;
+    const idx = conjurosSeleccionados.indexOf(id);
+
+    if (idx === -1) {
+        conjurosSeleccionados.push(id);
+        row.classList.add('seleccionado');
+    } else {
+        conjurosSeleccionados.splice(idx, 1);
+        row.classList.remove('seleccionado');
+    }
+
+    renderChips();
+}
+
+function quitarConjuroChip(id) {
+    conjurosSeleccionados = conjurosSeleccionados.filter(x => x !== id);
+    const row = document.querySelector(`.conjuro-row[data-id="${id}"]`);
+    if (row) row.classList.remove('seleccionado');
+    renderChips();
+}
+
+function renderChips() {
+    const cont = document.getElementById('conjuroChips');
+    if (conjurosSeleccionados.length === 0) {
+        cont.innerHTML = '<span class="conjuro-chips-vacio">Ningún conjuro seleccionado todavía — haz click en uno de la lista</span>';
+        return;
+    }
+    cont.innerHTML = conjurosSeleccionados.map(id => {
+        const row = document.querySelector(`.conjuro-row[data-id="${id}"]`);
+        const nombre = row ? row.dataset.nombreMostrar : id;
+        return `<span class="conjuro-chip">${nombre}<button type="button" onclick="quitarConjuroChip(${id})">✕</button></span>`;
+    }).join('');
+}
+
+/* ===== Picker de conjuros: filtro de búsqueda ===== */
+function filtrarConjuros(texto) {
+    const t = texto.trim().toLowerCase();
+    document.querySelectorAll('.conjuro-row').forEach(row => {
+        row.style.display = row.dataset.nombre.includes(t) ? '' : 'none';
+    });
+    document.querySelectorAll('.conjuro-grupo').forEach(grupo => {
+        const visibles = [...grupo.querySelectorAll('.conjuro-row')].some(r => r.style.display !== 'none');
+        grupo.style.display = visibles ? '' : 'none';
+    });
+}
 </script>
 @endsection

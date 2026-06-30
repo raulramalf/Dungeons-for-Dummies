@@ -84,6 +84,13 @@
         display: flex;
         gap: 0.6rem;
         flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .exportar-pdf-form {
+        display: inline-flex;
+        gap: 0.4rem;
+        align-items: center;
     }
 
     .btn {
@@ -514,13 +521,15 @@
     $imgsPersonaje = json_decode($personaje->imagenes_personaje ?? '[]', true) ?? [];
     $imgsArmas     = json_decode($personaje->imagenes_armas ?? '[]', true) ?? [];
     $stats = ['FUE'=>'fuerza','DES'=>'destreza','CON'=>'constitucion','INT'=>'inteligencia','SAB'=>'sabiduria','CAR'=>'carisma'];
+    $trucosOrdenados = $personaje->trucos->sortBy(fn($t) => $t->conjuro->nivel ?? 0)->values();
 @endphp
 
 <div class="ficha-wrapper">
 
     {{-- CABECERA --}}
     <div class="ficha-header">
-        <img class="ficha-avatar" src="{{ $personaje->avatar_url }}" alt="{{ $personaje->nombre }}">
+        <img class="ficha-avatar" src="{{ $personaje->avatar_url }}" alt="{{ $personaje->nombre }}"
+             style="cursor:zoom-in" onclick="abrirLightbox(this.src)">
 
         <div class="ficha-titulo">
             <h1>{{ $personaje->nombre }}</h1>
@@ -679,10 +688,10 @@
         </div>
         @endif
 
-        {{-- ATAQUES --}}
+        {{-- ARMAS Y ATAQUES --}}
         @if(count($ataques) > 0)
         <div class="seccion">
-            <div class="seccion-titulo">⚔️ Ataques y Conjuros</div>
+            <div class="seccion-titulo">⚔️ Armas y Ataques</div>
             <table class="tabla-ataques">
                 <thead>
                     <tr>
@@ -861,6 +870,38 @@
                     <span class="moneda-nombre">Platino</span>
                 </div>
             </div>
+        </div>
+        @endif
+
+        {{-- TRUCOS Y CONJUROS (al final de la página) --}}
+        @if($trucosOrdenados->count() > 0)
+        <div class="seccion">
+            <div class="seccion-titulo">📖 Trucos y Conjuros</div>
+            <table class="tabla-ataques">
+                <thead>
+                    <tr>
+                        <th>Nivel</th>
+                        <th>Nombre</th>
+                        <th>Escuela</th>
+                        <th>Tiempo</th>
+                        <th>Alcance</th>
+                        <th>Notas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($trucosOrdenados as $truco)
+                    @php $c = $truco->conjuro; @endphp
+                    <tr>
+                        <td>{{ $c ? ($c->nivel == 0 ? 'Truco' : $c->nivel) : 'Truco' }}</td>
+                        <td>{{ $c->nombre ?? $truco->nombre }}</td>
+                        <td>{{ $c->escuela ?? '—' }}</td>
+                        <td>{{ $c->tiempo_lanzamiento ?? '—' }}</td>
+                        <td>{{ $c->alcance ?? '—' }}</td>
+                        <td>{{ $truco->fuente ?? ($truco->descripcion ?? '—') }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
         @endif
 

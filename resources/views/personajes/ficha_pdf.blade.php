@@ -25,38 +25,47 @@
     }
 
     .cabecera {
-        border-bottom: 2px solid #B30303;
-        padding-bottom: 8px;
-        margin-bottom: 12px;
+        background: linear-gradient(135deg, #7a0202 0%, #4d0101 100%);
+        border-radius: 6px;
+        padding: 12px 16px;
+        margin-bottom: 14px;
+        color: #f1e6c8;
+        position: relative;
+        overflow: hidden;
     }
+
+    .cabecera-fila { width: 100%; }
+    .cabecera-escudo { width: 36px; height: 36px; flex-shrink: 0; }
 
     .cabecera h1 {
         font-size: 22px;
         margin: 0 0 2px;
-        color: #7a0202;
+        color: #fff;
+        letter-spacing: 0.02em;
     }
 
     .cabecera .subtitulo {
-        font-size: 11px;
-        color: #555;
+        font-size: 10.5px;
+        color: #e8c9a0;
     }
 
     .badges {
-        margin-top: 4px;
+        margin-top: 6px;
     }
 
     .badge {
         display: inline-block;
-        border: 1px solid #B30303;
-        color: #7a0202;
-        padding: 1px 7px;
+        background: rgba(255,255,255,0.12);
+        border: 1px solid rgba(241,230,200,0.5);
+        color: #f1e6c8;
+        padding: 1.5px 8px;
         border-radius: 9px;
-        font-size: 9px;
+        font-size: 8.6px;
         margin-right: 4px;
     }
 
     .seccion-titulo {
-        background: #f3e9d8;
+        background: linear-gradient(90deg, #f3e9d8, #fdf9ef);
         border-left: 3px solid #B30303;
         padding: 3px 8px;
         font-size: 11px;
@@ -65,6 +74,7 @@
         text-transform: uppercase;
         letter-spacing: 0.04em;
         margin: 10px 0 6px;
+        border-radius: 0 4px 4px 0;
     }
 
     /* ----- Layout de dos columnas con floats ----- */
@@ -75,35 +85,46 @@
     /* ----- Tabla de características ----- */
     table.stats {
         width: 100%;
-        border-collapse: collapse;
+        border-collapse: separate;
+        border-spacing: 4px;
         margin-bottom: 4px;
     }
     table.stats td {
-        border: 1px solid #c9b89a;
+        border: 1.5px solid #B30303;
+        border-radius: 6px;
+        background: #fdf9ef;
         text-align: center;
-        padding: 4px 2px;
+        padding: 5px 2px;
         width: 16.6%;
     }
-    table.stats .label { font-size: 8px; color: #7a0202; font-weight: bold; }
-    table.stats .valor { font-size: 14px; font-weight: bold; }
-    table.stats .mod   { font-size: 9px; color: #555; }
+    table.stats .label { font-size: 8px; color: #7a0202; font-weight: bold; letter-spacing: 0.04em; }
+    table.stats .valor { font-size: 15px; font-weight: bold; }
+    table.stats .mod   { font-size: 9px; color: #777; }
 
     /* ----- Tablas genéricas ----- */
     table.datos {
         width: 100%;
         border-collapse: collapse;
         margin-bottom: 6px;
+        border: 1px solid #d8cdb8;
+        border-radius: 4px;
+        overflow: hidden;
     }
     table.datos th, table.datos td {
-        border: 1px solid #d8cdb8;
-        padding: 3px 6px;
+        border-bottom: 1px solid #e7decb;
+        padding: 4px 6px;
         text-align: left;
         font-size: 9.5px;
     }
     table.datos th {
-        background: #f3e9d8;
-        color: #5a1212;
+        background: linear-gradient(90deg, #7a0202, #9c1010);
+        color: #fdf3e3;
+        font-weight: normal;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        font-size: 8.3px;
     }
+    table.datos tr:nth-child(even) td { background: #faf4e6; }
 
     /* ----- Lista de competencias ----- */
     .comp-item {
@@ -162,22 +183,33 @@
         'Edad' => $personaje->edad, 'Altura' => $personaje->altura, 'Peso' => $personaje->peso,
         'Ojos' => $personaje->ojos, 'Piel' => $personaje->piel, 'Pelo' => $personaje->pelo,
     ]);
+    $trucosOrdenados = $personaje->trucos->sortBy(fn($t) => $t->conjuro->nivel ?? 0)->values();
+
+    $escudoSvg = '<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 3 L35 9 V19 C35 28 29 34 20 37 C11 34 5 28 5 19 V9 Z" stroke="#f1e6c8" stroke-width="2"/>
+        <path d="M13 19 L18 24 L28 13" stroke="#f1e6c8" stroke-width="2" fill="none"/>
+    </svg>';
 @endphp
 
 {{-- CABECERA --}}
 <div class="cabecera">
-    <h1>{{ $personaje->nombre }}</h1>
-    <div class="subtitulo">
-        {{ $personaje->raza->nombre ?? '—' }} · {{ $personaje->clase->nombre ?? '—' }}
-        @if($personaje->subclase) ({{ $personaje->subclase->nombre }}) @endif
-        @if($personaje->trasfondo) · {{ $personaje->trasfondo->nombre }} @endif
-    </div>
-    <div class="badges">
-        <span class="badge">Nivel {{ $personaje->nivel }}</span>
-        @if($personaje->alineamiento)<span class="badge">{{ $personaje->alineamiento }}</span>@endif
-        @if($personaje->experiencia)<span class="badge">{{ number_format($personaje->experiencia) }} XP</span>@endif
-        @if($personaje->divinidad)<span class="badge">{{ $personaje->divinidad }}</span>@endif
-    </div>
+    <table class="cabecera-fila"><tr>
+        <td style="width:46px;vertical-align:top">{!! $escudoSvg !!}</td>
+        <td style="vertical-align:top">
+            <h1>{{ $personaje->nombre }}</h1>
+            <div class="subtitulo">
+                {{ $personaje->raza->nombre ?? '—' }} · {{ $personaje->clase->nombre ?? '—' }}
+                @if($personaje->subclase) ({{ $personaje->subclase->nombre }}) @endif
+                @if($personaje->trasfondo) · {{ $personaje->trasfondo->nombre }} @endif
+            </div>
+            <div class="badges">
+                <span class="badge">Nivel {{ $personaje->nivel }}</span>
+                @if($personaje->alineamiento)<span class="badge">{{ $personaje->alineamiento }}</span>@endif
+                @if($personaje->experiencia)<span class="badge">{{ number_format($personaje->experiencia) }} XP</span>@endif
+                @if($personaje->divinidad)<span class="badge">{{ $personaje->divinidad }}</span>@endif
+            </div>
+        </td>
+    </tr></table>
 </div>
 
 {{-- CARACTERÍSTICAS --}}
@@ -255,9 +287,9 @@
         @endif
     </table>
 
-    {{-- ATAQUES --}}
+    {{-- ARMAS Y ATAQUES --}}
     @if(count($ataques) > 0)
-    <div class="seccion-titulo">Ataques y Conjuros</div>
+    <div class="seccion-titulo">Armas y Ataques</div>
     <table class="datos">
         <tr><th>Nombre</th><th>Bonif.</th><th>Daño / Tipo</th></tr>
         @foreach($ataques as $ataque)
@@ -339,6 +371,25 @@
 @if($personaje->historia)
 <div class="seccion-titulo">Historia</div>
 <div class="caja-texto">{{ $personaje->historia }}</div>
+@endif
+
+{{-- TRUCOS Y CONJUROS (al final, como en la ficha oficial) --}}
+@if($trucosOrdenados->count() > 0)
+<div class="seccion-titulo">Trucos y Conjuros</div>
+<table class="datos">
+    <tr><th>Nivel</th><th>Nombre</th><th>Escuela</th><th>Tiempo</th><th>Alcance</th><th>Notas</th></tr>
+    @foreach($trucosOrdenados as $truco)
+        @php $c = $truco->conjuro; @endphp
+        <tr>
+            <td>{{ $c ? ($c->nivel == 0 ? 'Truco' : $c->nivel) : 'Truco' }}</td>
+            <td>{{ $c->nombre ?? $truco->nombre }}</td>
+            <td>{{ $c->escuela ?? '—' }}</td>
+            <td>{{ $c->tiempo_lanzamiento ?? '—' }}</td>
+            <td>{{ $c->alcance ?? '—' }}</td>
+            <td>{{ $truco->fuente ?? ($truco->descripcion ?? '—') }}</td>
+        </tr>
+    @endforeach
+</table>
 @endif
 
 <div class="pie">

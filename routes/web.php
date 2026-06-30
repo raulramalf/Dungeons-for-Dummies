@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\PersonajeController;
 use App\Http\Controllers\EquipoController;
+use App\Http\Controllers\TrucoController;
 use App\Http\Controllers\CampanaController;
 
 // ==========================================
@@ -29,7 +30,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/personajes', [PersonajeController::class, 'store'])->name('personajes.store');
     Route::get('/personajes/{personaje}', [PersonajeController::class, 'show'])->name('personajes.show');
     Route::get('/personajes/{personaje}/editar', [PersonajeController::class, 'edit'])->name('personajes.edit');
-    Route::get('/personajes/{personaje}/exportar', [PersonajeController::class, 'exportarFicha'])->name('personajes.exportar');
+    Route::get('/personajes/{personaje}/exportar', [PersonajeController::class, 'elegirPlantilla'])->name('personajes.exportar');
+    Route::get('/personajes/{personaje}/exportar/descargar', [PersonajeController::class, 'exportarFicha'])->name('personajes.exportar.descargar');
     Route::put('/personajes/{personaje}', [PersonajeController::class, 'update'])->name('personajes.update');
     Route::delete('/personajes/{personaje}', [PersonajeController::class, 'destroy'])->name('personajes.destroy');
 
@@ -41,6 +43,8 @@ Route::middleware('auth')->group(function () {
     Route::prefix('personajes/{personaje}')->group(function () {
         Route::post('/equipo', [EquipoController::class, 'store'])->name('equipo.store');
         Route::delete('/equipo/{equipo}', [EquipoController::class, 'destroy'])->name('equipo.destroy');
+        Route::post('/trucos', [TrucoController::class, 'store'])->name('trucos.store');
+        Route::delete('/trucos/{truco}', [TrucoController::class, 'destroy'])->name('trucos.destroy');
         Route::put('/monedas', [PersonajeController::class, 'actualizarMonedas'])->name('personajes.actualizar_monedas');
     });
 });
