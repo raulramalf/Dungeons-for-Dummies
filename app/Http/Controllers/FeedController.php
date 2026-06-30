@@ -11,12 +11,12 @@ class FeedController extends Controller
 {
     // Salas disponibles en la Taberna
     const SALAS = [
-        'general'     => ['label' => 'La Barra',                'desc' => 'Conversación libre para todo aventurero'],
-        'hazanas'     => ['label' => 'Fardadas de la Partida',   'desc' => 'Comparte tus victorias (y tus derrotas épicas)'],
-        'dm'          => ['label' => 'Solo para Master',         'desc' => 'Consejos, mapas y lamentos de Dungeon Masters'],
-        'personajes'  => ['label' => 'Presenta tu Personaje',    'desc' => 'Presenta tu héroe o pide ayuda para crearlo'],
-        'reglas'      => ['label' => 'Dudas de Reglas',          'desc' => 'Dudas, aclaraciones y debates de reglamento'],
-        'campanas'    => ['label' => 'Busco Grupo',              'desc' => 'Busca grupo, comparte tu campaña o pide jugadores'],
+        'general'     => ['label' => 'La Barra',          'desc' => 'Charla libre entre aventureros'],
+        'hazanas'     => ['label' => 'Crónicas y Hazañas', 'desc' => 'Cuenta cómo te fue (bien o mal)'],
+        'dm'          => ['label' => 'Mesa del DM',        'desc' => 'Sesiones, Resumenes y Notas de Máster'],
+        'personajes'  => ['label' => 'Galería de Héroes',  'desc' => 'Enseña tu personaje o pide consejo'],
+        'reglas'      => ['label' => 'Consultas al Sabio', 'desc' => 'Pregunta tus dudas de reglas y que te ayuden'],
+        'campanas'    => ['label' => 'Forja de Ideas',     'desc' => 'Comparte tus reglas y contenido casero para hacer dnd más divertido'],
     ];
 
     public function index(Request $request)
@@ -68,28 +68,6 @@ class FeedController extends Controller
         ]);
 
         return back()->with('success', '¡Tu hazaña ha sido publicada en la taberna!');
-    }
-
-    public function destroy(Post $post)
-    {
-        if ($post->user_id !== auth()->id()) {
-            abort(403, 'No puedes borrar publicaciones ajenas.');
-        }
-
-        $comentarioIds = $post->comentarios()->pluck('id');
-
-        Like::where('likeable_type', Post::class)->where('likeable_id', $post->id)->delete();
-        if ($comentarioIds->isNotEmpty()) {
-            Like::where('likeable_type', Comentario::class)->whereIn('likeable_id', $comentarioIds)->delete();
-        }
-
-        $post->delete();
-
-        if (request()->ajax()) {
-            return response()->json(['success' => true]);
-        }
-
-        return back()->with('success', 'Publicación eliminada.');
     }
 
     public function storeComentario(Request $request)
@@ -168,4 +146,5 @@ class FeedController extends Controller
 
         return back();
     }
+    
 }

@@ -3,6 +3,11 @@
 @section('titulo', 'La Taberna')
 
 @section('contenido')
+
+<video autoplay muted loop playsinline id="bg-video-taberna">
+    <source src="{{ asset('videos/tavern.mp4') }}" type="video/mp4">
+</video>
+
 <style>
     /* =============================================
        LAYOUT
@@ -41,7 +46,7 @@
         gap: 0.4rem;
         flex-wrap: wrap;
         margin-bottom: 1.8rem;
-        background: rgba(0,0,0,0.2);
+        background: rgba(18,8,4,0.85);
         border: 1px solid rgba(179,3,3,0.15);
         border-radius: 10px;
         padding: 0.5rem;
@@ -123,8 +128,8 @@
        TARJETA DE NUEVO POST
     ============================================= */
     .card {
-        background: rgba(255,255,255,0.025);
-        border: 1px solid rgba(179,3,3,0.2);
+        background: rgba(18,8,4,0.88);
+        border: 1px solid rgba(179,3,3,0.25);
         border-radius: 10px;
         padding: 1.5rem;
         margin-bottom: 1.5rem;
@@ -366,7 +371,7 @@
     }
 
     .comment-item {
-        background: rgba(0,0,0,0.2);
+        background: rgba(0,0,0,0.55);
         padding: 0.9rem 1rem;
         border-radius: 6px;
         margin-bottom: 0.8rem;
@@ -521,6 +526,27 @@
         .salas-nav { gap: 0.3rem; }
         .sala-tab { min-width: calc(50% - 0.3rem); font-size: 0.82rem; }
     }
+
+    /* =============================================
+        VIDEO DE FONDO
+    ============================================= */
+    #bg-video-taberna {
+        position: fixed;
+        top: 0;
+        left: var(--sidebar-w);
+        width: calc(100% - var(--sidebar-w));
+        height: 100%;
+        object-fit: cover;
+        z-index: -2;
+        filter: brightness(0.35);
+    }
+
+    @media (max-width: 1024px) {
+        #bg-video-taberna {
+            left: 0;
+            width: 100%;
+        }
+    }
 </style>
 
 <div class="feed-wrap">
@@ -551,6 +577,7 @@
     @auth
     <div class="card card-publicar">
         <div class="card-titulo">Publicar en {{ $salas[$salaActual]['label'] }}</div>
+        <div style="color: #768596; font-size: 0.85rem; margin-top: -0.5rem; margin-bottom: 1rem; font-style: italic;">{{ $salas[$salaActual]['desc'] }}</div>
         <form action="{{ route('feed.store') }}" method="POST" id="postForm">
             @csrf
             <input type="hidden" name="sala" value="{{ $salaActual }}">
