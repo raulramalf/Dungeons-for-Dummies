@@ -81,6 +81,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/perfil', [PerfilController::class, 'show'])->name('perfil.index');
     Route::patch('/perfil/actualizar', [PerfilController::class, 'actualizar'])->name('perfil.actualizar');
     Route::patch('/perfil/password', [PerfilController::class, 'password'])->name('perfil.password');
+    Route::post('/perfil/avatar', [PerfilController::class, 'actualizarAvatar'])->name('perfil.avatar');
 
     // Profile de Breeze (inglés — no eliminar, lo usa auth)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

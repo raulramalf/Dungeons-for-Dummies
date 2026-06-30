@@ -569,6 +569,21 @@
 
     <div class="feed-posts-area" style="flex:1;min-width:0;">
 
+    @if($etiquetas->count() > 0)
+    <div style="margin-bottom: 1.2rem; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <label style="color: #768596; font-size: 0.85rem; white-space: nowrap;">Filtrar por etiqueta:</label>
+        <select onchange="filtrarPorEtiqueta(this.value)" class="form-control" style="max-width: 220px; padding: 0.5rem 0.8rem; font-size: 0.85rem;">
+            <option value="">Todas las etiquetas</option>
+            @foreach($etiquetas as $et)
+            <option value="{{ $et }}" {{ $etiquetaActual === $et ? 'selected' : '' }}>#{{ $et }}</option>
+            @endforeach
+        </select>
+        @if($etiquetaActual)
+        <a href="{{ route('feed.index', ['sala' => $salaActual]) }}" style="color: #D46043; font-size: 0.82rem;">✕ Quitar filtro</a>
+        @endif
+    </div>
+    @endif
+
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
@@ -616,10 +631,10 @@
 
         <div class="post-meta">
             <span class="post-autor">
-                <img src="{{ $post->usuario->avatar
-                    ? $post->usuario->avatar
-                    : 'https://ui-avatars.com/api/?name=' . urlencode($post->usuario->nombre) . '&background=B30303&color=fff&size=34' }}"
-                    alt="{{ $post->usuario->nombre }}">
+                <img src="{{ $post->usuario->avatar ? (str_starts_with($post->usuario->avatar, 'http') ? $post->usuario->avatar : Storage::url($post->usuario->avatar)) : 'https://ui-avatars.com/api/?name=' . urlencode($post->usuario->nombre) . '&background=B30303&color=fff&size=34' }}"
+                    alt="{{ $post->usuario->nombre }}"
+                    style="cursor: zoom-in;"
+                    onclick="event.stopPropagation(); abrirLightboxAvatar(this.src);">
                 {{ $post->usuario->nombre }}
             </span>
             <span class="post-tiempo">{{ $post->created_at->diffForHumans() }}</span>
@@ -681,10 +696,10 @@
             <div class="comment-item" id="comment-{{ $comentario->id }}">
                 <div class="comment-meta">
                     <span class="comment-autor">
-                        <img src="{{ $comentario->usuario->avatar
-                            ? $comentario->usuario->avatar
-                            : 'https://ui-avatars.com/api/?name=' . urlencode($comentario->usuario->nombre) . '&background=B30303&color=fff&size=22' }}"
-                            alt="{{ $comentario->usuario->nombre }}">
+                        <img src="{{ $post->usuario->avatar ? (str_starts_with($post->usuario->avatar, 'http') ? $post->usuario->avatar : Storage::url($post->usuario->avatar)) : 'https://ui-avatars.com/api/?name=' . urlencode($post->usuario->nombre) . '&background=B30303&color=fff&size=34' }}"
+                            alt="{{ $post->usuario->nombre }}"
+                            style="cursor: zoom-in;"
+                            onclick="event.stopPropagation(); abrirLightboxAvatar(this.src);">
                         <strong>{{ $comentario->usuario->nombre }}</strong>
                     </span>
                     <span>{{ $comentario->created_at->diffForHumans() }}</span>
@@ -741,10 +756,10 @@
                 <div class="comment-item reply" style="margin-top:0.6rem" id="comment-{{ $respuesta->id }}">
                     <div class="comment-meta">
                         <span class="comment-autor">
-                            <img src="{{ $respuesta->usuario->avatar
-                                ? $respuesta->usuario->avatar
-                                : 'https://ui-avatars.com/api/?name=' . urlencode($respuesta->usuario->nombre) . '&background=B30303&color=fff&size=22' }}"
-                                alt="{{ $respuesta->usuario->nombre }}">
+                            <img src="{{ $post->usuario->avatar ? (str_starts_with($post->usuario->avatar, 'http') ? $post->usuario->avatar : Storage::url($post->usuario->avatar)) : 'https://ui-avatars.com/api/?name=' . urlencode($post->usuario->nombre) . '&background=B30303&color=fff&size=34' }}"
+                                alt="{{ $post->usuario->nombre }}"
+                                style="cursor: zoom-in;"
+                                onclick="event.stopPropagation(); abrirLightboxAvatar(this.src);">
                             <strong>{{ $respuesta->usuario->nombre }}</strong>
                         </span>
                         <span>{{ $respuesta->created_at->diffForHumans() }}</span>
@@ -984,9 +999,29 @@ document.querySelectorAll('textarea').forEach(ta => {
         this.style.height = (this.scrollHeight) + 'px';
     });
 });
+
+function filtrarPorEtiqueta(etiqueta) {
+    const url = new URL(window.location.href);
+    if (etiqueta) {
+        url.searchParams.set('etiqueta', etiqueta);
+    } else {
+        url.searchParams.delete('etiqueta');
+    }
+    window.location.href = url.toString();
+}
 </script>
 
     </div>{{-- /feed-posts-area --}}
     </div>{{-- /feed-layout --}}
 
+    <div id="lightbox-avatar" onclick="this.style.display='none'" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:2000; align-items:center; justify-content:center; cursor:zoom-out;">
+        <img id="lightbox-avatar-img" src="" style="max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 8px; border: 2px solid rgba(179,3,3,0.3);">
+    </div>
+
+    <script>
+    function abrirLightboxAvatar(src) {
+        document.getElementById('lightbox-avatar-img').src = src;
+        document.getElementById('lightbox-avatar').style.display = 'flex';
+    }
+    </script>
 @endsection

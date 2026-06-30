@@ -905,3 +905,85 @@ textarea.control { resize: vertical; min-height: 90px; }
     .hero { padding: 3rem 1.5rem; }
     .info-grid { grid-template-columns: 1fr; }
 }
+
+/* ============================================================================
+   7. CHECKBOXES, SELECTS Y FECHAS — ARMONIZACIÓN GLOBAL
+   ============================================================================ */
+
+/* Checkboxes sueltos sin la clase .check-item (estilo de respaldo) */
+input[type="checkbox"]:not(.check-item input) {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 17px;
+    height: 17px;
+    margin: 0;
+    border: 2px solid var(--b-medio);
+    border-radius: 4px;
+    background: rgba(0,0,0,0.3);
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+}
+
+input[type="checkbox"]:not(.check-item input):hover {
+    border-color: var(--c-rojo);
+}
+
+input[type="checkbox"]:not(.check-item input):checked {
+    background: var(--c-rojo);
+    border-color: var(--c-rojo);
+}
+
+input[type="checkbox"]:not(.check-item input):checked::after {
+    content: '';
+    position: absolute;
+    left: 4px;
+    top: 0px;
+    width: 5px;
+    height: 9px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Selects fuera de .control (estilo inline en blades antiguos) */
+select {
+    color-scheme: dark;
+}
+
+select option {
+    background: var(--c-fondo-alt);
+    color: var(--t-principal);
+}
+
+/* Inputs de fecha y hora — forzar tema oscuro para que el icono del calendario sea visible */
+input[type="date"],
+input[type="datetime-local"],
+input[type="time"] {
+    color-scheme: dark;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.7) sepia(1) saturate(5) hue-rotate(320deg);
+    cursor: pointer;
+}
+
+/* Asegurar que cualquier input/select con fondo inline oscuro tenga el calendario visible */
+input[type="date"],
+input[type="datetime-local"] {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid var(--b-neutro);
+    border-radius: var(--r-md);
+    padding: 0.7rem 1rem;
+    color: var(--t-principal);
+    font-family: var(--f-cuerpo);
+}
+
+input[type="date"]:focus,
+input[type="datetime-local"]:focus {
+    outline: none;
+    border-color: var(--c-rojo);
+    box-shadow: 0 0 0 3px rgba(179,3,3,0.12);
+}

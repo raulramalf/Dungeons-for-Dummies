@@ -26,24 +26,41 @@ class FeedController extends Controller
             $salaActual = 'general';
         }
 
-        $posts = Post::with([
+        $etiquetaActual = $request->get('etiqueta');
+
+        $query = Post::with([
                 'usuario',
                 'comentarios' => function ($query) {
                     $query->whereNull('parent_id')
-                          ->with(['usuario', 'respuestas.usuario', 'likes'])
-                          ->latest();
+                        ->with(['usuario', 'respuestas.usuario', 'likes'])
+                        ->latest();
                 },
                 'likes',
             ])
             ->withCount('likes')
-            ->where('sala', $salaActual)
-            ->latest()
-            ->get();
+            ->where('sala', $salaActual);
+
+        if ($etiquetaActual) {
+            $query->whereJsonContains('etiquetas', $etiquetaActual);
+        }
+
+        $posts = $query->latest()->get();
+
+        // Recopilar todas las etiquetas únicas usadas en esta sala
+        $todasLasEtiquetas = Post::where('sala', $salaActual)
+            ->whereNotNull('etiquetas')
+            ->pluck('etiquetas')
+            ->flatten()
+            ->unique()
+            ->sort()
+            ->values();
 
         return view('feed', [
-            'posts'      => $posts,
-            'salas'      => self::SALAS,
-            'salaActual' => $salaActual,
+            'posts'          => $posts,
+            'salas'          => self::SALAS,
+            'salaActual'     => $salaActual,
+            'etiquetas'      => $todasLasEtiquetas,
+            'etiquetaActual' => $etiquetaActual,
         ]);
     }
 

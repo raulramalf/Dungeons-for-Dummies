@@ -11,7 +11,18 @@ class PerfilController extends Controller
 {
     public function show()
     {
-        return view('perfil');
+        $usuario = Auth::user();
+        
+        $personajesCount = \App\Models\Personaje::where('usuario_id', $usuario->id)->count();
+        $campanasCount = \App\Models\Campana::where('dungeon_master_id', $usuario->id)
+            ->orWhereHas('usuarios', fn($q) => $q->where('usuarios.id', $usuario->id))
+            ->count();
+        $sesionesCount = \App\Models\Sesion::whereHas('campana', function($q) use ($usuario) {
+            $q->where('dungeon_master_id', $usuario->id)
+            ->orWhereHas('usuarios', fn($q2) => $q2->where('usuarios.id', $usuario->id));
+        })->count();
+
+        return view('perfil', compact('personajesCount', 'campanasCount', 'sesionesCount'));
     }
 
     public function actualizar(Request $request)
@@ -41,5 +52,24 @@ class PerfilController extends Controller
         ]);
 
         return redirect('/perfil')->with('success', 'Contraseña actualizada correctamente.');
+    }
+
+    public function actualizarAvatar(Request $request)
+    {
+        $request->validate([
+            'avatar' => ['required', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
+        ]);
+
+        $usuario = Auth::user();
+
+        if ($usuario->avatar && !str_starts_with($usuario->avatar, 'http')) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($usuario->avatar);
+        }
+
+        $path = $request->file('avatar')->store('avatares', 'public');
+
+        $usuario->update(['avatar' => $path]);
+
+        return redirect('/perfil')->with('success', 'Foto de perfil actualizada.');
     }
 }

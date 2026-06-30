@@ -139,9 +139,15 @@
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem;">
         <div class="tarjeta" style="border-top: 3px solid var(--c-rojo);">
             <div style="display: flex; align-items: center; gap: 12px;">
-                <div style="width: 42px; height: 42px; border-radius: 50%; background: var(--c-rojo); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; flex-shrink: 0;">
-                    {{ strtoupper(substr($campana->dungeonMaster->nombre, 0, 1)) }}
-                </div>
+                @if($campana->dungeonMaster->avatar)
+            <img src="{{ str_starts_with($campana->dungeonMaster->avatar, 'http') ? $campana->dungeonMaster->avatar : Storage::url($campana->dungeonMaster->avatar) }}"
+                style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--c-rojo); flex-shrink: 0; cursor: zoom-in;"
+                onclick="event.stopPropagation(); document.getElementById('lightbox-campana-img').src=this.src; document.getElementById('lightbox-campana').style.display='flex';">
+            @else
+            <div style="width: 42px; height: 42px; border-radius: 50%; background: var(--c-rojo); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; flex-shrink: 0;">
+                {{ strtoupper(substr($campana->dungeonMaster->nombre, 0, 1)) }}
+            </div>
+            @endif
                 <div>
                     <div style="font-weight: bold; font-size: 0.95rem;">{{ $campana->dungeonMaster->nombre }}</div>
                     <div style="color: var(--c-rojo-claro); font-size: 0.78rem; font-family: var(--f-titulo); letter-spacing: 1px;">DUNGEON MASTER</div>
@@ -153,9 +159,15 @@
         @php $personajeUsuario = isset($personajesPorUsuario[$usuario->id]) ? $personajesPorUsuario[$usuario->id]->first() : null; @endphp
         <div class="tarjeta" style="border-top: 3px solid var(--c-verde);">
             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
+                @if($usuario->avatar)
+                <img src="{{ str_starts_with($usuario->avatar, 'http') ? $usuario->avatar : Storage::url($usuario->avatar) }}"
+                    style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--c-verde); flex-shrink: 0; cursor: zoom-in;"
+                    onclick="event.stopPropagation(); document.getElementById('lightbox-campana-img').src=this.src; document.getElementById('lightbox-campana').style.display='flex';">
+                @else
                 <div style="width: 42px; height: 42px; border-radius: 50%; background: var(--c-verde); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; flex-shrink: 0;">
                     {{ strtoupper(substr($usuario->nombre, 0, 1)) }}
                 </div>
+                @endif
                 <div style="flex: 1;">
                     <div style="font-weight: bold; font-size: 0.95rem;">{{ $usuario->nombre }}</div>
                     <div style="color: var(--t-secundario); font-size: 0.78rem; font-family: var(--f-titulo); letter-spacing: 1px;">JUGADOR</div>
@@ -290,9 +302,15 @@
 
         {{-- DM --}}
         <div style="text-align: center; min-width: 70px;">
+            @if($campana->dungeonMaster->avatar)
+            <img src="{{ str_starts_with($campana->dungeonMaster->avatar, 'http') ? $campana->dungeonMaster->avatar : Storage::url($campana->dungeonMaster->avatar) }}"
+                style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; margin: 0 auto 6px; border: 2px solid rgba(179,3,3,0.5); box-shadow: 0 0 14px rgba(179,3,3,0.25); cursor: zoom-in; display: block;"
+                onclick="document.getElementById('lightbox-campana-img').src=this.src; document.getElementById('lightbox-campana').style.display='flex';">
+            @else
             <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--c-rojo); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.4rem; margin: 0 auto 6px; border: 2px solid rgba(179,3,3,0.5); box-shadow: 0 0 14px rgba(179,3,3,0.25);">
                 {{ strtoupper(substr($campana->dungeonMaster->nombre, 0, 1)) }}
             </div>
+            @endif
             <div style="font-size: 0.82rem; font-weight: bold; color: var(--t-principal);">{{ $campana->dungeonMaster->nombre }}</div>
             <div style="font-size: 0.68rem; color: var(--c-rojo-claro); font-family: var(--f-titulo); letter-spacing: 1px; margin-top: 2px;">DM</div>
         </div>

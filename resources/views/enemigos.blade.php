@@ -129,7 +129,7 @@
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                         <label style="color: var(--color-gris); font-size: 0.8rem;">Nombre *</label>
                         <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--color-gris); font-size: 0.85rem;">
-                            <input type="checkbox" name="es_boss" id="nuevo-boss" style="width: 16px; height: 16px; accent-color: #B30303; cursor: pointer;">
+                            <input type="checkbox" name="es_boss" id="nuevo-boss">
                             ⚠️ Es un Boss
                         </label>
                     </div>
@@ -269,7 +269,7 @@
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                         <label style="color: var(--color-gris); font-size: 0.8rem;">Nombre *</label>
                         <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; color: var(--color-gris); font-size: 0.85rem;">
-                            <input type="checkbox" name="es_boss" id="ver-boss" style="width: 16px; height: 16px; accent-color: #B30303; cursor: pointer;">
+                            <input type="checkbox" name="es_boss" id="ver-boss">
                             ⚠️ Es un Boss
                         </label>
                     </div>

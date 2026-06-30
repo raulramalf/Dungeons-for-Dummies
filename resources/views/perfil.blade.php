@@ -14,10 +14,26 @@
     @endif
 
     <!-- CABECERA PERFIL -->
-    <div style="background: #2a0a18; border-radius: 10px; padding: 30px; display: flex; align-items: center; gap: 25px; margin-bottom: 25px;">
-        <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--color-rojo); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; flex-shrink: 0; border: 3px solid var(--color-rojo);">
-            {{ strtoupper(substr(auth()->user()->nombre, 0, 1)) }}
-        </div>
+    <div style="background: #2a0a18; border-radius: 10px; padding: 30px; display: flex; align-items: center; gap: 25px; margin-bottom: 25px; flex-wrap: wrap;">
+        <form method="POST" action="{{ route('perfil.avatar') }}" enctype="multipart/form-data" id="formAvatar" style="position: relative; flex-shrink: 0;">
+            @csrf
+            <label for="inputAvatar" style="cursor: pointer; display: block; position: relative;">
+                @if(auth()->user()->avatar)
+                <img src="{{ str_starts_with(auth()->user()->avatar, 'http') ? auth()->user()->avatar : Storage::url(auth()->user()->avatar) }}"
+                    style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--color-rojo);">
+                @else
+                <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--color-rojo); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; border: 3px solid var(--color-rojo);">
+                    {{ strtoupper(substr(auth()->user()->nombre, 0, 1)) }}
+                </div>
+                @endif
+                <div style="position: absolute; bottom: -2px; right: -2px; width: 26px; height: 26px; background: var(--color-naranja); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #2a0a18;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 13px; height: 13px; stroke: white; fill: none; stroke-width: 2.5;">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 20h9"/><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>
+                    </svg>
+                </div>
+            </label>
+            <input type="file" name="avatar" id="inputAvatar" accept="image/*" style="display: none;" onchange="document.getElementById('formAvatar').submit()">
+        </form>
         <div>
             <div style="font-size: 1.3rem; font-weight: bold;">{{ strtoupper(auth()->user()->nombre) }}</div>
             <div style="color: var(--color-gris); font-size: 0.85rem;">
@@ -25,15 +41,15 @@
             </div>
             <div style="display: flex; gap: 20px; margin-top: 12px;">
                 <div style="text-align: center;">
-                    <div style="font-size: 1.2rem; font-weight: bold; color: var(--color-rojo);">0</div>
+                    <div style="font-size: 1.2rem; font-weight: bold; color: var(--color-rojo);">{{ $personajesCount }}</div>
                     <div style="color: var(--color-gris); font-size: 0.75rem;">Personajes</div>
                 </div>
                 <div style="text-align: center;">
-                    <div style="font-size: 1.2rem; font-weight: bold; color: var(--color-rojo);">0</div>
+                    <div style="font-size: 1.2rem; font-weight: bold; color: var(--color-rojo);">{{ $campanasCount }}</div>
                     <div style="color: var(--color-gris); font-size: 0.75rem;">Campañas</div>
                 </div>
                 <div style="text-align: center;">
-                    <div style="font-size: 1.2rem; font-weight: bold; color: var(--color-rojo);">0</div>
+                    <div style="font-size: 1.2rem; font-weight: bold; color: var(--color-rojo);">{{ $sesionesCount }}</div>
                     <div style="color: var(--color-gris); font-size: 0.75rem;">Sesiones</div>
                 </div>
             </div>
