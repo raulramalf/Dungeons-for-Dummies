@@ -5,8 +5,9 @@
 @section('contenido')
 <style>
     .gremio-container {
-        max-width: 1200px;
+        max-width: 100%;
         margin: 0 auto;
+        padding: 0 2.5rem;
     }
 
     .header-actions {
@@ -54,7 +55,6 @@
     .carousel-wrap {
         position: relative;
         width: 100%;
-        max-width: 1100px;
         margin: 0 auto;
     }
 
@@ -62,7 +62,7 @@
     .carousel-scene {
         position: relative;
         width: 100%;
-        height: 500px;
+        height: 620px;
         overflow: hidden;
     }
 
@@ -70,14 +70,14 @@
     .hero-slide {
         position: absolute;
         top: 50%;
-        width: 300px;
-        height: 440px;
-        margin-top: -220px;
         border-radius: 14px;
         overflow: hidden;
         cursor: pointer;
         transition:
-            left     0.5s cubic-bezier(0.25,0.46,0.45,0.94),
+            left      0.5s cubic-bezier(0.25,0.46,0.45,0.94),
+            width     0.5s cubic-bezier(0.25,0.46,0.45,0.94),
+            height    0.5s cubic-bezier(0.25,0.46,0.45,0.94),
+            margin-top 0.5s cubic-bezier(0.25,0.46,0.45,0.94),
             transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94),
             filter   0.5s ease,
             opacity  0.4s ease,
@@ -89,20 +89,20 @@
 
     .hero-slide.es-centro {
         z-index: 10;
-        filter: brightness(1);
+        filter: brightness(1) grayscale(0);
         border-color: rgba(179,3,3,0.55);
         box-shadow: 0 0 50px rgba(179,3,3,0.25), 0 25px 50px rgba(0,0,0,0.7);
     }
 
     .hero-slide.es-lateral1 {
         z-index: 6;
-        filter: brightness(0.5);
+        filter: brightness(0.55) grayscale(0.9);
         border-color: rgba(179,3,3,0.08);
     }
 
     .hero-slide.es-lateral2 {
         z-index: 3;
-        filter: brightness(0.28);
+        filter: brightness(0.35) grayscale(1);
         border-color: transparent;
     }
 
@@ -114,12 +114,13 @@
     }
 
     .hero-slide.es-lateral1:hover {
-        filter: brightness(0.72);
-        border-color: rgba(179,3,3,0.25);
+        filter: brightness(1.05) grayscale(0);
+        border-color: rgba(179,3,3,0.4);
+        box-shadow: 0 0 35px rgba(179,3,3,0.15);
     }
 
     .hero-slide.es-lateral2:hover {
-        filter: brightness(0.42);
+        filter: brightness(0.85) grayscale(0.2);
     }
 
     /* Imagen */
@@ -344,7 +345,6 @@
 
     @media (max-width: 768px) {
         .carousel-scene { height: 420px; }
-        .hero-slide { width: 240px; height: 360px; margin-top: -180px; }
         .carousel-nav.prev { left: -16px; }
         .carousel-nav.next { right: -16px; }
         .header-actions { flex-direction: column; align-items: stretch; }
@@ -353,7 +353,6 @@
 
     @media (max-width: 480px) {
         .carousel-scene { height: 380px; }
-        .hero-slide { width: 200px; height: 310px; margin-top: -155px; }
     }
 </style>
 
@@ -460,31 +459,25 @@
 <script>
 (function () {
     const TOTAL   = {{ $personajes->count() }};
-    const CARD_W  = 300;   // ancho carta en px
-    const SCALE_1 = 0.78;  // escala lateral 1
-    const SCALE_2 = 0.62;  // escala lateral 2
+    const GAP     = 18;    // separación entre cartas en px
+    const SCALE_2 = 0.9;   // escala de la 4ª+ carta (si hay más de 3 personajes)
 
     let current = 0;
 
-    // Calcula left (px desde borde izq del scene) para centrar la carta
-    function centroScene() {
-        const scene = document.getElementById('carouselScene');
-        return scene.offsetWidth / 2 - CARD_W / 2;
+    function scene() { return document.getElementById('carouselScene'); }
+
+    // Ancho de carta: la escena se reparte en 3 franjas iguales (centro + 2 laterales)
+    function cardW() {
+        const w = scene().offsetWidth;
+        return (w - GAP * 2) / 3;
     }
 
-    // Separación lateral calculada según cuántos personajes hay
-    function sepLateral1() {
-        const scene = document.getElementById('carouselScene');
-        const w = scene.offsetWidth;
-        // Con 2 personajes usamos 28% del ancho del scene
-        // Con 3+ usamos 32% del ancho del scene
-        const pct = (TOTAL === 2) ? 0.28 : 0.32;
-        return Math.round(w * pct);
+    function cardH() {
+        return scene().offsetHeight * 0.94;
     }
 
-    function sepLateral2() {
-        const scene = document.getElementById('carouselScene');
-        return Math.round(scene.offsetWidth * 0.50);
+    function centroScene(w) {
+        return scene().offsetWidth / 2 - w / 2;
     }
 
     function posicion(i) {
@@ -494,18 +487,18 @@
     }
 
     function render() {
-        const cx  = centroScene();
-        const s1  = sepLateral1();
-        const s2  = sepLateral2();
+        const w   = cardW();
+        const h   = cardH();
+        const cx  = centroScene(w);
+        const sep = w + GAP;
 
         for (let i = 0; i < TOTAL; i++) {
             const slide = document.getElementById('slide-' + i);
             const diff  = posicion(i);
 
-            // Quitar clases de estado
             slide.classList.remove('es-centro','es-lateral1','es-lateral2','es-oculta');
 
-            let leftPx, scale, clase;
+            let leftPx, scale, clase, anchoCarta = w;
 
             if (diff === 0) {
                 leftPx = cx;
@@ -513,28 +506,32 @@
                 clase  = 'es-centro';
                 slide.onclick = null;
             } else if (diff === 1 || diff === -1) {
-                leftPx = cx + diff * s1;
-                scale  = SCALE_1;
+                leftPx = cx + diff * sep;
+                scale  = 1;
                 clase  = 'es-lateral1';
                 const idx = i;
                 slide.onclick = () => irA(idx);
             } else if (diff === 2 || diff === -2) {
-                leftPx = cx + diff * s2 / 2 * Math.sign(diff) + Math.sign(diff) * s2;
-                scale  = SCALE_2;
+                // Solo aparece si hay 4+ personajes: una franja parcial asomando en el borde
+                anchoCarta = w * SCALE_2;
+                leftPx = cx + diff * sep + Math.sign(diff) * (w - anchoCarta) / 2;
+                scale  = 1;
                 clase  = 'es-lateral2';
                 const idx = i;
                 slide.onclick = () => irA(idx);
             } else {
-                // Ocultar fuera del área
                 leftPx = diff > 0 ? cx + 9999 : cx - 9999;
-                scale  = 0.3;
+                scale  = 1;
                 clase  = 'es-oculta';
                 slide.onclick = null;
             }
 
             slide.classList.add(clase);
-            slide.style.left      = leftPx + 'px';
-            slide.style.transform = `scale(${scale})`;
+            slide.style.left       = leftPx + 'px';
+            slide.style.width      = anchoCarta + 'px';
+            slide.style.height     = h + 'px';
+            slide.style.marginTop  = (-h / 2) + 'px';
+            slide.style.transform  = `scale(${scale})`;
             slide.style.transformOrigin = 'center center';
         }
 
@@ -556,9 +553,9 @@
 
     // Swipe
     let startX = 0;
-    const scene = document.getElementById('carouselScene');
-    scene.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
-    scene.addEventListener('touchend',   e => {
+    const sceneEl = document.getElementById('carouselScene');
+    sceneEl.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+    sceneEl.addEventListener('touchend',   e => {
         if (Math.abs(startX - e.changedTouches[0].clientX) > 45)
             moverSlide(startX > e.changedTouches[0].clientX ? 1 : -1);
     }, { passive: true });
