@@ -771,12 +771,7 @@
                         @foreach($imgsPersonaje as $i => $img)
                         <div class="img-existente">
                             <img src="{{ Storage::url($img) }}" alt="Imagen {{ $i+1 }}">
-                            <form action="{{ route('personajes.eliminarImagen', $personaje) }}" method="POST" style="display:inline">
-                                @csrf
-                                <input type="hidden" name="tipo" value="personaje">
-                                <input type="hidden" name="index" value="{{ $i }}">
-                                <button type="submit" class="btn-del-img" onclick="return confirm('¿Eliminar imagen?')">✕</button>
-                            </form>
+                            <button type="button" class="btn-del-img" onclick="eliminarImagen('personaje', {{ $i }})">✕</button>
                         </div>
                         @endforeach
                     </div>
@@ -806,12 +801,7 @@
                         @foreach($imgsArmas as $i => $img)
                         <div class="img-existente">
                             <img src="{{ Storage::url($img) }}" alt="Arma {{ $i+1 }}">
-                            <form action="{{ route('personajes.eliminarImagen', $personaje) }}" method="POST" style="display:inline">
-                                @csrf
-                                <input type="hidden" name="tipo" value="arma">
-                                <input type="hidden" name="index" value="{{ $i }}">
-                                <button type="submit" class="btn-del-img" onclick="return confirm('¿Eliminar imagen?')">✕</button>
-                            </form>
+                            <button type="button" class="btn-del-img" onclick="eliminarImagen('arma', {{ $i }})">✕</button>
                         </div>
                         @endforeach
                     </div>
@@ -1006,11 +996,8 @@
                         <div class="equipo-det">
                             {{ $truco->conjuro ? 'Nivel ' . $truco->conjuro->nivel . ' · ' . $truco->conjuro->escuela : 'Conjuro propio' }}
                         </div>
-                        <form action="{{ route('trucos.destroy', ['personaje' => $personaje, 'truco' => $truco]) }}" method="POST" style="display:inline">
-                            @csrf @method('DELETE')
-                            <button type="submit" class="btn-del-equipo"
-                                    onclick="return confirm('¿Eliminar {{ addslashes($truco->conjuro->nombre ?? $truco->nombre) }}?')">✕</button>
-                        </form>
+                        <button type="button" class="btn-del-equipo"
+                                onclick="eliminarTruco('{{ route('trucos.destroy', ['personaje' => $personaje, 'truco' => $truco]) }}', '{{ addslashes($truco->conjuro->nombre ?? $truco->nombre) }}')">✕</button>
                     </div>
                     @endforeach
                 </div>
@@ -1185,9 +1172,41 @@
         </div>
     </div>
 
+    {{-- Formularios ocultos compartidos (fuera del form principal a propósito:
+         HTML no permite anidar <form>, así que estos botones de borrado que viven
+         dentro de .edit-body / dentro del form de edición se controlan por JS) --}}
+    <form id="formEliminarImagen" action="{{ route('personajes.eliminarImagen', $personaje) }}" method="POST" style="display:none">
+        @csrf
+        <input type="hidden" name="tipo" id="eliminarImagenTipo">
+        <input type="hidden" name="index" id="eliminarImagenIndex">
+    </form>
+
+    <form id="formEliminarTruco" action="" method="POST" style="display:none">
+        @csrf
+        @method('DELETE')
+    </form>
+
 </div>{{-- /.edit-wrapper --}}
 
 <script>
+/* ===== Eliminar imagen (personaje o arma) — formulario compartido fuera del form principal ===== */
+function eliminarImagen(tipo, index) {
+    if (!confirm('¿Eliminar imagen?')) return;
+    document.getElementById('eliminarImagenTipo').value = tipo;
+    document.getElementById('eliminarImagenIndex').value = index;
+    document.getElementById('formEliminarImagen').submit();
+}
+
+/* ===== Eliminar truco/conjuro — formulario compartido fuera del form principal =====
+   (antes este botón vivía en un <form> anidado dentro del form de edición; el HTML
+   no permite formularios anidados y el navegador colaba el _method=DELETE en el
+   form principal, lo que acababa borrando el personaje entero en vez del truco) */
+function eliminarTruco(url, nombre) {
+    if (!confirm('¿Eliminar ' + nombre + '?')) return;
+    document.getElementById('formEliminarTruco').action = url;
+    document.getElementById('formEliminarTruco').submit();
+}
+
 /* ===== Modificador automático al cambiar stats ===== */
 function actualizarMod(input) {
     const val  = parseInt(input.value) || 10;
