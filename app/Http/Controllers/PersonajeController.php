@@ -103,30 +103,22 @@ class PersonajeController extends Controller
 
     // Plantillas de ficha PDF disponibles
     const PLANTILLAS_PDF = [
-        'clasica' => [
-            'label' => 'Clásica',
-            'vista' => 'personajes.ficha_pdf',
-            'desc'  => 'Orden y claridad. Tablas limpias en granate sobre fondo claro, una sola página.',
-        ],
         'oficial' => [
-            'label' => 'Estilo Oficial',
+            'label' => 'Estilo Oficial 2024',
             'vista' => 'personajes.ficha_pdf_oficial',
-            'desc'  => 'Calcada de la maquetación oficial de 2024: características a la izquierda, conjuros en página aparte.',
+            'desc'  => 'Maquetación fiel a la disposición estándar de una hoja de personaje de 5e: mismas cajas, círculos y dos páginas.',
         ],
-        'pergamino' => [
-            'label' => 'Pergamino Dracónico',
-            'vista' => 'personajes.ficha_pdf_pergamino',
-            'desc'  => 'Fondo envejecido, medallones circulares para cada característica y marco ornamental.',
+    ];
+
+    // Tipos de ficha: completa (todo) o resumen (solo combate/conjuros/equipo)
+    const TIPOS_FICHA = [
+        'completa' => [
+            'label' => 'Ficha de personaje completa',
+            'desc'  => 'Características, salvaciones, habilidades, combate, historia, equipo, armas y conjuros.',
         ],
-        'gotica' => [
-            'label' => 'Oscura Gótica',
-            'vista' => 'personajes.ficha_pdf_gotica',
-            'desc'  => 'Fondo negro, oro y granate. Para fichas que dan tanto miedo como el dungeon.',
-        ],
-        'minimalista' => [
-            'label' => 'Minimalista',
-            'vista' => 'personajes.ficha_pdf_minimalista',
-            'desc'  => 'Una columna, mucho blanco, líneas finas. La más rápida de leer e imprimir.',
+        'resumen' => [
+            'label' => 'Ficha de conjuros, armas y equipo',
+            'desc'  => 'Solo lo que necesitas en mesa: armas y ataques, trucos y conjuros, y equipo. Sin historia ni personalidad.',
         ],
     ];
 
@@ -139,6 +131,7 @@ class PersonajeController extends Controller
         return view('personajes.exportar_elegir', [
             'personaje'  => $personaje,
             'plantillas' => self::PLANTILLAS_PDF,
+            'tipos'      => self::TIPOS_FICHA,
         ]);
     }
 
@@ -148,9 +141,14 @@ class PersonajeController extends Controller
             abort(403, 'No tienes permiso para exportar este personaje.');
         }
 
-        $plantilla = $request->query('plantilla', 'clasica');
+        $plantilla = $request->query('plantilla', 'oficial');
         if (!array_key_exists($plantilla, self::PLANTILLAS_PDF)) {
-            $plantilla = 'clasica';
+            $plantilla = 'oficial';
+        }
+
+        $tipo = $request->query('tipo', 'completa');
+        if (!array_key_exists($tipo, self::TIPOS_FICHA)) {
+            $tipo = 'completa';
         }
 
         $personaje->load([
@@ -165,10 +163,11 @@ class PersonajeController extends Controller
 
         $vista = self::PLANTILLAS_PDF[$plantilla]['vista'];
 
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView($vista, compact('personaje'))
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView($vista, compact('personaje', 'tipo'))
             ->setPaper('a4', 'portrait');
 
-        $nombreArchivo = 'ficha-' . \Illuminate\Support\Str::slug($personaje->nombre) . '.pdf';
+        $sufijo = $tipo === 'resumen' ? '-resumen' : '';
+        $nombreArchivo = 'ficha-' . \Illuminate\Support\Str::slug($personaje->nombre) . $sufijo . '.pdf';
 
         return $pdf->download($nombreArchivo);
     }

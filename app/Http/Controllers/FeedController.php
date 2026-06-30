@@ -87,6 +87,28 @@ class FeedController extends Controller
         return back()->with('success', '¡Tu hazaña ha sido publicada en la taberna!');
     }
 
+    public function destroy(Post $post)
+    {
+        if ($post->user_id !== auth()->id()) {
+            abort(403, 'No puedes borrar publicaciones ajenas.');
+        }
+
+        $comentarioIds = $post->comentarios()->pluck('id');
+
+        Like::where('likeable_type', Post::class)->where('likeable_id', $post->id)->delete();
+        if ($comentarioIds->isNotEmpty()) {
+            Like::where('likeable_type', Comentario::class)->whereIn('likeable_id', $comentarioIds)->delete();
+        }
+
+        $post->delete();
+
+        if (request()->ajax()) {
+            return response()->json(['success' => true]);
+        }
+
+        return back()->with('success', 'Publicación eliminada.');
+    }
+
     public function storeComentario(Request $request)
     {
         $request->validate([
