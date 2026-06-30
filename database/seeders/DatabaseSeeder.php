@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             SubclasesSeeder::class,
             TrasfondosSeeder::class,
             DotesSeeder::class,
-            ConjurosSeeder::class,
+            ConjurosEdicion55Seeder::class,
         ]);
     }
 }
