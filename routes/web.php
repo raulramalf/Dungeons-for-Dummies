@@ -29,6 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/personajes', [PersonajeController::class, 'store'])->name('personajes.store');
     Route::get('/personajes/{personaje}', [PersonajeController::class, 'show'])->name('personajes.show');
     Route::get('/personajes/{personaje}/editar', [PersonajeController::class, 'edit'])->name('personajes.edit');
+    Route::get('/personajes/{personaje}/exportar', [PersonajeController::class, 'exportarFicha'])->name('personajes.exportar');
     Route::put('/personajes/{personaje}', [PersonajeController::class, 'update'])->name('personajes.update');
     Route::delete('/personajes/{personaje}', [PersonajeController::class, 'destroy'])->name('personajes.destroy');
 
@@ -50,6 +51,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/feed', [FeedController::class, 'index'])->name('feed.index');
     Route::post('/feed', [FeedController::class, 'store'])->name('feed.store');
+    Route::delete('/feed/{post}', [FeedController::class, 'destroy'])->name('feed.destroy');
     Route::post('/comentarios', [FeedController::class, 'storeComentario'])->name('comentarios.store');
     Route::delete('/comentarios/{comentario}', [FeedController::class, 'destroyComentario'])->name('comentarios.destroy');
     Route::post('/like', [FeedController::class, 'toggleLike'])->name('like.toggle');

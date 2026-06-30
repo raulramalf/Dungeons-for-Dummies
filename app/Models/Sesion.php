@@ -13,6 +13,10 @@ class Sesion extends Model
         'notas_dm', 'fecha_sesion', 'duracion_minutos', 'estado',
     ];
 
+    protected $casts = [
+        'fecha_sesion' => 'datetime',
+    ];
+
     public function campana()
     {
         return $this->belongsTo(Campana::class);

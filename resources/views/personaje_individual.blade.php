@@ -547,6 +547,7 @@
             <div class="ficha-acciones">
                 <a href="{{ route('personajes.index') }}" class="btn btn-volver">← Volver</a>
                 <a href="{{ route('personajes.edit', $personaje) }}" class="btn btn-editar">✏️ Editar</a>
+                <a href="{{ route('personajes.exportar', $personaje) }}" class="btn btn-editar">📄 Exportar Ficha</a>
                 <form action="{{ route('personajes.destroy', $personaje) }}" method="POST"
                       style="display:inline"
                       onsubmit="return confirm('¿Eliminar a {{ addslashes($personaje->nombre) }}? Esta acción no se puede deshacer.')">

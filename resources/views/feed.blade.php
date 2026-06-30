@@ -634,6 +634,16 @@
                 Responder
             </button>
             @endauth
+
+            @auth
+            @if(auth()->id() === $post->user_id)
+            <button class="btn-accion-post btn-eliminar-comentario"
+                    onclick="eliminarPost({{ $post->id }}, this)"
+                    title="Eliminar publicación">
+                Eliminar
+            </button>
+            @endif
+            @endauth
         </div>
 
         {{-- SECCIÓN DE COMENTARIOS --}}
@@ -903,6 +913,39 @@ async function eliminarComentario(id, btn) {
         }
     } catch (e) {
         console.error('Error al eliminar comentario:', e);
+        btn.disabled = false;
+    }
+}
+
+/* ===== Eliminar publicación propia AJAX ===== */
+async function eliminarPost(id, btn) {
+    if (!confirm('¿Seguro que quieres borrar esta publicación? También se borrarán sus comentarios.')) return;
+
+    btn.disabled = true;
+
+    try {
+        const res = await fetch(`/feed/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': CSRF_TOKEN,
+                'Accept':       'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        });
+
+        if (!res.ok) throw new Error('Error eliminando');
+
+        const data = await res.json();
+        if (data.success) {
+            const el = document.getElementById('post-' + id);
+            if (el) {
+                el.style.transition = 'opacity 0.3s';
+                el.style.opacity = '0';
+                setTimeout(() => el.remove(), 300);
+            }
+        }
+    } catch (e) {
+        console.error('Error al eliminar publicación:', e);
         btn.disabled = false;
     }
 }

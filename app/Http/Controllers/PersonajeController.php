@@ -101,6 +101,30 @@ class PersonajeController extends Controller
         return view('personaje_individual', compact('personaje'));
     }
 
+    public function exportarFicha(Personaje $personaje)
+    {
+        if ($personaje->usuario_id !== auth()->id()) {
+            abort(403, 'No tienes permiso para exportar este personaje.');
+        }
+
+        $personaje->load([
+            'raza',
+            'clase',
+            'subclase',
+            'trasfondo',
+            'estadisticas',
+            'equipo',
+            'trucos',
+        ]);
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('personajes.ficha_pdf', compact('personaje'))
+            ->setPaper('a4', 'portrait');
+
+        $nombreArchivo = 'ficha-' . \Illuminate\Support\Str::slug($personaje->nombre) . '.pdf';
+
+        return $pdf->download($nombreArchivo);
+    }
+
     public function edit(Personaje $personaje)
     {
         if ($personaje->usuario_id !== auth()->id()) {

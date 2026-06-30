@@ -5,52 +5,69 @@ namespace App\Http\Controllers;
 use App\Models\Personaje;
 use App\Models\Campana;
 use App\Models\Post;
+use App\Models\Sesion;
 
 class InicioController extends Controller
 {
     public function index()
     {
-        // Últimas hazañas publicadas en la Taberna
-        $ultimasHazanas = Post::with(['usuario', 'likes'])
+        // Tu próxima sesión (como DM o como jugador) — una sola, destacada aparte
+        $proximaSesion = null;
+        if (auth()->check()) {
+            $campanaIds = Campana::where('dungeon_master_id', auth()->id())
+                ->orWhereHas('usuarios', fn ($q) => $q->where('usuarios.id', auth()->id()))
+                ->pluck('id');
+
+            $proximaSesion = Sesion::with('campana.dungeonMaster')
+                ->whereIn('campana_id', $campanaIds)
+                ->where('estado', 'planificada')
+                ->where('fecha_sesion', '>=', now())
+                ->orderBy('fecha_sesion')
+                ->first();
+        }
+
+        // Hazañas recientes de la Taberna
+        $hazanas = Post::with('usuario')
             ->withCount('likes')
             ->latest()
             ->take(5)
-            ->get();
+            ->get()
+            ->map(fn ($p) => [
+                'tipo'  => 'hazana',
+                'fecha' => $p->created_at,
+                'data'  => $p,
+            ]);
 
-        // Campañas activas
-        $campanasActivas = Campana::with('dungeonMaster')
+        // Personajes nuevos de la comunidad
+        $personajes = Personaje::with(['usuario', 'raza', 'clase'])
+            ->where('activo', true)
+            ->latest()
+            ->take(5)
+            ->get()
+            ->map(fn ($p) => [
+                'tipo'  => 'personaje',
+                'fecha' => $p->created_at,
+                'data'  => $p,
+            ]);
+
+        // Campañas que han abierto mesa recientemente
+        $campanas = Campana::with('dungeonMaster')
             ->where('estado', 'activa')
             ->latest()
-            ->take(4)
-            ->get();
+            ->take(5)
+            ->get()
+            ->map(fn ($c) => [
+                'tipo'  => 'campana',
+                'fecha' => $c->created_at,
+                'data'  => $c,
+            ]);
 
-        $datosCuriosos = [
-            [
-                'titulo' => 'Un dado, todo un destino',
-                'texto'  => 'Gary Gygax diseñó el d20 en 1974 y sin querer inventó el objeto más odiado y amado de cualquier mesa. Un 1 natural todavía duele más que un dragón.',
-            ],
-            [
-                'titulo' => 'El Ojo de Vecna',
-                'texto'  => 'Para usar este artefacto tienes que arrancarte el ojo y meter el de Vecna en la cuenca. Lo que nadie te cuenta es lo que ves después... ni siquiera el DM lo sabe seguro.',
-            ],
-            [
-                'titulo' => 'Drizzt, el elfo que rompió moldes',
-                'texto'  => 'Apareció en 1988 como secundario de un libro de Forgotten Realms y terminó siendo tan popular que su autor lleva décadas escribiendo solo sobre él. Ahí lo tienes.',
-            ],
-            [
-                'titulo' => 'La regla del "sí, y..."',
-                'texto'  => 'Los mejores DM no dicen "no". Dicen "sí, y además..." y de ahí salen las sesiones que se recuerdan veinte años después alrededor de una cerveza.',
-            ],
-            [
-                'titulo' => 'Tiamat tiene cinco malas noticias',
-                'texto'  => 'Una cabeza de cada color cromático: roja, azul, negra, blanca y verde. No elijas un favorito. Todas quieren verte muerto por razones distintas.',
-            ],
-            [
-                'titulo' => '+500 conjuros en 5ª Ed.',
-                'texto'  => 'Y aun así el mago de tu grupo siempre lanza Bola de Fuego. Sin falta. En cada sesión. Aunque el dungeon sea de madera.',
-            ],
-        ];
+        // La Bitácora: todo lo anterior intercalado por fecha, lo más reciente primero
+        $bitacora = $hazanas->concat($personajes)->concat($campanas)
+            ->sortByDesc('fecha')
+            ->take(8)
+            ->values();
 
-        return view('inicio', compact('ultimasHazanas', 'campanasActivas', 'datosCuriosos'));
+        return view('inicio', compact('proximaSesion', 'bitacora'));
     }
 }
