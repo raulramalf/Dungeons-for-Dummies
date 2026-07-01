@@ -84,6 +84,13 @@
         transform: scale(0) rotate(-8deg);
         opacity: 0;
     }
+    #d20-crit-overlay.fail #d20-crit-text {
+        color: #ff2b2b;
+        text-shadow:
+            0 0 20px rgba(255, 40, 40, 0.9),
+            0 0 60px rgba(255, 40, 40, 0.6),
+            0 4px 0 rgba(90, 0, 0, 0.9);
+    }
     #d20-crit-overlay.show #d20-crit-text {
         animation: d20CritPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
@@ -105,6 +112,7 @@
         const badge = document.getElementById('result-badge');
         const shadow = document.getElementById('d20-shadow');
         const critOverlay = document.getElementById('d20-crit-overlay');
+        const critText = document.getElementById('d20-crit-text');
         let isRolling = false;
 
         // --- Escena y cámara ---
@@ -359,7 +367,15 @@
                     container.classList.add('result-show');
                     isRolling = false;
 
-                    if (pendingResult === 20) {
+                    // El número se muestra 2s y luego se oculta solo.
+                    window.clearTimeout(container._badgeHideTimer);
+                    container._badgeHideTimer = window.setTimeout(function() {
+                        container.classList.remove('result-show');
+                    }, 2000);
+
+                    if (pendingResult === 20 || pendingResult === 1) {
+                        critText.textContent = pendingResult === 20 ? '¡CRÍTICO!' : '¡PIFIA!';
+                        critOverlay.classList.toggle('fail', pendingResult === 1);
                         critOverlay.classList.add('show');
                         window.clearTimeout(critOverlay._hideTimer);
                         critOverlay._hideTimer = window.setTimeout(function() {
@@ -386,7 +402,8 @@
             badge.style.transform = 'translate(-50%, -50%) scale(0)';
             badge.style.opacity = '0';
             badge.textContent = '0';
-            critOverlay.classList.remove('show');
+            window.clearTimeout(container._badgeHideTimer);
+            critOverlay.classList.remove('show', 'fail');
             window.clearTimeout(critOverlay._hideTimer);
 
             // Elegimos el resultado ANTES de girar; el muelle converge a él
