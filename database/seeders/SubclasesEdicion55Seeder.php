@@ -39,7 +39,6 @@ class SubclasesEdicion55Seeder extends Seeder
             true,
             flags: JSON_THROW_ON_ERROR,
         );
-
         // Las clases se siembran en inglés (dnd5eapi.co vía ClasesSeeder),
         // pero el dataset de subclases puede traer el nombre en español.
         // Este mapa traduce para poder resolver clase_id en ambos casos.
@@ -57,7 +56,6 @@ class SubclasesEdicion55Seeder extends Seeder
             "Paladín" => "Paladin",
             "Pícaro" => "Rogue",
         ];
-
         $creados = 0;
         $actualizados = 0;
         $sinClase = 0;

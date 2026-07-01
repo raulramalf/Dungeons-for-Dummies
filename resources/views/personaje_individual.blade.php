@@ -535,8 +535,16 @@
             <h1>{{ $personaje->nombre }}</h1>
             <div class="ficha-subtitulo">
                 {{ $personaje->raza->nombre ?? '—' }} · {{ $personaje->clase->nombre ?? '—' }}
-                @if($personaje->subclase) ({{ $personaje->subclase->nombre }}) @endif
-                @if($personaje->trasfondo) · {{ $personaje->trasfondo->nombre }} @endif
+                @if($personaje->dotes->isNotEmpty())
+                    <div class="dotes-personaje" style="margin-top: 1rem;">
+                        <h4 style="text-transform: uppercase; letter-spacing: 1px; color: var(--color-gris);">Dotes</h4>
+                        <ul>
+                            @foreach($personaje->dotes as $dote)
+                                <li>{{ $dote->nombre }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif                @if($personaje->trasfondo) · {{ $personaje->trasfondo->nombre }} @endif
             </div>
             <div class="ficha-badges">
                 <span class="badge badge-nivel">Nivel {{ $personaje->nivel }}</span>

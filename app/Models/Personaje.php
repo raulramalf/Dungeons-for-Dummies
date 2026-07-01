@@ -10,42 +10,42 @@ class Personaje extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'personajes';
+    protected $table = "personajes";
 
     protected $fillable = [
-        'usuario_id',
-        'raza_id',
-        'clase_id',
-        'subclase_id',
-        'trasfondo_id',
-        'nombre',
-        'alineamiento',
-        'nivel',
-        'experiencia',
-        'avatar',
-        'historia',
-        'activo',
+        "usuario_id",
+        "raza_id",
+        "clase_id",
+        "subclase_id",
+        "trasfondo_id",
+        "nombre",
+        "alineamiento",
+        "nivel",
+        "experiencia",
+        "avatar",
+        "historia",
+        "activo",
         // Personalidad
-        'rasgos_personalidad',
-        'ideales',
-        'vinculos',
-        'defectos',
+        "rasgos_personalidad",
+        "ideales",
+        "vinculos",
+        "defectos",
         // Apariencia
-        'edad',
-        'altura',
-        'peso',
-        'ojos',
-        'piel',
-        'pelo',
-        'divinidad',
-        'idiomas',
+        "edad",
+        "altura",
+        "peso",
+        "ojos",
+        "piel",
+        "pelo",
+        "divinidad",
+        "idiomas",
         // Imágenes
-        'imagenes_personaje',
-        'imagenes_armas',
+        "imagenes_personaje",
+        "imagenes_armas",
         // Competencias y ataques
-        'competencias_habilidades',
-        'competencias_salvaciones',
-        'ataques',
+        "competencias_habilidades",
+        "competencias_salvaciones",
+        "ataques",
     ];
 
     // Relaciones
@@ -74,6 +74,11 @@ class Personaje extends Model
         return $this->belongsTo(Trasfondo::class);
     }
 
+    public function dotes()
+    {
+        return $this->belongsToMany(Dote::class, "personaje_dote");
+    }
+
     public function estadisticas()
     {
         return $this->hasOne(Estadistica::class);
@@ -91,14 +96,23 @@ class Personaje extends Model
 
     public function campanas()
     {
-        return $this->belongsToMany(Campana::class, 'personaje_campana')
-                    ->withPivot('estado', 'fecha_ingreso', 'fecha_salida', 'notas', 'historia_visible')
-                    ->withTimestamps();
+        return $this->belongsToMany(Campana::class, "personaje_campana")
+            ->withPivot(
+                "estado",
+                "fecha_ingreso",
+                "fecha_salida",
+                "notas",
+                "historia_visible",
+            )
+            ->withTimestamps();
     }
 
     // Método para obtener la URL del avatar
     public function getAvatarUrlAttribute()
     {
-        return $this->avatar ?? 'https://ui-avatars.com/api/?name=' . urlencode($this->nombre) . '&background=B30303&color=fff&size=200';
+        return $this->avatar ??
+            "https://ui-avatars.com/api/?name=" .
+                urlencode($this->nombre) .
+                "&background=B30303&color=fff&size=200";
     }
 }

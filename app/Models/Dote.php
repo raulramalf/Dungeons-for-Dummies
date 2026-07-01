@@ -6,17 +6,28 @@ use Illuminate\Database\Eloquent\Model;
 
 class Dote extends Model
 {
-    protected $table = 'dotes';
+    protected $table = "dotes";
 
     protected $fillable = [
-        'nombre', 'categoria', 'descripcion', 'prerequisitos',
-        'beneficios', 'incremento_caracteristica', 'repetible', 'edicion',
+        "nombre",
+        "categoria",
+        "descripcion",
+        "prerequisitos",
+        "beneficios",
+        "incremento_caracteristica",
+        "repetible",
+        "edicion",
     ];
 
     protected $casts = [
-        'prerequisitos'            => 'array',
-        'beneficios'               => 'array',
-        'incremento_caracteristica'=> 'boolean',
-        'repetible'                => 'boolean',
+        "prerequisitos" => "array",
+        "beneficios" => "array",
+        "incremento_caracteristica" => "boolean",
+        "repetible" => "boolean",
     ];
+
+    public function personajes()
+    {
+        return $this->belongsToMany(Personaje::class, "personaje_dote");
+    }
 }
