@@ -85,7 +85,7 @@ class PersonajeController extends Controller
             "pg_actuales" => 10,
             "clase_de_armadura" => 10,
             "velocidad" => 30,
-            "bonus_competencia" => 2,
+            "bonus_competencia" => $this->calcularBonusCompetencia($validated["nivel"]),
         ]);
 
         return redirect()
@@ -241,6 +241,14 @@ class PersonajeController extends Controller
         );
     }
 
+    /**
+     * Calcula el bonus de competencia según el nivel del personaje (regla estándar de 5e).
+     */
+    private function calcularBonusCompetencia(int $nivel): int
+    {
+        return 2 + intdiv(max($nivel, 1) - 1, 4);
+    }
+
     public function update(Request $request, Personaje $personaje)
     {
         if ($personaje->usuario_id !== auth()->id()) {
@@ -285,7 +293,6 @@ class PersonajeController extends Controller
             "pg_temporales" => "nullable|integer|min:0",
             "clase_de_armadura" => "nullable|integer|min:0",
             "velocidad" => "nullable|integer|min:0",
-            "bonus_competencia" => "nullable|integer|min:0|max:6",
             "iniciativa" => "nullable|integer",
             // Dados de golpe y muerte
             "dados_golpe_disponibles" => "nullable|integer|min:0",
@@ -403,9 +410,7 @@ class PersonajeController extends Controller
                 ($estadisticas->clase_de_armadura ?? 10),
             "velocidad" =>
                 $validated["velocidad"] ?? ($estadisticas->velocidad ?? 30),
-            "bonus_competencia" =>
-                $validated["bonus_competencia"] ??
-                ($estadisticas->bonus_competencia ?? 2),
+            "bonus_competencia" => $this->calcularBonusCompetencia($validated["nivel"]),
             "iniciativa" => $validated["iniciativa"] ?? null,
             "dados_golpe_disponibles" =>
                 $validated["dados_golpe_disponibles"] ?? null,

@@ -175,7 +175,7 @@
 
             <div class="form-group">
                 <label>Clase <span class="required">*</span></label>
-                <select name="clase_id" class="form-control @error('clase_id') error @enderror" required>
+                <select name="clase_id" id="claseSelect" class="form-control @error('clase_id') error @enderror" required onchange="filtrarSubclases()">
                     <option value="">Selecciona una clase</option>
                     @foreach($clases as $clase)
                         <option value="{{ $clase->id }}" {{ old('clase_id') == $clase->id ? 'selected' : '' }}>
@@ -191,10 +191,10 @@
 
         <div class="form-group">
             <label>Subclase</label>
-            <select name="subclase_id" class="form-control @error('subclase_id') error @enderror">
+            <select name="subclase_id" id="subclaseSelect" class="form-control @error('subclase_id') error @enderror">
                 <option value="">Sin subclase todavía</option>
                 @foreach($subclases as $subclase)
-                    <option value="{{ $subclase->id }}" {{ old('subclase_id') == $subclase->id ? 'selected' : '' }}>
+                    <option value="{{ $subclase->id }}" data-clase="{{ $subclase->clase_id }}" {{ old('subclase_id') == $subclase->id ? 'selected' : '' }}>
                         {{ $subclase->nombre }} ({{ $subclase->clase->nombre ?? '' }})
                     </option>
                 @endforeach
@@ -240,4 +240,22 @@
         </div>
     </form>
 </div>
+
+<script>
+function filtrarSubclases() {
+    const claseId = document.getElementById('claseSelect').value;
+    const subclaseSelect = document.getElementById('subclaseSelect');
+    let seleccionValida = false;
+
+    [...subclaseSelect.options].forEach(opt => {
+        if (!opt.value) { opt.style.display = ''; return; } // "Sin subclase todavía"
+        const coincide = opt.dataset.clase === claseId;
+        opt.style.display = coincide ? '' : 'none';
+        if (coincide && opt.selected) seleccionValida = true;
+    });
+
+    if (!seleccionValida) subclaseSelect.value = '';
+}
+document.addEventListener('DOMContentLoaded', filtrarSubclases);
+</script>
 @endsection

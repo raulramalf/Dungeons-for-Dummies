@@ -39,29 +39,15 @@ class SubclasesEdicion55Seeder extends Seeder
             true,
             flags: JSON_THROW_ON_ERROR,
         );
-        // Las clases se siembran en inglés (dnd5eapi.co vía ClasesSeeder),
-        // pero el dataset de subclases puede traer el nombre en español.
-        // Este mapa traduce para poder resolver clase_id en ambos casos.
-        $traduccion = [
-            "Bárbaro" => "Barbarian",
-            "Bardo" => "Bard",
-            "Brujo" => "Warlock",
-            "Clérigo" => "Cleric",
-            "Druida" => "Druid",
-            "Explorador" => "Ranger",
-            "Guerrero" => "Fighter",
-            "Hechicero" => "Sorcerer",
-            "Mago" => "Wizard",
-            "Monje" => "Monk",
-            "Paladín" => "Paladin",
-            "Pícaro" => "Rogue",
-        ];
+        // Las clases ya están sembradas en español por TraduccionRazasSeeder,
+        // que se ejecuta ANTES que este seeder (ver orden en DatabaseSeeder).
+        // El dataset de subclases también trae el nombre de clase en español,
+        // así que se busca directamente sin necesidad de traducir.
         $creados = 0;
         $actualizados = 0;
         $sinClase = 0;
         foreach ($subclases as $item) {
-            $nombreClase = $traduccion[$item["clase"]] ?? $item["clase"];
-            $clase = Clase::where("nombre", $nombreClase)->first();
+            $clase = Clase::where("nombre", $item["clase"])->first();
             if (!$clase) {
                 $this->command?->warn(
                     "Clase '{$item["clase"]}' no encontrada, se omite la subclase '{$item["nombre"]}'. ¿Corriste ClasesSeeder antes?",
