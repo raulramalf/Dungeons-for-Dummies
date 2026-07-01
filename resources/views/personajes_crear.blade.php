@@ -171,33 +171,6 @@
                 @error('raza_id')
                     <span class="error-text">{{ $message }}</span>
                 @enderror
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>Subclase</label>
-                        <select name="subclase_id" class="form-control @error('subclase_id') error @enderror">
-                            <option value="">Sin subclase todavía</option>
-                            @foreach($subclases as $subclase)
-                                <option value="{{ $subclase->id }}" {{ old('subclase_id') == $subclase->id ? 'selected' : '' }}>
-                                    {{ $subclase->nombre }} ({{ $subclase->clase->nombre ?? '' }})
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('subclase_id')
-                            <span class="error-text">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Dotes</label>
-                    <select name="dotes[]" class="form-control" multiple size="6">
-                        @foreach($dotes as $dote)
-                            <option value="{{ $dote->id }}" {{ in_array($dote->id, old('dotes', [])) ? 'selected' : '' }}>
-                                {{ $dote->nombre }} ({{ $dote->categoria }})
-                            </option>
-                        @endforeach
-                    </select>
-                    <small style="color:var(--color-gris)">Ctrl/Cmd + clic para seleccionar varias.</small>
-                </div>
             </div>
 
             <div class="form-group">
@@ -214,6 +187,21 @@
                     <span class="error-text">{{ $message }}</span>
                 @enderror
             </div>
+        </div>
+
+        <div class="form-group">
+            <label>Subclase</label>
+            <select name="subclase_id" class="form-control @error('subclase_id') error @enderror">
+                <option value="">Sin subclase todavía</option>
+                @foreach($subclases as $subclase)
+                    <option value="{{ $subclase->id }}" {{ old('subclase_id') == $subclase->id ? 'selected' : '' }}>
+                        {{ $subclase->nombre }} ({{ $subclase->clase->nombre ?? '' }})
+                    </option>
+                @endforeach
+            </select>
+            @error('subclase_id')
+                <span class="error-text">{{ $message }}</span>
+            @enderror
         </div>
 
         <div class="form-group">

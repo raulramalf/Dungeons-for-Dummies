@@ -529,22 +529,13 @@
     {{-- CABECERA --}}
     <div class="ficha-header">
         <img class="ficha-avatar" src="{{ $personaje->avatar_url }}" alt="{{ $personaje->nombre }}"
-             style="cursor:zoom-in" onclick="abrirLightbox(this.src)">
+            style="cursor:zoom-in" onclick="abrirLightbox(this.src)">
 
         <div class="ficha-titulo">
             <h1>{{ $personaje->nombre }}</h1>
             <div class="ficha-subtitulo">
                 {{ $personaje->raza->nombre ?? '—' }} · {{ $personaje->clase->nombre ?? '—' }}
-                @if($personaje->dotes->isNotEmpty())
-                    <div class="dotes-personaje" style="margin-top: 1rem;">
-                        <h4 style="text-transform: uppercase; letter-spacing: 1px; color: var(--color-gris);">Dotes</h4>
-                        <ul>
-                            @foreach($personaje->dotes as $dote)
-                                <li>{{ $dote->nombre }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif                @if($personaje->trasfondo) · {{ $personaje->trasfondo->nombre }} @endif
+                @if($personaje->trasfondo) · {{ $personaje->trasfondo->nombre }} @endif
             </div>
             <div class="ficha-badges">
                 <span class="badge badge-nivel">Nivel {{ $personaje->nivel }}</span>
@@ -566,8 +557,8 @@
                 <a href="{{ route('personajes.edit', $personaje) }}" class="btn btn-editar">@include('partials.icon', ['name' => 'edit', 'class' => 'icon-sm']) Editar</a>
                 <a href="{{ route('personajes.exportar', $personaje) }}" class="btn btn-editar">@include('partials.icon', ['name' => 'scroll', 'class' => 'icon-sm']) Exportar Ficha</a>
                 <form action="{{ route('personajes.destroy', $personaje) }}" method="POST"
-                      style="display:inline"
-                      onsubmit="return confirm('¿Eliminar a {{ addslashes($personaje->nombre) }}? Esta acción no se puede deshacer.')">
+                    style="display:inline"
+                    onsubmit="return confirm('¿Eliminar a {{ addslashes($personaje->nombre) }}? Esta acción no se puede deshacer.')">
                     @csrf @method('DELETE')
                     <button type="submit" class="btn btn-eliminar">@include('partials.icon', ['name' => 'trash', 'class' => 'icon-sm']) Eliminar</button>
                 </form>
@@ -905,6 +896,29 @@
                         <td>{{ $c->tiempo_lanzamiento ?? '—' }}</td>
                         <td>{{ $c->alcance ?? '—' }}</td>
                         <td>{{ $truco->fuente ?? ($truco->descripcion ?? '—') }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        @endif
+
+        {{-- DOTES (justo debajo de trucos y conjuros) --}}
+        @if($personaje->dotes->isNotEmpty())
+        <div class="seccion">
+            <div class="seccion-titulo">@include('partials.icon', ['name' => 'star']) Dotes</div>
+            <table class="tabla-ataques">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Categoría</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($personaje->dotes as $dote)
+                    <tr>
+                        <td>{{ $dote->nombre }}</td>
+                        <td>{{ $dote->categoria ?? '—' }}</td>
                     </tr>
                     @endforeach
                 </tbody>

@@ -34,6 +34,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/personajes/{personaje}/exportar/descargar', [PersonajeController::class, 'exportarFicha'])->name('personajes.exportar.descargar');
     Route::put('/personajes/{personaje}', [PersonajeController::class, 'update'])->name('personajes.update');
     Route::delete('/personajes/{personaje}', [PersonajeController::class, 'destroy'])->name('personajes.destroy');
+    Route::delete('/personajes/{personaje}/dotes/{dote}', [PersonajeController::class, 'eliminarDote'])->name('dotes.destroy');
 
     // Eliminar imagen de personaje
     Route::post('/personajes/{personaje}/eliminar-imagen', [PersonajeController::class, 'eliminarImagen'])

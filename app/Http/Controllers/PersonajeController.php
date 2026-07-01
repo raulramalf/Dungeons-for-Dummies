@@ -58,8 +58,6 @@ class PersonajeController extends Controller
             "inteligencia" => "required|integer|min:1|max:30",
             "sabiduria" => "required|integer|min:1|max:30",
             "carisma" => "required|integer|min:1|max:30",
-            "dotes" => "nullable|array",
-            "dotes.*" => "exists:dotes,id",
         ]);
 
         $personaje = Personaje::create([
@@ -74,10 +72,6 @@ class PersonajeController extends Controller
             "avatar" => $validated["avatar"] ?? null,
             "historia" => $validated["historia"] ?? null,
         ]);
-
-        if (!empty($validated["dotes"])) {
-            $personaje->dotes()->sync($validated["dotes"]);
-        }
 
         Estadistica::create([
             "personaje_id" => $personaje->id,
@@ -227,20 +221,11 @@ class PersonajeController extends Controller
             ->orderBy("nombre")
             ->get();
 
-        // Catálogo de conjuros para el desplegable, filtrado por la clase del personaje cuando es posible
-        $conjurosCatalogo = \App\Models\Conjuro::orderBy("nivel")
-            ->orderBy("nombre")
-            ->get()
-            ->when($personaje->clase, function ($conjuros) use ($personaje) {
-                $filtrados = $conjuros->filter(function ($c) use ($personaje) {
-                    return in_array(
-                        $personaje->clase->nombre,
-                        $c->clases ?? [],
-                    );
-                });
-                // Si el filtro deja la lista vacía (nombres de clase no coinciden), mostramos el catálogo completo
-                return $filtrados->isNotEmpty() ? $filtrados : $conjuros;
-            });
+        // Catálogo completo de conjuros, sin filtrar por clase
+        // (hay rasgos, dotes y trasfondos que dan acceso a conjuros de otras clases)
+        $conjurosCatalogo = \App\Models\Conjuro::orderBy('nivel')
+            ->orderBy('nombre')
+            ->get();
 
         return view(
             "personajes_editar",
@@ -273,8 +258,7 @@ class PersonajeController extends Controller
             "alineamiento" => "nullable|string|max:50",
             "avatar" => "nullable|url|max:500",
             "historia" => "nullable|string",
-            "dotes" => "nullable|array",
-            "dotes.*" => "exists:dotes,id",
+            "dotes_nuevos" => "nullable|json",
             // Rasgos de personalidad
             "rasgos_personalidad" => "nullable|string",
             "ideales" => "nullable|string",
@@ -351,8 +335,15 @@ class PersonajeController extends Controller
             "ataques" => $validated["ataques"] ?? null,
         ]);
 
-        // ——— Sincronizar dotes seleccionadas ———
-        $personaje->dotes()->sync($validated["dotes"] ?? []);
+        // ——— Añadir dotes nuevas seleccionadas en el desplegable ———
+        $dotesNuevos = json_decode($validated["dotes_nuevos"] ?? "[]", true) ?? [];
+        if (count($dotesNuevos) > 0) {
+            $yaTiene = $personaje->dotes()->pluck("dotes.id")->toArray();
+            $aAnadir = array_diff($dotesNuevos, $yaTiene);
+            if (!empty($aAnadir)) {
+                $personaje->dotes()->attach($aAnadir);
+            }
+        }
 
         // ——— Subida de imágenes del personaje (máx. 5) ———
         if ($request->hasFile("imagenes_personaje")) {
@@ -545,6 +536,20 @@ class PersonajeController extends Controller
         }
 
         return back()->with("success", "Imagen eliminada.");
+    }
+
+    /**
+    * Quita una dote concreta del personaje (equivalente a eliminarTruco, pero vía detach en la pivot)
+    */
+    public function eliminarDote(Personaje $personaje, \App\Models\Dote $dote)
+    {
+        if ($personaje->usuario_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $personaje->dotes()->detach($dote->id);
+
+        return back()->with("success", "Dote eliminada.");
     }
 
     public function json($id)

@@ -707,36 +707,21 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Subclase</label>
-                            <select name="subclase_id" class="form-control @error('subclase_id') error @enderror">
-                                <option value="">Sin subclase todavía</option>
-                                @foreach($subclases as $subclase)
-                                    <option value="{{ $subclase->id }}" {{ old('subclase_id', $personaje->subclase_id) == $subclase->id ? 'selected' : '' }}>
-                                        {{ $subclase->nombre }} ({{ $subclase->clase->nombre ?? '' }})
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('subclase_id')
-                                <span class="error-text">{{ $message }}</span>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Dotes</label>
-                        @php
-                            $dotesSeleccionadas = old('dotes', $personaje->dotes->pluck('id')->toArray());
-                        @endphp
-                        <select name="dotes[]" class="form-control" multiple size="6">
-                            @foreach($dotes as $dote)
-                                <option value="{{ $dote->id }}" {{ in_array($dote->id, $dotesSeleccionadas) ? 'selected' : '' }}>
-                                    {{ $dote->nombre }} ({{ $dote->categoria }})
-                                </option>
-                            @endforeach
-                        </select>
-                        <small style="color:var(--color-gris)">Ctrl/Cmd + clic para seleccionar varias.</small>
-                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Subclase</label>
+                    <select name="subclase_id" class="form-control @error('subclase_id') error @enderror">
+                        <option value="">Sin subclase todavía</option>
+                        @foreach($subclases as $subclase)
+                            <option value="{{ $subclase->id }}" {{ old('subclase_id', $personaje->subclase_id) == $subclase->id ? 'selected' : '' }}>
+                                {{ $subclase->nombre }} ({{ $subclase->clase->nombre ?? '' }})
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('subclase_id')
+                        <span class="error-text">{{ $message }}</span>
+                    @enderror
                 </div>
 
                 <div class="form-row">
@@ -796,6 +781,20 @@
                 <div class="form-group">
                     <label>Imágenes del Personaje (máx. 5 — {{ count($imgsPersonaje) }}/5 actuales)</label>
 
+                    @if(count($imgsPersonaje) < 5)
+                    <div class="upload-zone" onclick="document.getElementById('uploadPersonaje').click()" style="margin-bottom: 0.8rem;">
+                        <input type="file" id="uploadPersonaje" name="imagenes_personaje[]"
+                            multiple accept="image/jpeg,image/png,image/webp"
+                            onchange="previewImgs(this, 'previewP', {{ 5 - count($imgsPersonaje) }})">
+                        <div class="upload-label">
+                            📁 <span>Selecciona hasta {{ 5 - count($imgsPersonaje) }} imágenes de golpe</span> — JPG, PNG, WEBP · Máx. 2MB
+                        </div>
+                    </div>
+                    <div id="previewP" class="imgs-grid" style="margin-bottom: 0.8rem;"></div>
+                    @else
+                    <p style="color:#768596;font-size:.85rem;margin-top:.4rem;margin-bottom:0.8rem;">Has alcanzado el límite de 5 imágenes. Elimina alguna para añadir más.</p>
+                    @endif
+
                     @if(count($imgsPersonaje) > 0)
                     <div class="imgs-grid">
                         @foreach($imgsPersonaje as $i => $img)
@@ -806,25 +805,25 @@
                         @endforeach
                     </div>
                     @endif
-
-                    @if(count($imgsPersonaje) < 5)
-                    <div class="upload-zone" onclick="document.getElementById('uploadPersonaje').click()">
-                        <input type="file" id="uploadPersonaje" name="imagenes_personaje[]"
-                               multiple accept="image/jpeg,image/png,image/webp"
-                               onchange="previewImgs(this, 'previewP', {{ 5 - count($imgsPersonaje) }})">
-                        <div class="upload-label">
-                            📁 <span>Selecciona imágenes</span> — JPG, PNG, WEBP · Máx. 2MB por imagen
-                        </div>
-                    </div>
-                    <div id="previewP" class="imgs-grid"></div>
-                    @else
-                    <p style="color:#768596;font-size:.85rem;margin-top:.4rem">Has alcanzado el límite de 5 imágenes. Elimina alguna para añadir más.</p>
-                    @endif
                 </div>
 
                 {{-- Imágenes de armas --}}
                 <div class="form-group">
                     <label>Imágenes de Armas (máx. 5 — {{ count($imgsArmas) }}/5 actuales)</label>
+
+                    @if(count($imgsArmas) < 5)
+                    <div class="upload-zone" onclick="document.getElementById('uploadArmas').click()" style="margin-bottom: 0.8rem;">
+                        <input type="file" id="uploadArmas" name="imagenes_armas[]"
+                            multiple accept="image/jpeg,image/png,image/webp"
+                            onchange="previewImgs(this, 'previewA', {{ 5 - count($imgsArmas) }})">
+                        <div class="upload-label">
+                            ⚔️ <span>Selecciona hasta {{ 5 - count($imgsArmas) }} imágenes de golpe</span> — JPG, PNG, WEBP · Máx. 2MB
+                        </div>
+                    </div>
+                    <div id="previewA" class="imgs-grid" style="margin-bottom: 0.8rem;"></div>
+                    @else
+                    <p style="color:#768596;font-size:.85rem;margin-top:.4rem;margin-bottom:0.8rem;">Has alcanzado el límite de 5 imágenes. Elimina alguna para añadir más.</p>
+                    @endif
 
                     @if(count($imgsArmas) > 0)
                     <div class="imgs-grid">
@@ -835,18 +834,6 @@
                         </div>
                         @endforeach
                     </div>
-                    @endif
-
-                    @if(count($imgsArmas) < 5)
-                    <div class="upload-zone" onclick="document.getElementById('uploadArmas').click()">
-                        <input type="file" id="uploadArmas" name="imagenes_armas[]"
-                               multiple accept="image/jpeg,image/png,image/webp"
-                               onchange="previewImgs(this, 'previewA', {{ 5 - count($imgsArmas) }})">
-                        <div class="upload-label">
-                            ⚔️ <span>Selecciona imágenes de armas</span> — JPG, PNG, WEBP · Máx. 2MB
-                        </div>
-                    </div>
-                    <div id="previewA" class="imgs-grid"></div>
                     @endif
                 </div>
             </div>
@@ -1072,6 +1059,62 @@
                 <input type="hidden" name="conjuros_nuevos" id="conjurosNuevosHidden">
             </div>
 
+            {{-- ======= DOTES ======= --}}
+            <div class="seccion">
+                <div class="seccion-titulo">@include('partials.icon', ['name' => 'star']) Dotes</div>
+
+                @if($personaje->dotes && $personaje->dotes->count() > 0)
+                <div class="equipo-existente" style="margin-bottom:1rem">
+                    @foreach($personaje->dotes as $dote)
+                    <div class="equipo-item">
+                        <span class="equipo-nombre">{{ $dote->nombre }}</span>
+                        <div class="equipo-det">{{ $dote->categoria }}</div>
+                        <button type="button" class="btn-del-equipo"
+                                onclick="eliminarDote('{{ route('dotes.destroy', ['personaje' => $personaje, 'dote' => $dote]) }}', '{{ addslashes($dote->nombre) }}')">✕</button>
+                    </div>
+                    @endforeach
+                </div>
+                @else
+                <p style="color:#768596;margin-bottom:1rem">Este personaje no tiene dotes todavía.</p>
+                @endif
+
+                @php $doteIdsExistentes = $personaje->dotes->pluck('id')->values(); @endphp
+
+                <div class="conjuro-picker">
+                    <div class="conjuro-picker-cab">Añadir dotes del catálogo</div>
+                    <input type="text" class="form-control conjuro-buscador"
+                        placeholder="Buscar dote por nombre..."
+                        oninput="filtrarDotes(this.value)">
+
+                    <div class="conjuro-chips" id="doteChips">
+                        <span class="conjuro-chips-vacio">Ninguna dote seleccionada todavía — haz click en una de la lista</span>
+                    </div>
+
+                    <div class="conjuro-lista" id="doteLista">
+                        @foreach($dotes->groupBy('categoria') as $categoria => $grupo)
+                            @php $yaTiene = $grupo->filter(fn($d) => $doteIdsExistentes->contains($d->id))->count() === $grupo->count(); @endphp
+                            @if(!$yaTiene)
+                            <div class="conjuro-grupo">
+                                <div class="conjuro-grupo-titulo">{{ $categoria ?: 'General' }}</div>
+                                @foreach($grupo as $d)
+                                    @if(!$doteIdsExistentes->contains($d->id))
+                                    <div class="conjuro-row" data-nombre="{{ strtolower($d->nombre) }}"
+                                        data-id="{{ $d->id }}" data-nombre-mostrar="{{ $d->nombre }}"
+                                        onclick="toggleDote(this)">
+                                        <span class="conjuro-row-nombre">{{ $d->nombre }}</span>
+                                        <span class="conjuro-row-escuela">{{ $d->categoria }}</span>
+                                    </div>
+                                    @endif
+                                @endforeach
+                            </div>
+                            @endif
+                        @endforeach
+                    </div>
+                </div>
+
+                <input type="hidden" name="dotes_nuevos" id="dotesNuevosHidden">
+            </div>
+
             {{-- ======= PERSONALIDAD ======= --}}
             <div class="seccion">
                 <div class="seccion-titulo">@include('partials.icon', ['name' => 'user']) Personalidad</div>
@@ -1216,6 +1259,11 @@
         @method('DELETE')
     </form>
 
+    <form id="formEliminarDote" action="" method="POST" style="display:none">
+        @csrf
+        @method('DELETE')
+    </form>
+
 </div>{{-- /.edit-wrapper --}}
 
 <script>
@@ -1235,6 +1283,13 @@ function eliminarTruco(url, nombre) {
     if (!confirm('¿Eliminar ' + nombre + '?')) return;
     document.getElementById('formEliminarTruco').action = url;
     document.getElementById('formEliminarTruco').submit();
+}
+
+/* ===== Eliminar dote — formulario compartido fuera del form principal (mismo motivo que eliminarTruco) ===== */
+function eliminarDote(url, nombre) {
+    if (!confirm('¿Eliminar ' + nombre + '?')) return;
+    document.getElementById('formEliminarDote').action = url;
+    document.getElementById('formEliminarDote').submit();
 }
 
 /* ===== Modificador automático al cambiar stats ===== */
@@ -1324,6 +1379,8 @@ document.getElementById('formPersonaje').addEventListener('submit', function () 
 
     // Serializar conjuros nuevos seleccionados en el picker
     document.getElementById('conjurosNuevosHidden').value = JSON.stringify(conjurosSeleccionados);
+    // Serializar dotes nuevas seleccionadas en el picker
+    document.getElementById('dotesNuevosHidden').value = JSON.stringify(doteSeleccionados);
 });
 
 /* ===== Picker de conjuros: click para seleccionar/deseleccionar ===== */
@@ -1347,7 +1404,7 @@ function toggleConjuro(row) {
 
 function quitarConjuroChip(id) {
     conjurosSeleccionados = conjurosSeleccionados.filter(x => x !== id);
-    const row = document.querySelector(`.conjuro-row[data-id="${id}"]`);
+    const row = document.querySelector(`#conjuroLista .conjuro-row[data-id="${id}"]`);
     if (row) row.classList.remove('seleccionado');
     renderChips();
 }
@@ -1359,7 +1416,7 @@ function renderChips() {
         return;
     }
     cont.innerHTML = conjurosSeleccionados.map(id => {
-        const row = document.querySelector(`.conjuro-row[data-id="${id}"]`);
+        const row = document.querySelector(`#conjuroLista .conjuro-row[data-id="${id}"]`);
         const nombre = row ? row.dataset.nombreMostrar : id;
         return `<span class="conjuro-chip">${nombre}<button type="button" onclick="quitarConjuroChip(${id})">✕</button></span>`;
     }).join('');
@@ -1368,10 +1425,60 @@ function renderChips() {
 /* ===== Picker de conjuros: filtro de búsqueda ===== */
 function filtrarConjuros(texto) {
     const t = texto.trim().toLowerCase();
-    document.querySelectorAll('.conjuro-row').forEach(row => {
+    document.querySelectorAll('#conjuroLista .conjuro-row').forEach(row => {
         row.style.display = row.dataset.nombre.includes(t) ? '' : 'none';
     });
-    document.querySelectorAll('.conjuro-grupo').forEach(grupo => {
+    document.querySelectorAll('#conjuroLista .conjuro-grupo').forEach(grupo => {
+        const visibles = [...grupo.querySelectorAll('.conjuro-row')].some(r => r.style.display !== 'none');
+        grupo.style.display = visibles ? '' : 'none';
+    });
+}
+
+/* ===== Picker de dotes: click para seleccionar/deseleccionar ===== */
+let doteSeleccionados = [];
+
+function toggleDote(row) {
+    const id = parseInt(row.dataset.id);
+    const idx = doteSeleccionados.indexOf(id);
+
+    if (idx === -1) {
+        doteSeleccionados.push(id);
+        row.classList.add('seleccionado');
+    } else {
+        doteSeleccionados.splice(idx, 1);
+        row.classList.remove('seleccionado');
+    }
+
+    renderDoteChips();
+}
+
+function quitarDoteChip(id) {
+    doteSeleccionados = doteSeleccionados.filter(x => x !== id);
+    const row = document.querySelector(`#doteLista .conjuro-row[data-id="${id}"]`);
+    if (row) row.classList.remove('seleccionado');
+    renderDoteChips();
+}
+
+function renderDoteChips() {
+    const cont = document.getElementById('doteChips');
+    if (doteSeleccionados.length === 0) {
+        cont.innerHTML = '<span class="conjuro-chips-vacio">Ninguna dote seleccionada todavía — haz click en una de la lista</span>';
+        return;
+    }
+    cont.innerHTML = doteSeleccionados.map(id => {
+        const row = document.querySelector(`#doteLista .conjuro-row[data-id="${id}"]`);
+        const nombre = row ? row.dataset.nombreMostrar : id;
+        return `<span class="conjuro-chip">${nombre}<button type="button" onclick="quitarDoteChip(${id})">✕</button></span>`;
+    }).join('');
+}
+
+/* ===== Picker de dotes: filtro de búsqueda ===== */
+function filtrarDotes(texto) {
+    const t = texto.trim().toLowerCase();
+    document.querySelectorAll('#doteLista .conjuro-row').forEach(row => {
+        row.style.display = row.dataset.nombre.includes(t) ? '' : 'none';
+    });
+    document.querySelectorAll('#doteLista .conjuro-grupo').forEach(grupo => {
         const visibles = [...grupo.querySelectorAll('.conjuro-row')].some(r => r.style.display !== 'none');
         grupo.style.display = visibles ? '' : 'none';
     });
