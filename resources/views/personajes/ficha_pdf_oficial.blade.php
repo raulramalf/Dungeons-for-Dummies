@@ -19,7 +19,7 @@
         color: #241008;
         font-size: 9.4px;
         line-height: 1.3;
-        background: #fffdf8;
+        background: #f7f0dc;
     }
 
     .caja {
@@ -27,7 +27,7 @@
         border-radius: 6px;
         padding: 7px 9px;
         margin-bottom: 9px;
-        background: #fffdf8;
+        background: #faf4e4;
     }
 
     .divisor-orn {
@@ -56,7 +56,7 @@
     table.cab-top td { vertical-align: top; }
 
     .identidad-box {
-        border: 1.6px solid #8a1c1c; border-radius: 6px; padding: 6px 9px; background: #fffdf8;
+        border: 1.6px solid #8a1c1c; border-radius: 6px; padding: 6px 9px; background: #faf4e4;
     }
     .identidad-nombre { font-size: 17px; font-weight: bold; color: #6e0f0f; margin-bottom: 2px; }
     .identidad-fila { font-size: 8.6px; color: #4a3520; }
@@ -66,7 +66,7 @@
     .mini-circulo {
         width: 46px; height: 46px; border: 2px solid #8a1c1c; border-radius: 50%;
         margin: 0 auto 2px; text-align: center; line-height: 46px; font-size: 18px; font-weight: bold; color: #6e0f0f;
-        background: #fffdf8;
+        background: #faf4e4;
     }
     .mini-label { font-size: 6.6px; text-transform: uppercase; color: #8a1c1c; letter-spacing: 0.04em; }
 
@@ -74,21 +74,36 @@
     .mini-escudo svg { width: 50px; height: 50px; }
     .mini-escudo-valor { font-size: 17px; font-weight: bold; color: #6e0f0f; margin-top: -36px; position: relative; }
 
-    .pgbox { border: 1.6px solid #8a1c1c; border-radius: 6px; padding: 5px 7px; background: #fffdf8; text-align: center; }
+    .pgbox { border: 1.6px solid #8a1c1c; border-radius: 6px; padding: 5px 7px; background: #faf4e4; text-align: center; }
     .pgbox .titulo { font-size: 6.8px; text-transform: uppercase; color: #8a1c1c; font-weight: bold; }
     .pgbox .grande { font-size: 16px; font-weight: bold; color: #3a1c08; }
     .pgbox .fila2 { font-size: 7px; color: #4a3520; margin-top: 2px; }
 
-    .muerte-box { border: 1.6px solid #8a1c1c; border-radius: 6px; padding: 5px 7px; background: #fffdf8; text-align: center; }
+    .muerte-box { border: 1.6px solid #8a1c1c; border-radius: 6px; padding: 5px 7px; background: #faf4e4; text-align: center; }
     .muerte-box .titulo { font-size: 6.2px; text-transform: uppercase; color: #8a1c1c; font-weight: bold; line-height: 1.1; }
-    .diamantes { font-size: 11px; letter-spacing: 2px; color: #8a1c1c; }
-    .muerte-fila { font-size: 6.6px; color: #4a3520; text-align: left; }
+    .diamante-wrap {
+        display: inline-block;
+        width: 11px; height: 11px;
+        margin: 0 2px;
+        position: relative;
+        vertical-align: middle;
+    }
+    .diamante {
+        position: absolute;
+        top: 2px; left: 2px;
+        width: 7px; height: 7px;
+        border: 1.2px solid #8a1c1c;
+        transform: rotate(45deg);
+        background: transparent;
+    }
+    .diamante.lleno { background: #8a1c1c; }
+    .muerte-fila { font-size: 6.6px; color: #4a3520; text-align: left; line-height: 13px; margin-bottom: 1px; }
 
     /* ----- Fila secundaria: bono competencia / iniciativa / velocidad / tamaño / percep pasiva ----- */
     table.fila-sec { width: 100%; border-collapse: separate; border-spacing: 5px 0; margin-bottom: 7px; }
     table.fila-sec td {
         border: 1.6px solid #8a1c1c; border-radius: 6px; text-align: center; padding: 4px 2px;
-        width: 20%; background: #fffdf8;
+        width: 20%; background: #faf4e4;
     }
     table.fila-sec .lbl { font-size: 6.4px; text-transform: uppercase; color: #8a1c1c; letter-spacing: 0.02em; }
     table.fila-sec .val { font-size: 14px; font-weight: bold; color: #3a1c08; }
@@ -99,7 +114,7 @@
     .col-car-td { width: 21%; padding-right: 9px; }
     .col-resto-td { width: 79%; }
 
-    .car-box { border: 1.4px solid #8a1c1c; border-radius: 6px; padding: 5px 6px; margin-bottom: 7px; background: #fffdf8; }
+    .car-box { border: 1.4px solid #8a1c1c; border-radius: 6px; padding: 5px 6px; margin-bottom: 7px; background: #faf4e4; }
     .car-nombre { font-size: 8.4px; font-weight: bold; text-transform: uppercase; color: #6e0f0f; text-align: center; letter-spacing: 0.02em; }
     .car-mod { font-size: 18px; font-weight: bold; text-align: center; line-height: 1.1; color: #3a1c08; }
     .car-punt { font-size: 7.4px; text-align: center; color: #8a7752; margin-bottom: 3px; }
@@ -122,7 +137,7 @@
 
     .pagina-2 { page-break-before: always; }
 
-    .mag-box { border: 1.6px solid #8a1c1c; border-radius: 6px; padding: 6px 8px; margin-bottom: 7px; background: #fffdf8; }
+    .mag-box { border: 1.6px solid #8a1c1c; border-radius: 6px; padding: 6px 8px; margin-bottom: 7px; background: #faf4e4; }
     .mag-fila { display: block; font-size: 8px; padding: 1.5px 0; }
     .mag-fila b { color: #8a1c1c; text-transform: uppercase; font-size: 7px; display: inline-block; width: 62%; }
 
@@ -224,8 +239,8 @@
         </td>
         <td style="width:10%">
             <div class="mini-circulo-wrap">
-                <div class="mini-circulo">{{ $personaje->nivel }}</div>
-                <div class="mini-label">Nivel @if($personaje->experiencia) · {{ number_format($personaje->experiencia) }} PX @endif</div>
+                <div class="mini-label" style="margin-bottom:3px">Nivel @if($personaje->experiencia) · {{ number_format($personaje->experiencia) }} PX @endif</div>
+                <div class="mini-circulo" style="margin:0 auto">{{ $personaje->nivel }}</div>
             </div>
         </td>
         <td style="width:13%">
@@ -252,8 +267,16 @@
         <td style="width:13%">
             <div class="muerte-box">
                 <div class="titulo">Salvaciones contra muerte</div>
-                <div class="muerte-fila">Éxitos: <span class="diamantes">{{ str_repeat('◆', $est->exitos_muerte ?? 0) }}{{ str_repeat('◇', 3 - ($est->exitos_muerte ?? 0)) }}</span></div>
-                <div class="muerte-fila">Fallos: <span class="diamantes">{{ str_repeat('◆', $est->fallos_muerte ?? 0) }}{{ str_repeat('◇', 3 - ($est->fallos_muerte ?? 0)) }}</span></div>
+                <div class="muerte-fila">Éxitos:
+                    @for($i = 1; $i <= 3; $i++)
+                        <span class="diamante-wrap"><span class="diamante {{ $i <= ($est->exitos_muerte ?? 0) ? 'lleno' : '' }}"></span></span>
+                    @endfor
+                </div>
+                <div class="muerte-fila">Fallos:
+                    @for($i = 1; $i <= 3; $i++)
+                        <span class="diamante-wrap"><span class="diamante {{ $i <= ($est->fallos_muerte ?? 0) ? 'lleno' : '' }}"></span></span>
+                    @endfor
+                </div>
             </div>
         </td>
     </tr>
@@ -345,7 +368,13 @@
         <td>
             <div class="caja">
                 <div class="caja-titulo">Dotes</div>
-                <div class="lineas-vacias"><div></div><div></div></div>
+                @if($personaje->dotes->isNotEmpty())
+                    @foreach($personaje->dotes as $dote)
+                        <div style="font-size:7.8px;margin-bottom:2px">• {{ $dote->nombre }}</div>
+                    @endforeach
+                @else
+                    <div class="lineas-vacias"><div></div><div></div></div>
+                @endif
             </div>
         </td>
     </tr></table>
@@ -440,6 +469,36 @@
         @endif
     </div>
 
+    {{-- DOTES — descripción completa, debajo de trucos y conjuros --}}
+    @if($personaje->dotes->isNotEmpty())
+    <div class="caja">
+        <div class="caja-titulo">Dotes</div>
+        <div class="desc-conjuros">
+            @foreach($personaje->dotes as $dote)
+            <div class="desc-conjuro-item">
+                <div class="desc-conjuro-titulo">
+                    {{ $dote->nombre }}
+                    <span class="desc-conjuro-meta">{{ $dote->categoria ?? '—' }}{{ $dote->repetible ? ' · Repetible' : '' }}</span>
+                </div>
+                @if($dote->prerequisitos && count($dote->prerequisitos) > 0)
+                    <div class="desc-conjuro-texto"><strong>Prerrequisitos.</strong> {{ implode(', ', $dote->prerequisitos) }}</div>
+                @endif
+                @if($dote->descripcion)
+                    <div class="desc-conjuro-texto">{!! $dote->descripcion !!}</div>
+                @endif
+                @if($dote->beneficios && count($dote->beneficios) > 0)
+                    <div class="desc-conjuro-texto" style="margin-top:3px">
+                        @foreach($dote->beneficios as $beneficio)
+                            • {{ is_array($beneficio) ? ($beneficio['texto'] ?? $beneficio['nombre'] ?? implode(': ', $beneficio)) : $beneficio }}<br>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
     {{-- EQUIPO --}}
     <div class="caja">
         <div class="caja-titulo">Equipo</div>
@@ -448,7 +507,7 @@
             <tr><th>Objeto</th><th>Tipo</th><th>Cant.</th><th>Peso</th><th>Valor</th></tr>
             @foreach($personaje->equipo as $item)
             <tr>
-                <td>{{ $item->nombre }}{{ $item->equipado ? ' (equipado)' : '' }}{{ $item->magico ? ' ✨' : '' }}</td>
+                <td>{{ $item->nombre }}{{ $item->equipado ? ' (equipado)' : '' }}{{ $item->magico ? ' (mágico)' : '' }}</td>
                 <td>{{ $item->tipo }}</td>
                 <td>{{ $item->cantidad ?? 1 }}</td>
                 <td>{{ $item->peso ? $item->peso . ' lb' : '—' }}</td>
@@ -475,7 +534,7 @@
     @endif
 
 @unless($resumen)
-    <div class="divisor-orn">❧ ❧ ❧</div>
+    <div class="divisor-orn">· · ·</div>
 
     {{-- HISTORIA Y PERSONALIDAD --}}
     <div class="caja">

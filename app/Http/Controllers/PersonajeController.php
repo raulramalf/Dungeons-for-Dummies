@@ -175,6 +175,7 @@ class PersonajeController extends Controller
             "estadisticas",
             "equipo",
             "trucos.conjuro",
+            "dotes",
         ]);
 
         $vista = self::PLANTILLAS_PDF[$plantilla]["vista"];
