@@ -13,6 +13,7 @@ class Trasfondo extends Model
         'competencias_herramientas', 'idiomas', 'equipo_inicial',
         'rasgo_personalidad', 'ideal', 'vinculo',
         'defecto', 'caracteristica_especial',
+        'mejora_caracteristicas', 'dote_origen', 'edicion',
     ];
 
     protected $casts = [
@@ -20,6 +21,7 @@ class Trasfondo extends Model
         'competencias_herramientas' => 'array',
         'idiomas'                   => 'array',
         'equipo_inicial'            => 'array',
+        'mejora_caracteristicas'    => 'array',
     ];
 
     public function personajes()

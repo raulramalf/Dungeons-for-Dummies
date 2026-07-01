@@ -1,0 +1,62 @@
+[
+    {
+        "nombre": "Acólito",
+        "descripcion": "Has pasado tu vida al servicio de un templo, aprendiendo ritos sagrados y sirviendo a los sacerdotes de tu religión. Eres capaz de canalizar un poco del poder de tu deidad a través de plegarias y símbolos sagrados.",
+        "competencias_habilidades": ["Perspicacia", "Religión"],
+        "competencias_herramientas": ["Utensilios de calígrafo"],
+        "equipo_inicial": {
+            "opcion_a": ["Utensilios de calígrafo", "Libro (plegarias)", "Símbolo sagrado", "Pergamino (10 hojas)", "Túnica", "8 po"],
+            "opcion_b": ["50 po"]
+        },
+        "mejora_caracteristicas": {
+            "opciones": ["Inteligencia", "Sabiduría", "Carisma"],
+            "modo": "2_1_o_3x1"
+        },
+        "dote_origen": "Iniciado en la Magia (Clérigo)"
+    },
+    {
+        "nombre": "Criminal",
+        "descripcion": "Tienes experiencia sobreviviendo al margen de la ley. Sabes moverte por los bajos fondos, conoces contactos turbios y no tienes reparo en usar herramientas de ladrón para conseguir lo que necesitas.",
+        "competencias_habilidades": ["Juego de Manos", "Sigilo"],
+        "competencias_herramientas": ["Herramientas de ladrón"],
+        "equipo_inicial": {
+            "opcion_a": ["2 Dagas", "Herramientas de ladrón", "Palanca", "2 Sacos", "Ropa de viajero", "16 po"],
+            "opcion_b": ["50 po"]
+        },
+        "mejora_caracteristicas": {
+            "opciones": ["Destreza", "Constitución", "Inteligencia"],
+            "modo": "2_1_o_3x1"
+        },
+        "dote_origen": "Alerta"
+    },
+    {
+        "nombre": "Erudito",
+        "descripcion": "Has dedicado años al estudio en bibliotecas y academias, acumulando conocimiento arcano e histórico. Tu curiosidad intelectual te ha llevado a rozar los primeros pasos de la magia.",
+        "competencias_habilidades": ["Arcanos", "Historia"],
+        "competencias_herramientas": ["Utensilios de calígrafo"],
+        "equipo_inicial": {
+            "opcion_a": ["Bastón", "Utensilios de calígrafo", "Libro (historia)", "Pergamino (8 hojas)", "Túnica", "8 po"],
+            "opcion_b": ["50 po"]
+        },
+        "mejora_caracteristicas": {
+            "opciones": ["Constitución", "Inteligencia", "Sabiduría"],
+            "modo": "2_1_o_3x1"
+        },
+        "dote_origen": "Iniciado en la Magia (Mago)"
+    },
+    {
+        "nombre": "Soldado",
+        "descripcion": "Serviste en un ejército, milicia o compañía mercenaria, entrenando en combate y disciplina táctica. Sabes manejar armas de guerra y llevar el peso del equipo militar.",
+        "competencias_habilidades": ["Atletismo", "Intimidación"],
+        "competencias_herramientas": ["Un tipo de juego de herramientas de juego, a elegir"],
+        "equipo_inicial": {
+            "opcion_a": ["Lanza", "Arco corto", "20 Flechas", "Juego de herramientas de juego (el mismo elegido arriba)", "Kit de sanador", "Carcaj", "Ropa de viajero", "14 po"],
+            "opcion_b": ["50 po"]
+        },
+        "mejora_caracteristicas": {
+            "opciones": ["Fuerza", "Destreza", "Constitución"],
+            "modo": "2_1_o_3x1"
+        },
+        "dote_origen": "Atacante Salvaje"
+    }
+]

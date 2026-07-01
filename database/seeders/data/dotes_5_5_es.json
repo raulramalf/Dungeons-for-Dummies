@@ -1,0 +1,204 @@
+[
+    {
+        "nombre": "Alerta",
+        "categoria": "origen",
+        "descripcion": "Siempre estás pendiente del peligro, lo que te hace difícil de sorprender y rápido de reaccionar en combate.",
+        "prerequisitos": null,
+        "beneficios": {
+            "Bonificador a Iniciativa": "Cuando tiras Iniciativa, puedes añadir tu bonificador de competencia a la tirada.",
+            "Intercambio de Iniciativa": "Justo después de tirar Iniciativa, puedes intercambiarla con la de un aliado dispuesto en el mismo combate. No puedes hacer este intercambio si tú o el aliado tenéis la condición Incapacitado."
+        },
+        "incremento_caracteristica": false,
+        "repetible": false
+    },
+    {
+        "nombre": "Iniciado en la Magia",
+        "categoria": "origen",
+        "descripcion": "Aprendes algo de magia arcana, divina o primigenia, dependiendo de la lista de conjuros que elijas al obtener esta dote.",
+        "prerequisitos": null,
+        "beneficios": {
+            "Dos Trucos": "Aprendes dos trucos a elección de la lista de Clérigo, Druida o Mago. Inteligencia, Sabiduría o Carisma es tu característica de lanzamiento para los conjuros de esta dote (se elige al escogerla).",
+            "Conjuro de Nivel 1": "Eliges un conjuro de nivel 1 de la misma lista escogida para los trucos. Siempre lo tienes preparado. Puedes lanzarlo una vez sin gastar espacio de conjuro, recuperando esta capacidad al completar un descanso largo. También puedes lanzarlo usando espacios de conjuro que tengas.",
+            "Cambio de Conjuro": "Cada vez que subes de nivel, puedes cambiar uno de los conjuros elegidos para esta dote por otro del mismo nivel de la lista escogida."
+        },
+        "incremento_caracteristica": false,
+        "repetible": true
+    },
+    {
+        "nombre": "Atacante Salvaje",
+        "categoria": "origen",
+        "descripcion": "Te has entrenado para asestar golpes especialmente dañinos.",
+        "prerequisitos": null,
+        "beneficios": {
+            "Daño Máximo": "Una vez por turno, cuando impactas a un objetivo con un arma, puedes tirar los dados de daño del arma dos veces y usar cualquiera de las dos tiradas contra el objetivo."
+        },
+        "incremento_caracteristica": false,
+        "repetible": false
+    },
+    {
+        "nombre": "Habilidoso",
+        "categoria": "origen",
+        "descripcion": "Tienes un talento natural que se manifiesta en distintas áreas de pericia.",
+        "prerequisitos": null,
+        "beneficios": {
+            "Tres Competencias": "Ganas competencia en cualquier combinación de tres habilidades o herramientas a tu elección."
+        },
+        "incremento_caracteristica": false,
+        "repetible": true
+    },
+    {
+        "nombre": "Mejora de Característica",
+        "categoria": "general",
+        "descripcion": "Tu entrenamiento y dedicación te permiten superar tus límites físicos y mentales.",
+        "prerequisitos": {"nivel": 4},
+        "beneficios": {
+            "Incremento": "Aumenta una característica a tu elección en 2, o dos características a tu elección en 1 cada una. Esta dote no puede subir una característica por encima de 20."
+        },
+        "incremento_caracteristica": true,
+        "repetible": true
+    },
+    {
+        "nombre": "Apresador",
+        "categoria": "general",
+        "descripcion": "Te has especializado en inmovilizar a tus enemigos con tus propias manos.",
+        "prerequisitos": {"nivel": 4, "caracteristica": "Fuerza o Destreza", "valor_minimo": 13},
+        "beneficios": {
+            "Incremento": "Aumenta tu Fuerza o Destreza en 1, hasta un máximo de 20.",
+            "Golpe y Agarre": "Cuando impactas a una criatura con un Ataque Desarmado como parte de la acción de Atacar en tu turno, puedes aplicar tanto el Daño como la opción de Agarrar. Solo puedes usar este beneficio una vez por turno.",
+            "Ventaja en el Ataque": "Tienes Ventaja en tiradas de ataque contra una criatura Agarrada por ti.",
+            "Luchador Rápido": "No necesitas gastar movimiento extra para mover a una criatura Agarrada por ti si es de tu tamaño o menor."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Tiro con Arco",
+        "categoria": "estilo_combate",
+        "descripcion": "Te especializas en el uso de armas a distancia.",
+        "prerequisitos": {"rasgo": "Estilo de Combate"},
+        "beneficios": {
+            "Bonificador de Ataque": "Ganas un bonificador de +2 a las tiradas de ataque que hagas con armas a Distancia."
+        },
+        "incremento_caracteristica": false,
+        "repetible": false
+    },
+    {
+        "nombre": "Defensa",
+        "categoria": "estilo_combate",
+        "descripcion": "Te especializas en el uso de la armadura para protegerte.",
+        "prerequisitos": {"rasgo": "Estilo de Combate"},
+        "beneficios": {
+            "Bonificador a CA": "Mientras llevas armadura Ligera, Media o Pesada, ganas un bonificador de +1 a la Clase de Armadura."
+        },
+        "incremento_caracteristica": false,
+        "repetible": false
+    },
+    {
+        "nombre": "Lucha con Armas a Dos Manos",
+        "categoria": "estilo_combate",
+        "descripcion": "Te especializas en el uso de armas pesadas empuñadas con ambas manos.",
+        "prerequisitos": {"rasgo": "Estilo de Combate"},
+        "beneficios": {
+            "Repetir Daño Bajo": "Cuando tiras el daño de un ataque que haces con un arma Cuerpo a Cuerpo que sostienes con las dos manos, puedes tratar cualquier 1 o 2 en un dado de daño como un 3. El arma debe tener la propiedad A Dos Manos o Versátil para obtener este beneficio."
+        },
+        "incremento_caracteristica": false,
+        "repetible": false
+    },
+    {
+        "nombre": "Lucha con Dos Armas",
+        "categoria": "estilo_combate",
+        "descripcion": "Te especializas en combatir con un arma en cada mano.",
+        "prerequisitos": {"rasgo": "Estilo de Combate"},
+        "beneficios": {
+            "Modificador al Daño Extra": "Cuando haces un ataque extra por usar un arma con la propiedad Ligera, puedes añadir tu modificador de característica al daño de ese ataque si aún no lo estabas añadiendo."
+        },
+        "incremento_caracteristica": false,
+        "repetible": false
+    },
+    {
+        "nombre": "Don de Destreza en Combate",
+        "categoria": "epica",
+        "descripcion": "Has alcanzado tal maestría marcial que puedes forzar la suerte en pleno combate.",
+        "prerequisitos": {"nivel": 19},
+        "beneficios": {
+            "Incremento": "Aumenta una característica a tu elección en 1, hasta un máximo de 30.",
+            "Puntería Impecable": "Cuando fallas una tirada de ataque, puedes convertirla en impacto. Una vez usado este beneficio, no puedes volver a usarlo hasta el inicio de tu siguiente turno."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Don de Viaje Dimensional",
+        "categoria": "epica",
+        "descripcion": "Has aprendido a deslizarte brevemente entre planos para reposicionarte en combate.",
+        "prerequisitos": {"nivel": 19},
+        "beneficios": {
+            "Incremento": "Aumenta una característica a tu elección en 1, hasta un máximo de 30.",
+            "Pasos Parpadeantes": "Justo después de realizar la acción de Atacar o la acción de Magia, puedes teletransportarte hasta 9 metros a un espacio desocupado que puedas ver."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Don del Destino",
+        "categoria": "epica",
+        "descripcion": "Has ganado el favor del destino mismo, pudiendo inclinarlo a tu voluntad en momentos cruciales.",
+        "prerequisitos": {"nivel": 19},
+        "beneficios": {
+            "Incremento": "Aumenta una característica a tu elección en 1, hasta un máximo de 30.",
+            "Mejorar el Destino": "Cuando tú u otra criatura a 18 metros supera o falla una prueba de D20, puedes tirar 2d4 y aplicar el total como bonificador o penalización a esa tirada. Una vez usado este beneficio, no puedes volver a usarlo hasta que tires Iniciativa o completes un descanso corto o largo."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Don de Ofensiva Irresistible",
+        "categoria": "epica",
+        "descripcion": "Tus ataques se han vuelto tan certeros que ninguna resistencia puede detenerlos.",
+        "prerequisitos": {"nivel": 19},
+        "beneficios": {
+            "Incremento": "Aumenta una característica a tu elección en 1, hasta un máximo de 30.",
+            "Superar Defensas": "El daño Contundente, Perforante y Cortante que infliges ignora siempre la Resistencia.",
+            "Golpe Abrumador": "Cuando sacas un 20 natural en una tirada de ataque, puedes infligir daño extra al objetivo igual a la característica aumentada por esta dote. El tipo de daño extra es el mismo que el del ataque."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Don de Recuerdo de Conjuros",
+        "categoria": "epica",
+        "descripcion": "Tu dominio arcano te permite, en ocasiones, lanzar un conjuro sin gastar el espacio que consumiría.",
+        "prerequisitos": {"nivel": 19, "rasgo": "Lanzamiento de Conjuros"},
+        "beneficios": {
+            "Incremento": "Aumenta una característica a tu elección en 1, hasta un máximo de 30.",
+            "Lanzamiento Gratuito": "Cada vez que lanzas un conjuro con un espacio de nivel 1 a 4, tira 1d4. Si el número obtenido coincide con el nivel del espacio, este no se gasta."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Don del Espíritu Nocturno",
+        "categoria": "epica",
+        "descripcion": "Las sombras te acogen como a uno más de los suyos.",
+        "prerequisitos": {"nivel": 19},
+        "beneficios": {
+            "Incremento": "Aumenta una característica a tu elección en 1, hasta un máximo de 30.",
+            "Fusión con las Sombras": "Mientras estás en Penumbra u Oscuridad, puedes darte la condición Invisible como acción adicional. La condición termina inmediatamente después de que realices una acción, acción adicional o reacción.",
+            "Forma Sombría": "Mientras estás en Penumbra u Oscuridad, tienes Resistencia a todo el daño excepto Psíquico y Radiante."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Don de Visión Verdadera",
+        "categoria": "epica",
+        "descripcion": "Tus ojos han sido tocados por un poder que ve más allá de los engaños del mundo.",
+        "prerequisitos": {"nivel": 19},
+        "beneficios": {
+            "Incremento": "Aumenta una característica a tu elección en 1, hasta un máximo de 30.",
+            "Visión Verdadera": "Tienes Visión Verdadera con un alcance de 18 metros."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    }
+]

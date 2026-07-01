@@ -1,0 +1,156 @@
+[
+    {
+        "clase": "Barbarian",
+        "nombre": "Camino del Berserker",
+        "descripcion": "Canaliza la Rabia en Furia Violenta. Los bárbaros que siguen el Camino del Berserker dirigen su Rabia principalmente hacia la violencia. Su senda es una de furia desenfrenada: disfrutan del caos de la batalla mientras dejan que la Rabia los posea y los potencie.",
+        "nivel_disponible": 3,
+        "rasgos": [
+            {"nombre": "Frenesí", "descripcion": "Si usas Ataque Temerario mientras tu Rabia está activa, infliges daño extra al primer objetivo que impactas en tu turno con un ataque basado en Fuerza."},
+            {"nombre": "Presencia Intimidante", "descripcion": "Como acción adicional, infundes terror en otros gracias a tu presencia amenazante y poder primigenio, obligando a las criaturas cercanas a tirar salvación de Sabiduría o quedar Asustadas."},
+            {"nombre": "Furia Irracional", "descripcion": "Tienes inmunidad a las condiciones Hechizado y Asustado mientras tu Rabia está activa. Si ya estabas Hechizado o Asustado al entrar en Rabia, la condición queda suspendida durante la Rabia."},
+            {"nombre": "Represalia", "descripcion": "Cuando recibes daño de una criatura a 1,5 metros o menos, puedes usar tu reacción para hacer un ataque cuerpo a cuerpo contra esa criatura."}
+        ]
+    },
+    {
+        "clase": "Bard",
+        "nombre": "Colegio del Conocimiento",
+        "descripcion": "Ahonda en las Profundidades del Saber Mágico. Los bardos del Colegio del Conocimiento recopilan conjuros y secretos de fuentes diversas: tomos eruditos, ritos místicos, cuentos populares. Se reúnen en bibliotecas y universidades para compartir su saber, y también en festivales o asuntos de estado, donde exponen corrupción, desenmarañan mentiras y se burlan de figuras de autoridad pomposas.",
+        "nivel_disponible": 3,
+        "rasgos": [
+            {"nombre": "Competencias Adicionales", "descripcion": "Ganas competencia en tres habilidades a tu elección."},
+            {"nombre": "Palabras Cortantes", "descripcion": "Cuando una criatura que puedes ver hace una tirada de ataque, prueba de característica o tirada de daño, puedes gastar un uso de Inspiración Bárdica para restar el resultado del dado a esa tirada."},
+            {"nombre": "Descubrimientos Mágicos", "descripcion": "Aprendes dos conjuros a elección de las listas de Clérigo, Druida o Mago, en cualquier combinación."},
+            {"nombre": "Habilidad Sin Par", "descripcion": "Cuando fallas una prueba de característica o tirada de ataque, puedes gastar un uso de Inspiración Bárdica y sumar el resultado del dado a esa tirada, pudiendo convertir el fallo en éxito."}
+        ]
+    },
+    {
+        "clase": "Cleric",
+        "nombre": "Dominio de la Vida",
+        "descripcion": "Alivia las Heridas del Mundo. El Dominio de la Vida se centra en la energía positiva que ayuda a sostener toda la vida en el multiverso. Los clérigos que aprovechan este dominio son maestros de la curación, usando esa fuerza vital para sanar todo tipo de heridas.",
+        "nivel_disponible": 3,
+        "rasgos": [
+            {"nombre": "Conjuros del Dominio de la Vida", "descripcion": "Tu conexión con este dominio divino asegura que siempre tengas ciertos conjuros de curación preparados, sin que cuenten para tu límite de conjuros preparados."},
+            {"nombre": "Preservar la Vida", "descripcion": "Como acción de Magia, presentas tu símbolo sagrado y gastas un uso de Canalizar Divinidad para evocar energía curativa que restaura una cantidad de puntos de golpe repartidos entre las criaturas que elijas cerca."},
+            {"nombre": "Discípulo de la Vida", "descripcion": "Cuando un conjuro que lanzas con un espacio de conjuro restaura puntos de golpe a una criatura, esa criatura recupera puntos de golpe adicionales en el turno en que lanzas el conjuro."},
+            {"nombre": "Sanador Bendecido", "descripcion": "Los conjuros de curación que lanzas sobre otros también te curan a ti. Justo después de lanzar un conjuro con un espacio que restaura puntos de golpe a una o más criaturas, recuperas puntos de golpe."},
+            {"nombre": "Curación Suprema", "descripcion": "Cuando normalmente tirarías uno o más dados para restaurar puntos de golpe con un conjuro o Canalizar Divinidad, en su lugar usas el máximo posible en cada dado."}
+        ]
+    },
+    {
+        "clase": "Druid",
+        "nombre": "Círculo de la Tierra",
+        "descripcion": "Celebra la Conexión con el Mundo Natural. El Círculo de la Tierra está formado por místicos y sabios que salvaguardan conocimientos y ritos ancestrales. Estos druidas se reúnen en círculos sagrados de árboles o piedras erguidas para susurrar secretos primigenios en Druídico.",
+        "nivel_disponible": 3,
+        "rasgos": [
+            {"nombre": "Conjuros del Círculo de la Tierra", "descripcion": "Al completar un descanso largo, eliges un tipo de terreno (árido, polar, templado o tropical) que determina una lista de conjuros que siempre tienes preparados, sin que cuenten para tu límite."},
+            {"nombre": "Recuperación Natural", "descripcion": "Puedes lanzar uno de los conjuros de nivel 1 o superior que tengas preparados de tus Conjuros de Círculo sin gastar un espacio de conjuro; debes completar un descanso largo para volver a usar este beneficio."},
+            {"nombre": "Auxilio de la Tierra", "descripcion": "Como acción de Magia, puedes gastar un uso de Forma Salvaje y elegir un punto cercano; brotan flores vivificantes o zarcillos drenadores de vida que curan a tus aliados o dañan a tus enemigos en la zona."},
+            {"nombre": "Santuario de la Naturaleza", "descripcion": "Amplía el beneficio de Recuperación Natural, permitiéndote usarlo un número mayor de veces entre descansos largos."},
+            {"nombre": "Guardia de la Naturaleza", "descripcion": "Como acción de Magia, puedes gastar un uso de Forma Salvaje para hacer aparecer árboles y enredaderas espectrales en una zona cercana que dificultan el movimiento y dañan a tus enemigos."}
+        ]
+    },
+    {
+        "clase": "Fighter",
+        "nombre": "Campeón",
+        "descripcion": "Persigue la Excelencia Física en Combate. Un Campeón se centra en el desarrollo de la destreza marcial en una búsqueda incansable de la victoria. Los Campeones combinan un entrenamiento riguroso con la excelencia física para asestar golpes devastadores, resistir el peligro y ganar gloria.",
+        "nivel_disponible": 3,
+        "rasgos": [
+            {"nombre": "Crítico Mejorado", "descripcion": "Tus tiradas de ataque con armas y Ataques Desarmados pueden lograr un Golpe Crítico con un 19 o 20 en el d20."},
+            {"nombre": "Atleta Excepcional", "descripcion": "Gracias a tu atletismo, tienes Ventaja en tiradas de Iniciativa y en pruebas de Fuerza (Atletismo)."},
+            {"nombre": "Estilo de Combate Adicional", "descripcion": "Ganas otra dote de Estilo de Combate a tu elección."},
+            {"nombre": "Guerrero Heroico", "descripcion": "La emoción de la batalla te impulsa hacia la victoria: puedes darte Inspiración Heroica cada vez que empiezas tu turno sin tenerla."},
+            {"nombre": "Crítico Superior", "descripcion": "Tus tiradas de ataque con armas y Ataques Desarmados pueden lograr un Golpe Crítico con un 18, 19 o 20 en el d20."},
+            {"nombre": "Superviviente", "descripcion": "Alcanzas el pináculo de la resiliencia en batalla: tienes Ventaja en tiradas de salvación contra la muerte y, al inicio de tu turno, recuperas puntos de golpe si estás mal herido."}
+        ]
+    },
+    {
+        "clase": "Monk",
+        "nombre": "Guerrero de la Mano Abierta",
+        "descripcion": "Domina las Técnicas de Combate Desarmado. Los Guerreros de la Mano Abierta son maestros del combate sin armas. Aprenden técnicas para empujar y derribar a sus oponentes, y a manipular su propia energía para protegerse del daño.",
+        "nivel_disponible": 3,
+        "rasgos": [
+            {"nombre": "Técnica de la Mano Abierta", "descripcion": "Cuando impactas a una criatura con un ataque otorgado por tu Torrente de Golpes, puedes imponerle uno de varios efectos a elegir: derribarla, empujarla o impedir sus reacciones."},
+            {"nombre": "Paso Ágil", "descripcion": "Cuando realizas una acción adicional distinta de Paso del Viento, puedes usar Paso del Viento inmediatamente después de esa acción adicional."},
+            {"nombre": "Plenitud del Cuerpo", "descripcion": "Como acción adicional, tiras tu dado de Artes Marciales y recuperas puntos de golpe iguales al resultado más tu nivel de monje."},
+            {"nombre": "Palma Trémula", "descripcion": "Cuando impactas a una criatura con un Ataque Desarmado, puedes gastar 4 Puntos de Enfoque para provocar vibraciones letales en su cuerpo, que pueden manifestarse tiempo después con efecto mortal."}
+        ]
+    },
+    {
+        "clase": "Paladin",
+        "nombre": "Juramento de Devoción",
+        "descripcion": "Defiende los Ideales de Justicia y Orden. El Juramento de Devoción ata a los paladines a los ideales de justicia y orden. Estos paladines encarnan el arquetipo del caballero de brillante armadura: se exigen a sí mismos los más altos estándares de conducta y, para bien o para mal, a veces exigen lo mismo al resto del mundo.",
+        "nivel_disponible": 3,
+        "rasgos": [
+            {"nombre": "Conjuros del Juramento de Devoción", "descripcion": "La magia de tu juramento asegura que siempre tengas ciertos conjuros preparados, sin que cuenten para tu límite de conjuros preparados."},
+            {"nombre": "Arma Sagrada", "descripcion": "Cuando realizas la acción de Atacar, puedes gastar un uso de Canalizar Divinidad para imbuir un arma cuerpo a cuerpo con energía positiva, ganando un bonificador a las tiradas de ataque y emitiendo luz."},
+            {"nombre": "Aura de Devoción", "descripcion": "Tú y tus aliados tenéis Inmunidad a la condición Hechizado mientras estéis dentro de tu Aura de Protección."},
+            {"nombre": "Castigo de Protección", "descripcion": "Tu castigo divino ahora irradia energía protectora: siempre que lanzas Castigo Divino, tú y tus aliados tenéis Media Cobertura mientras estéis dentro de tu Aura de Protección."},
+            {"nombre": "Nimbo Sagrado", "descripcion": "Como acción adicional, imbuyes tu Aura de Protección con poder sagrado durante 10 minutos, otorgando beneficios como daño radiante extra en tus ataques y luz que ciega a tus enemigos."}
+        ]
+    },
+    {
+        "clase": "Ranger",
+        "nombre": "Cazador",
+        "descripcion": "Protege la Naturaleza y a la Gente de la Destrucción. Acechas presas en tierras salvajes y más allá, usando tus habilidades de Cazador para proteger la naturaleza y a las personas de las fuerzas que buscan destruirlas.",
+        "nivel_disponible": 3,
+        "rasgos": [
+            {"nombre": "Presa del Cazador", "descripcion": "Eliges una de varias opciones de rasgo (Cazador de Colosos, Matador de Enjambres o Cazador de Horda) que mejoran tu daño contra distintos tipos de enemigos; puedes cambiarla tras un descanso."},
+            {"nombre": "Tácticas Defensivas", "descripcion": "Eliges una de varias opciones de rasgo (Esquiva Ágil, Cauteloso o Multiataque Defensivo) que mejoran tu supervivencia; puedes cambiarla tras un descanso."},
+            {"nombre": "Saber del Cazador", "descripcion": "Mientras una criatura está marcada por tu Marca del Cazador, puedes invocar a las fuerzas de la naturaleza para revelar sus fortalezas y debilidades."},
+            {"nombre": "Presa Superior del Cazador", "descripcion": "Una vez por turno, cuando infliges daño a una criatura marcada por tu Marca del Cazador, también puedes infligir ese daño extra a otra criatura cercana."},
+            {"nombre": "Defensa Superior del Cazador", "descripcion": "Cuando recibes daño, puedes usar tu reacción para ganar Resistencia a ese tipo de daño hasta el final del turno actual."}
+        ]
+    },
+    {
+        "clase": "Rogue",
+        "nombre": "Ladrón",
+        "descripcion": "Busca Tesoros como el Aventurero Clásico. Mezcla de ladrón, cazatesoros y explorador, eres la esencia del aventurero. Además de mejorar tu agilidad y sigilo, ganas habilidades útiles para adentrarte en ruinas y sacar el máximo partido a los objetos mágicos que encuentres allí.",
+        "nivel_disponible": 3,
+        "rasgos": [
+            {"nombre": "Manos Rápidas", "descripcion": "Como acción adicional, puedes hacer una prueba de Destreza (Juego de Manos) para forzar una cerradura o desactivar una trampa, robar un objeto, o usar herramientas de ladrón para sabotear un dispositivo."},
+            {"nombre": "Trabajo de Fachada", "descripcion": "Ganas Velocidad de Escalada igual a tu Velocidad, y puedes hacer una carrera larga sin desventaja al saltar."},
+            {"nombre": "Reflejos de Ladrón", "descripcion": "Puedes tomar dos turnos durante la primera ronda de cualquier combate: el primero con tu iniciativa normal, el segundo con iniciativa 10 menos."},
+            {"nombre": "Sigilo Supremo", "descripcion": "Ganas la opción de Golpe Astuto de Ataque Sigiloso: si tienes la condición Invisible por la acción de Esconderse, este ataque no la termina."},
+            {"nombre": "Uso de Objetos Mágicos", "descripcion": "Puedes sintonizarte con hasta cuatro objetos mágicos a la vez, e ignoras las clases, especies o niveles requeridos para usar un objeto mágico."}
+        ]
+    },
+    {
+        "clase": "Sorcerer",
+        "nombre": "Hechicería Dracónica",
+        "descripcion": "Respira la Magia de los Dragones. Tu magia innata proviene del don de un dragón: quizá un dragón anciano moribundo legó parte de su poder a tu antepasado, o absorbiste magia de un lugar impregnado del poder de los dragones, o tienes un dragón como ancestro.",
+        "nivel_disponible": 3,
+        "rasgos": [
+            {"nombre": "Resiliencia Dracónica", "descripcion": "La magia en tu cuerpo manifiesta rasgos físicos de tu don dracónico: tu máximo de puntos de golpe aumenta en 3, y sigue aumentando con cada nivel de hechicero que ganes."},
+            {"nombre": "Afinidad Elemental", "descripcion": "Tu magia dracónica tiene afinidad con un tipo de daño asociado a los dragones (ácido, frío, fuego, rayo o veneno); ganas resistencia a ese daño y puedes añadirlo a tus conjuros."},
+            {"nombre": "Conjuros Dracónicos", "descripcion": "Siempre tienes preparados ciertos conjuros asociados a tu linaje dracónico, sin que cuenten para tu límite de conjuros preparados."},
+            {"nombre": "Alas de Dragón", "descripcion": "Como acción adicional, haces aparecer alas dracónicas en tu espalda que te otorgan Velocidad de Vuelo igual a tu Velocidad durante 1 hora."},
+            {"nombre": "Compañero Dragón", "descripcion": "Puedes lanzar Convocar Dragón sin componente material, y una vez sin gastar espacio de conjuro, recuperando esta capacidad tras un descanso largo."}
+        ]
+    },
+    {
+        "clase": "Warlock",
+        "nombre": "Patrón Diablo",
+        "descripcion": "Haz un Trato con los Planos Inferiores. Tu pacto proviene de los Planos Inferiores, los reinos de la perdición. Podrías haber forjado un acuerdo con un señor demonio, un archidiablo u otro diablo especialmente poderoso, cuyos fines son malignos.",
+        "nivel_disponible": 3,
+        "rasgos": [
+            {"nombre": "Resiliencia Diabólica", "descripcion": "Al completar un descanso corto o largo, eliges un tipo de daño (distinto de Fuerza) y ganas Resistencia a él hasta que elijas otro tipo."},
+            {"nombre": "Bendición del Ente Oscuro", "descripcion": "Cuando reduces a un enemigo a 0 puntos de golpe, ganas puntos de golpe temporales iguales a tu modificador de Carisma más tu nivel de brujo (mínimo 1)."},
+            {"nombre": "Conjuros del Patrón Diablo", "descripcion": "La magia de tu patrón asegura que siempre tengas ciertos conjuros preparados, sin que cuenten para tu límite de conjuros preparados."},
+            {"nombre": "Suerte Propia del Ente Oscuro", "descripcion": "Puedes invocar a tu patrón diabólico para alterar el destino a tu favor: al hacer una prueba de característica o salvación, sumas 1d10 a la tirada."},
+            {"nombre": "Arrojar a Través del Infierno", "descripcion": "Una vez por turno, cuando impactas a una criatura con una tirada de ataque, puedes intentar transportarla instantáneamente a través de los Planos Inferiores, infligiéndole daño necrótico adicional."}
+        ]
+    },
+    {
+        "clase": "Wizard",
+        "nombre": "Evocador",
+        "descripcion": "Crea Efectos Elementales Explosivos. Tus estudios se centran en magia que crea poderosos efectos elementales: frío intenso, llamas abrasadoras, truenos, rayos crepitantes y ácido corrosivo. Algunos evocadores sirven en ejércitos como artillería a distancia; otros protegen a los demás, y algunos buscan solo su propio beneficio.",
+        "nivel_disponible": 3,
+        "rasgos": [
+            {"nombre": "Erudito de la Evocación", "descripcion": "Eliges dos conjuros de mago de la escuela de Evocación de nivel 2 o inferior y los añades gratis a tu libro de conjuros; además puedes copiarlos usando la mitad del tiempo y coste habituales."},
+            {"nombre": "Evocación Potenciada", "descripcion": "Cuando lanzas un conjuro de mago de la escuela de Evocación, puedes añadir tu modificador de Inteligencia a una de las tiradas de daño de ese conjuro."},
+            {"nombre": "Truco Potente", "descripcion": "Tus trucos de daño afectan incluso a las criaturas que esquivan el impacto: cuando fallas con un truco, la criatura recibe la mitad del daño de todos modos."},
+            {"nombre": "Esculpir Conjuros", "descripcion": "Puedes crear zonas de relativa seguridad dentro de tus conjuros de Evocación, eligiendo que algunas criaturas afectadas superen automáticamente la tirada de salvación y reciban la mitad del daño si no debería afectarles."},
+            {"nombre": "Sobrecarga", "descripcion": "Puedes aumentar el poder de tus conjuros: al lanzar un conjuro de mago con un espacio de nivel 1 a 5 que inflige daño, puedes hacer que inflija el daño máximo, a riesgo de sufrir tú mismo daño necrótico si repites esto entre descansos."}
+        ]
+    }
+]

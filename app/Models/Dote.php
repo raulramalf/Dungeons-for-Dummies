@@ -9,13 +9,14 @@ class Dote extends Model
     protected $table = 'dotes';
 
     protected $fillable = [
-        'nombre', 'descripcion', 'prerequisitos',
-        'beneficios', 'incremento_caracteristica',
+        'nombre', 'categoria', 'descripcion', 'prerequisitos',
+        'beneficios', 'incremento_caracteristica', 'repetible', 'edicion',
     ];
 
     protected $casts = [
         'prerequisitos'            => 'array',
         'beneficios'               => 'array',
         'incremento_caracteristica'=> 'boolean',
+        'repetible'                => 'boolean',
     ];
 }

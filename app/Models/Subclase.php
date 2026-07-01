@@ -10,7 +10,7 @@ class Subclase extends Model
 
     protected $fillable = [
         'clase_id', 'nombre', 'descripcion',
-        'nivel_disponible', 'rasgos',
+        'nivel_disponible', 'rasgos', 'edicion',
     ];
 
     protected $casts = [

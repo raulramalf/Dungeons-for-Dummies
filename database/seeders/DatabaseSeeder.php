@@ -21,8 +21,11 @@ class DatabaseSeeder extends Seeder
             ClasesSeeder::class,
             RazasSeeder::class,
             SubclasesSeeder::class,
+            SubclasesEdicion55Seeder::class,
             TrasfondosSeeder::class,
+            TrasfondosEdicion55Seeder::class,
             DotesSeeder::class,
+            DotesEdicion55Seeder::class,
             ConjurosEdicion55Seeder::class,
         ]);
     }
