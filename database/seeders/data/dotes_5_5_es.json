@@ -50,7 +50,9 @@
         "nombre": "Mejora de Característica",
         "categoria": "general",
         "descripcion": "Tu entrenamiento y dedicación te permiten superar tus límites físicos y mentales.",
-        "prerequisitos": {"nivel": 4},
+        "prerequisitos": {
+            "nivel": 4
+        },
         "beneficios": {
             "Incremento": "Aumenta una característica a tu elección en 2, o dos características a tu elección en 1 cada una. Esta dote no puede subir una característica por encima de 20."
         },
@@ -61,7 +63,11 @@
         "nombre": "Apresador",
         "categoria": "general",
         "descripcion": "Te has especializado en inmovilizar a tus enemigos con tus propias manos.",
-        "prerequisitos": {"nivel": 4, "caracteristica": "Fuerza o Destreza", "valor_minimo": 13},
+        "prerequisitos": {
+            "nivel": 4,
+            "caracteristica": "Fuerza o Destreza",
+            "valor_minimo": 13
+        },
         "beneficios": {
             "Incremento": "Aumenta tu Fuerza o Destreza en 1, hasta un máximo de 20.",
             "Golpe y Agarre": "Cuando impactas a una criatura con un Ataque Desarmado como parte de la acción de Atacar en tu turno, puedes aplicar tanto el Daño como la opción de Agarrar. Solo puedes usar este beneficio una vez por turno.",
@@ -75,7 +81,9 @@
         "nombre": "Tiro con Arco",
         "categoria": "estilo_combate",
         "descripcion": "Te especializas en el uso de armas a distancia.",
-        "prerequisitos": {"rasgo": "Estilo de Combate"},
+        "prerequisitos": {
+            "rasgo": "Estilo de Combate"
+        },
         "beneficios": {
             "Bonificador de Ataque": "Ganas un bonificador de +2 a las tiradas de ataque que hagas con armas a Distancia."
         },
@@ -86,7 +94,9 @@
         "nombre": "Defensa",
         "categoria": "estilo_combate",
         "descripcion": "Te especializas en el uso de la armadura para protegerte.",
-        "prerequisitos": {"rasgo": "Estilo de Combate"},
+        "prerequisitos": {
+            "rasgo": "Estilo de Combate"
+        },
         "beneficios": {
             "Bonificador a CA": "Mientras llevas armadura Ligera, Media o Pesada, ganas un bonificador de +1 a la Clase de Armadura."
         },
@@ -94,10 +104,12 @@
         "repetible": false
     },
     {
-        "nombre": "Lucha con Armas a Dos Manos",
+        "nombre": "Combate con Armas a Dos Manos",
         "categoria": "estilo_combate",
         "descripcion": "Te especializas en el uso de armas pesadas empuñadas con ambas manos.",
-        "prerequisitos": {"rasgo": "Estilo de Combate"},
+        "prerequisitos": {
+            "rasgo": "Estilo de Combate"
+        },
         "beneficios": {
             "Repetir Daño Bajo": "Cuando tiras el daño de un ataque que haces con un arma Cuerpo a Cuerpo que sostienes con las dos manos, puedes tratar cualquier 1 o 2 en un dado de daño como un 3. El arma debe tener la propiedad A Dos Manos o Versátil para obtener este beneficio."
         },
@@ -105,10 +117,12 @@
         "repetible": false
     },
     {
-        "nombre": "Lucha con Dos Armas",
+        "nombre": "Combate con Dos Armas",
         "categoria": "estilo_combate",
         "descripcion": "Te especializas en combatir con un arma en cada mano.",
-        "prerequisitos": {"rasgo": "Estilo de Combate"},
+        "prerequisitos": {
+            "rasgo": "Estilo de Combate"
+        },
         "beneficios": {
             "Modificador al Daño Extra": "Cuando haces un ataque extra por usar un arma con la propiedad Ligera, puedes añadir tu modificador de característica al daño de ese ataque si aún no lo estabas añadiendo."
         },
@@ -116,10 +130,12 @@
         "repetible": false
     },
     {
-        "nombre": "Don de Destreza en Combate",
+        "nombre": "Don de la Pericia en Combate",
         "categoria": "epica",
         "descripcion": "Has alcanzado tal maestría marcial que puedes forzar la suerte en pleno combate.",
-        "prerequisitos": {"nivel": 19},
+        "prerequisitos": {
+            "nivel": 19
+        },
         "beneficios": {
             "Incremento": "Aumenta una característica a tu elección en 1, hasta un máximo de 30.",
             "Puntería Impecable": "Cuando fallas una tirada de ataque, puedes convertirla en impacto. Una vez usado este beneficio, no puedes volver a usarlo hasta el inicio de tu siguiente turno."
@@ -128,10 +144,12 @@
         "repetible": false
     },
     {
-        "nombre": "Don de Viaje Dimensional",
+        "nombre": "Don del Viaje Dimensional",
         "categoria": "epica",
         "descripcion": "Has aprendido a deslizarte brevemente entre planos para reposicionarte en combate.",
-        "prerequisitos": {"nivel": 19},
+        "prerequisitos": {
+            "nivel": 19
+        },
         "beneficios": {
             "Incremento": "Aumenta una característica a tu elección en 1, hasta un máximo de 30.",
             "Pasos Parpadeantes": "Justo después de realizar la acción de Atacar o la acción de Magia, puedes teletransportarte hasta 9 metros a un espacio desocupado que puedas ver."
@@ -143,7 +161,9 @@
         "nombre": "Don del Destino",
         "categoria": "epica",
         "descripcion": "Has ganado el favor del destino mismo, pudiendo inclinarlo a tu voluntad en momentos cruciales.",
-        "prerequisitos": {"nivel": 19},
+        "prerequisitos": {
+            "nivel": 19
+        },
         "beneficios": {
             "Incremento": "Aumenta una característica a tu elección en 1, hasta un máximo de 30.",
             "Mejorar el Destino": "Cuando tú u otra criatura a 18 metros supera o falla una prueba de D20, puedes tirar 2d4 y aplicar el total como bonificador o penalización a esa tirada. Una vez usado este beneficio, no puedes volver a usarlo hasta que tires Iniciativa o completes un descanso corto o largo."
@@ -152,10 +172,12 @@
         "repetible": false
     },
     {
-        "nombre": "Don de Ofensiva Irresistible",
+        "nombre": "Don del Ataque Imparable",
         "categoria": "epica",
         "descripcion": "Tus ataques se han vuelto tan certeros que ninguna resistencia puede detenerlos.",
-        "prerequisitos": {"nivel": 19},
+        "prerequisitos": {
+            "nivel": 19
+        },
         "beneficios": {
             "Incremento": "Aumenta una característica a tu elección en 1, hasta un máximo de 30.",
             "Superar Defensas": "El daño Contundente, Perforante y Cortante que infliges ignora siempre la Resistencia.",
@@ -165,10 +187,13 @@
         "repetible": false
     },
     {
-        "nombre": "Don de Recuerdo de Conjuros",
+        "nombre": "Don del Recuerdo de Conjuros",
         "categoria": "epica",
         "descripcion": "Tu dominio arcano te permite, en ocasiones, lanzar un conjuro sin gastar el espacio que consumiría.",
-        "prerequisitos": {"nivel": 19, "rasgo": "Lanzamiento de Conjuros"},
+        "prerequisitos": {
+            "nivel": 19,
+            "rasgo": "Lanzamiento de Conjuros"
+        },
         "beneficios": {
             "Incremento": "Aumenta una característica a tu elección en 1, hasta un máximo de 30.",
             "Lanzamiento Gratuito": "Cada vez que lanzas un conjuro con un espacio de nivel 1 a 4, tira 1d4. Si el número obtenido coincide con el nivel del espacio, este no se gasta."
@@ -177,10 +202,12 @@
         "repetible": false
     },
     {
-        "nombre": "Don del Espíritu Nocturno",
+        "nombre": "Don del Espíritu de la Noche",
         "categoria": "epica",
         "descripcion": "Las sombras te acogen como a uno más de los suyos.",
-        "prerequisitos": {"nivel": 19},
+        "prerequisitos": {
+            "nivel": 19
+        },
         "beneficios": {
             "Incremento": "Aumenta una característica a tu elección en 1, hasta un máximo de 30.",
             "Fusión con las Sombras": "Mientras estás en Penumbra u Oscuridad, puedes darte la condición Invisible como acción adicional. La condición termina inmediatamente después de que realices una acción, acción adicional o reacción.",
@@ -190,13 +217,892 @@
         "repetible": false
     },
     {
-        "nombre": "Don de Visión Verdadera",
+        "nombre": "Don de la Visión Verdadera",
         "categoria": "epica",
         "descripcion": "Tus ojos han sido tocados por un poder que ve más allá de los engaños del mundo.",
-        "prerequisitos": {"nivel": 19},
+        "prerequisitos": {
+            "nivel": 19
+        },
         "beneficios": {
             "Incremento": "Aumenta una característica a tu elección en 1, hasta un máximo de 30.",
             "Visión Verdadera": "Tienes Visión Verdadera con un alcance de 18 metros."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Afortunado",
+        "categoria": "origen",
+        "descripcion": "Tienes una suerte inexplicable que te permite inclinar las probabilidades a tu favor.",
+        "prerequisitos": null,
+        "beneficios": {
+            "Puntos de Suerte": "Tienes un número de puntos de suerte igual a tu bonificador por competencia. Puedes gastar 1 punto para otorgarte Ventaja en una prueba con d20, o para imponer Desventaja a una tirada de ataque contra ti. Recuperas todos los puntos gastados al completar un descanso largo."
+        },
+        "incremento_caracteristica": false,
+        "repetible": false
+    },
+    {
+        "nombre": "Duro",
+        "categoria": "origen",
+        "descripcion": "Tu constitución es excepcionalmente robusta, capaz de soportar golpes que derribarían a otros.",
+        "prerequisitos": null,
+        "beneficios": {
+            "Puntos de Golpe Extra": "Tus puntos de golpe máximos aumentan en una cantidad igual al doble de tu nivel de personaje. Cada vez que subes de nivel, aumentan en 2 puntos de golpe adicionales."
+        },
+        "incremento_caracteristica": false,
+        "repetible": false
+    },
+    {
+        "nombre": "Fabricante",
+        "categoria": "origen",
+        "descripcion": "Has trabajado como artesano y conoces los secretos de la fabricación, lo que te permite crear objetos y conseguir descuentos.",
+        "prerequisitos": null,
+        "beneficios": {
+            "Competencia con Herramientas": "Ganas competencia con tres herramientas de artesano a tu elección.",
+            "Descuento": "Cuando compras un objeto no mágico, obtienes un 20% de descuento.",
+            "Fabricación Rápida": "Al completar un descanso largo, puedes fabricar un objeto de la lista de Fabricación Rápida si posees las herramientas adecuadas y eres competente con ellas. El objeto dura hasta tu siguiente descanso largo."
+        },
+        "incremento_caracteristica": false,
+        "repetible": false
+    },
+    {
+        "nombre": "Matón de Taberna",
+        "categoria": "origen",
+        "descripcion": "Eres un luchador callejero que sabe cómo usar cualquier objeto como arma y cómo dar puñetazos contundentes.",
+        "prerequisitos": null,
+        "beneficios": {
+            "Ataque Desarmado Mejorado": "Cuando impactas con un ataque desarmado, puedes infligir 1d4 + Fuerza de daño contundente en lugar del daño normal.",
+            "Repetir 1s": "Cuando tiras daño de un ataque desarmado, puedes repetir cualquier dado que muestre un 1 y usar el nuevo resultado.",
+            "Competencia con Armas Improvisadas": "Eres competente con armas improvisadas.",
+            "Empujón": "Cuando impactas a una criatura con un ataque desarmado, puedes empujarla 1,5 metros. Solo una vez por turno."
+        },
+        "incremento_caracteristica": false,
+        "repetible": false
+    },
+    {
+        "nombre": "Músico",
+        "categoria": "origen",
+        "descripcion": "Eres un artista consumado que sabe cómo animar a los demás con tu música.",
+        "prerequisitos": null,
+        "beneficios": {
+            "Tres Instrumentos": "Ganas competencia con tres instrumentos musicales a tu elección.",
+            "Canción Alentadora": "Al terminar un descanso corto o largo, puedes tocar una canción y conceder Inspiración Heroica a un número de aliados igual a tu bonificador por competencia."
+        },
+        "incremento_caracteristica": false,
+        "repetible": false
+    },
+    {
+        "nombre": "Sanador",
+        "categoria": "origen",
+        "descripcion": "Eres un experto en primeros auxilios, capaz de curar heridas incluso en el fragor de la batalla.",
+        "prerequisitos": null,
+        "beneficios": {
+            "Médico de Batalla": "Si tienes un kit de sanador, puedes gastar un uso para curar a una criatura a 1,5 metros. La criatura gasta un dado de golpe y recupera el resultado + tu bonificador de competencia.",
+            "Repetir 1s en Curación": "Cuando tiras dados para curar (con conjuros o con este beneficio), puedes repetir cualquier 1 y usar el nuevo resultado."
+        },
+        "incremento_caracteristica": false,
+        "repetible": false
+    },
+    {
+        "nombre": "Acechador",
+        "categoria": "general",
+        "descripcion": "Te desenvuelves en las sombras y aprovechas la confusión del combate para ocultarte y atacar con ventaja.",
+        "prerequisitos": {
+            "nivel": 4,
+            "caracteristica": "Destreza",
+            "valor_minimo": 13
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Destreza en 1, hasta 20.",
+            "Visión Ciega": "Tienes visión ciega con un alcance de 3 metros.",
+            "Niebla de Guerra": "Tienes Ventaja en pruebas de Destreza (Sigilo) durante el combate.",
+            "En la Sombra": "Si fallas un ataque mientras estás escondido, no revelas tu posición."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Actor",
+        "categoria": "general",
+        "descripcion": "Eres un maestro del disimulo y la imitación, capaz de engañar a cualquier oyente.",
+        "prerequisitos": {
+            "nivel": 4,
+            "caracteristica": "Carisma",
+            "valor_minimo": 13
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Carisma en 1, hasta 20.",
+            "Suplantación": "Mientras estás disfrazado, tienes Ventaja en Engaño o Interpretación para hacerte pasar por otra persona.",
+            "Imitación": "Puedes imitar voces y sonidos. Quien escuche debe superar una prueba de Sabiduría (Perspicacia) contra CD 8 + Carisma + Competencia para notar el engaño."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Atacante a la Carga",
+        "categoria": "general",
+        "descripcion": "Eres experto en cargar contra tus enemigos, usando tu impulso para causar estragos.",
+        "prerequisitos": {
+            "nivel": 4,
+            "caracteristica": "Fuerza o Destreza",
+            "valor_minimo": 13
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Fuerza o Destreza en 1, hasta 20.",
+            "Carrera Mejorada": "Cuando usas la acción de Correr, tu velocidad aumenta en 3 metros.",
+            "Ataque con Carga": "Si te mueves al menos 3 metros en línea recta hacia un objetivo antes de atacar, puedes añadir 1d8 al daño o empujar al objetivo hasta 3 metros (si es de tamaño no más de una categoría mayor que el tuyo). Una vez por turno."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Atleta",
+        "categoria": "general",
+        "descripcion": "Eres un deportista consumado, ágil y resistente.",
+        "prerequisitos": {
+            "nivel": 4,
+            "caracteristica": "Fuerza o Destreza",
+            "valor_minimo": 13
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Fuerza o Destreza en 1, hasta 20.",
+            "Velocidad Trepando": "Tienes velocidad trepando igual a tu velocidad.",
+            "Levantarse Rápido": "Puedes levantarte de estar Derribado gastando solo 1,5 metros de movimiento.",
+            "Salto con Carrera Reducida": "Puedes saltar con solo 1,5 metros de carrera previa."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Azote de Magos",
+        "categoria": "general",
+        "descripcion": "Has estudiado cómo interrumpir la magia, volviéndote un peligro para los lanzadores.",
+        "prerequisitos": {
+            "nivel": 4
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Fuerza o Destreza en 1, hasta 20.",
+            "Anticoncentración": "Cuando dañas a una criatura concentrada, tiene Desventaja en la tirada de salvación de Constitución para mantener la concentración.",
+            "Mente Robusta": "Si fallas una tirada de salvación de Inteligencia, Sabiduría o Carisma, puedes convertirla en éxito. Una vez usado, no puedes volver a usarlo hasta completar un descanso corto o largo."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Centinela",
+        "categoria": "general",
+        "descripcion": "Eres un guardián implacable que no deja escapar a sus enemigos.",
+        "prerequisitos": {
+            "nivel": 4,
+            "caracteristica": "Fuerza o Destreza",
+            "valor_minimo": 13
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Fuerza o Destreza en 1, hasta 20.",
+            "Guardián": "Puedes hacer un ataque de oportunidad contra una criatura que ataque a otro o que use la acción de Destrabarse.",
+            "Detener": "Cuando impactas con un ataque de oportunidad, la velocidad del objetivo se reduce a 0 hasta el final de su turno."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Chef",
+        "categoria": "general",
+        "descripcion": "Eres un cocinero excepcional que sabe preparar platos que reconfortan y fortalecen.",
+        "prerequisitos": {
+            "nivel": 4
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Constitución o Sabiduría en 1, hasta 20.",
+            "Útiles de Cocinero": "Obtienes competencia con útiles de cocinero.",
+            "Comida Reconstituyente": "Durante un descanso corto, puedes preparar comida para varios aliados; quienes la consuman y gasten dados de golpe recuperan 1d8 adicional.",
+            "Tentempiés Tonificantes": "Con 1 hora de trabajo, preparas tentempiés (igual a tu competencia) que otorgan puntos de golpe temporales iguales a tu competencia al consumirlos."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Combatiente con Dos Armas",
+        "categoria": "general",
+        "descripcion": "Eres un experto en empuñar dos armas a la vez, moviéndote con fluidez entre ellas.",
+        "prerequisitos": {
+            "nivel": 4,
+            "caracteristica": "Fuerza o Destreza",
+            "valor_minimo": 13
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Fuerza o Destreza en 1, hasta 20.",
+            "Manejo Doble Mejorado": "Cuando atacas con un arma ligera, puedes hacer un ataque extra como acción adicional con otra arma que no tenga la propiedad A Dos Manos.",
+            "Desenvainar Rápido": "Puedes desenvainar o envainar dos armas a la vez cuando normalmente solo podrías hacerlo con una."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Combatiente Montado",
+        "categoria": "general",
+        "descripcion": "Has entrenado extensamente para luchar montado, convirtiéndote en un jinete formidable.",
+        "prerequisitos": {
+            "nivel": 4
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Fuerza, Destreza o Sabiduría en 1, hasta 20.",
+            "Golpe Montado": "Mientras estás montado, tienes Ventaja contra criaturas no montadas de tamaño inferior a tu montura.",
+            "Esquivar de un Salto": "Tu montura puede esquivar ataques que requieran salvación de Destreza (si tú estás montado y no estás incapacitado, no recibe daño si supera la salvación).",
+            "Girar Bruscamente": "Puedes hacer que un ataque que impacte a tu montura te impacte a ti en su lugar."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Duelista Defensivo",
+        "categoria": "general",
+        "descripcion": "Eres un maestro de la esgrima defensiva, capaz de desviar golpes con tu arma sutil.",
+        "prerequisitos": {
+            "nivel": 4,
+            "caracteristica": "Destreza",
+            "valor_minimo": 13
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Destreza en 1, hasta 20.",
+            "Parada": "Si empuñas un arma sutil y una criatura te impacta con un ataque cuerpo a cuerpo, puedes usar tu reacción para sumar tu bonificador de competencia a tu CA contra ese ataque (y contra ataques cuerpo a cuerpo hasta tu siguiente turno)."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Entrenamiento con Armas Marciales",
+        "categoria": "general",
+        "descripcion": "Has recibido entrenamiento formal en el manejo de armas marciales.",
+        "prerequisitos": {
+            "nivel": 4
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Fuerza o Destreza en 1, hasta 20.",
+            "Competencia con Armas Marciales": "Obtienes competencia con todas las armas marciales."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Envenenador",
+        "categoria": "general",
+        "descripcion": "Eres un experto en venenos y sabes cómo hacerlos más letales.",
+        "prerequisitos": {
+            "nivel": 4
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Destreza o Inteligencia en 1, hasta 20.",
+            "Veneno Potente": "El daño de veneno que causas ignora la resistencia al daño de veneno.",
+            "Preparar Veneno": "Ganas competencia con útiles de envenenador. Con 1 hora y 50 po de materiales, creas un número de dosis igual a tu competencia. Aplicar una dosis a un arma o munición es una acción adicional."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Experto en Ballestas",
+        "categoria": "general",
+        "descripcion": "Eres un tirador consumado con ballestas, capaz de disparar con velocidad y precisión.",
+        "prerequisitos": {
+            "nivel": 4,
+            "caracteristica": "Destreza",
+            "valor_minimo": 13
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Destreza en 1, hasta 20.",
+            "Ignorar Recarga": "Ignoras la propiedad de Recarga de las ballestas.",
+            "Disparo a Quemarropa": "No sufres Desventaja por estar a 1,5 metros de un enemigo al disparar una ballesta.",
+            "Manejo Doble": "Cuando usas una ballesta ligera para el ataque extra de la propiedad Ligera, puedes sumar tu modificador de característica al daño."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Experto en Habilidades",
+        "categoria": "general",
+        "descripcion": "Tu dedicación al estudio o la práctica te ha convertido en un experto en varias áreas.",
+        "prerequisitos": {
+            "nivel": 4
+        },
+        "beneficios": {
+            "Incremento": "Aumenta una característica a tu elección en 1, hasta 20.",
+            "Competencia en Habilidad": "Ganas competencia en una habilidad a tu elección.",
+            "Pericia": "Elige una habilidad en la que ya tengas competencia; obtienes Pericia en ella."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Influencia Feérica",
+        "categoria": "general",
+        "descripcion": "Has sido tocado por la magia de los Parajes Feéricos, obteniendo habilidades de sigilo y encantamiento.",
+        "prerequisitos": {
+            "nivel": 4
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Inteligencia, Sabiduría o Carisma en 1, hasta 20.",
+            "Magia Feérica": "Aprendes Paso Brumoso y un conjuro de nivel 1 de adivinación o encantamiento. Los tienes siempre preparados y puedes lanzar cada uno una vez sin gastar espacio (recarga larga)."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Influencia Sombría",
+        "categoria": "general",
+        "descripcion": "Has sido tocado por la magia del Páramo Sombrío, obteniendo habilidades de sigilo y engaño.",
+        "prerequisitos": {
+            "nivel": 4
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Inteligencia, Sabiduría o Carisma en 1, hasta 20.",
+            "Magia de las Sombras": "Aprendes Invisibilidad y un conjuro de nivel 1 de ilusionismo o nigromancia. Los tienes siempre preparados y puedes lanzar cada uno una vez sin gastar espacio (recarga larga)."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Lanzador en Combate",
+        "categoria": "general",
+        "descripcion": "Has entrenado para lanzar conjuros en el fragor de la batalla, manteniendo la concentración y reaccionando con rapidez.",
+        "prerequisitos": {
+            "nivel": 4,
+            "rasgo": "Lanzamiento de Conjuros o Magia del Pacto"
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Inteligencia, Sabiduría o Carisma en 1, hasta 20.",
+            "Concentración Robusta": "Tienes Ventaja en tiradas de salvación de Constitución para mantener la concentración.",
+            "Conjuro Reactivo": "Puedes lanzar un conjuro como ataque de oportunidad.",
+            "Componentes Somáticos": "Puedes realizar gestos somáticos incluso con armas o escudo en las manos."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Lanzador Preciso",
+        "categoria": "general",
+        "descripcion": "Eres un tirador mágico excepcional, capaz de atravesar coberturas y lanzar a larga distancia.",
+        "prerequisitos": {
+            "nivel": 4,
+            "rasgo": "Lanzamiento de Conjuros o Magia del Pacto"
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Inteligencia, Sabiduría o Carisma en 1, hasta 20.",
+            "Sortear Cobertura": "Tus ataques de conjuro ignoran cobertura media y tres cuartos.",
+            "Lanzar Cuerpo a Cuerpo": "No sufres Desventaja por estar a 1,5 metros de un enemigo al lanzar conjuros de ataque.",
+            "Alcance Aumentado": "Cuando lanzas un conjuro que requiere ataque, su alcance aumenta en 18 metros."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Lanzador Ritual",
+        "categoria": "general",
+        "descripcion": "Has estudiado los rituales mágicos y puedes lanzar conjuros de forma ritual con gran eficacia.",
+        "prerequisitos": {
+            "nivel": 4,
+            "caracteristica": "Inteligencia, Sabiduría o Carisma",
+            "valor_minimo": 13
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Inteligencia, Sabiduría o Carisma en 1, hasta 20.",
+            "Conjuros Rituales": "Aprendes un número de conjuros de nivel 1 con la etiqueta ritual igual a tu competencia. Siempre los tienes preparados.",
+            "Ritual Rápido": "Una vez al día, puedes lanzar un conjuro ritual con su tiempo normal en lugar del tiempo extendido, sin gastar espacio."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Líder Inspirador",
+        "categoria": "general",
+        "descripcion": "Tus palabras y acciones inspiran a tus compañeros, infundiéndoles determinación.",
+        "prerequisitos": {
+            "nivel": 4,
+            "caracteristica": "Sabiduría o Carisma",
+            "valor_minimo": 13
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Sabiduría o Carisma en 1, hasta 20.",
+            "Interpretación Fortalecedora": "Tras un descanso corto o largo, puedes dar puntos de golpe temporales a hasta 6 aliados (igual a tu nivel + tu modificador de Sabiduría o Carisma)."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Ligeramente Acorazado",
+        "categoria": "general",
+        "descripcion": "Has aprendido a usar armaduras ligeras y escudos para protegerte.",
+        "prerequisitos": {
+            "nivel": 4
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Fuerza o Destreza en 1, hasta 20.",
+            "Entrenamiento con Armaduras": "Obtienes competencia con armaduras ligeras y escudos."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Maestro de Armas",
+        "categoria": "general",
+        "descripcion": "Has perfeccionado el manejo de un tipo de arma, pudiendo usar su propiedad de maestría.",
+        "prerequisitos": {
+            "nivel": 4
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Fuerza o Destreza en 1, hasta 20.",
+            "Propiedad de Maestría": "Puedes usar la propiedad de maestría de un arma sencilla o marcial con la que tengas competencia. Puedes cambiar el arma tras un descanso largo."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Maestro en Armaduras Medias",
+        "categoria": "general",
+        "descripcion": "Has aprendido a moverte con soltura en armaduras medias, aprovechando tu agilidad.",
+        "prerequisitos": {
+            "nivel": 4,
+            "entrenamiento": "Armaduras Medias"
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Fuerza o Destreza en 1, hasta 20.",
+            "Portador Diestro": "Si tienes Destreza 16 o más, con armadura media puedes sumar 3 en lugar de 2 a tu CA."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Maestro en Armaduras Pesadas",
+        "categoria": "general",
+        "descripcion": "Has entrenado para usar armaduras pesadas con tal pericia que reducen el daño que recibes.",
+        "prerequisitos": {
+            "nivel": 4,
+            "entrenamiento": "Armaduras Pesadas"
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Constitución o Fuerza en 1, hasta 20.",
+            "Reducción de Daño": "Mientras llevas armadura pesada, reduces el daño contundente, cortante y perforante en una cantidad igual a tu bonificador de competencia."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Maestro en Armas de Asta",
+        "categoria": "general",
+        "descripcion": "Eres un experto en el uso de armas largas como alabardas y lanzas, controlando el campo de batalla.",
+        "prerequisitos": {
+            "nivel": 4,
+            "caracteristica": "Fuerza o Destreza",
+            "valor_minimo": 13
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Fuerza o Destreza en 1, hasta 20.",
+            "Golpe con Asta": "Después de atacar con un arma de gran alcance y pesada, puedes hacer un ataque adicional con el extremo del arma (1d4 contundente) como acción adicional.",
+            "Golpe Reactivo": "Puedes hacer un ataque de oportunidad contra una criatura que entre en tu alcance."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Maestro en Armas Pesadas",
+        "categoria": "general",
+        "descripcion": "Has perfeccionado el arte de blandir armas enormes, causando estragos con cada golpe.",
+        "prerequisitos": {
+            "nivel": 4,
+            "caracteristica": "Fuerza",
+            "valor_minimo": 13
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Fuerza en 1, hasta 20.",
+            "Maestría con Armas Pesadas": "Cuando impactas con un arma pesada, añades tu bonificador de competencia al daño.",
+            "Avasallar": "Tras un crítico o al reducir a 0 a una criatura, puedes hacer un ataque adicional con la misma arma como acción adicional."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Maestro en Escudos",
+        "categoria": "general",
+        "descripcion": "Eres un experto en el uso del escudo, tanto para defenderte como para atacar.",
+        "prerequisitos": {
+            "nivel": 4,
+            "entrenamiento": "Escudos"
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Fuerza en 1, hasta 20.",
+            "Golpe con Escudo": "Cuando impactas con un ataque cuerpo a cuerpo, puedes golpear con tu escudo y forzar una salvación de Fuerza (CD 8 + Fuerza + Competencia) para empujar o derribar al objetivo.",
+            "Interponer Escudo": "Si superas una salvación de Destreza para recibir mitad de daño, no recibes daño si llevas escudo."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Mente Aguda",
+        "categoria": "general",
+        "descripcion": "Tu mente es rápida y aguda, sobresaliendo en el estudio y el razonamiento.",
+        "prerequisitos": {
+            "nivel": 4,
+            "caracteristica": "Inteligencia",
+            "valor_minimo": 13
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Inteligencia en 1, hasta 20.",
+            "Sabiduría Popular": "Elige una habilidad mental (Arcano, Historia, Investigación, Naturaleza o Religión). Si no tienes competencia, la obtienes; si ya la tienes, obtienes Pericia.",
+            "Estudio Rápido": "Puedes usar la acción de Estudiar como acción adicional."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Moderadamente Acorazado",
+        "categoria": "general",
+        "descripcion": "Has aprendido a usar armaduras medias, ganando protección adicional.",
+        "prerequisitos": {
+            "nivel": 4,
+            "entrenamiento": "Armaduras Ligeras"
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Fuerza o Destreza en 1, hasta 20.",
+            "Entrenamiento con Armaduras": "Obtienes competencia con armaduras medias."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Muy Acorazado",
+        "categoria": "general",
+        "descripcion": "Has entrenado para usar las armaduras más pesadas, ofreciendo la máxima protección.",
+        "prerequisitos": {
+            "nivel": 4,
+            "entrenamiento": "Armaduras Medias"
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Constitución o Fuerza en 1, hasta 20.",
+            "Entrenamiento con Armaduras": "Obtienes competencia con armaduras pesadas."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Observador",
+        "categoria": "general",
+        "descripcion": "Tienes una percepción aguda y una capacidad de observación excepcional.",
+        "prerequisitos": {
+            "nivel": 4,
+            "caracteristica": "Inteligencia o Sabiduría",
+            "valor_minimo": 13
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Inteligencia o Sabiduría en 1, hasta 20.",
+            "Observador Perspicaz": "Elige Investigación, Percepción o Perspicacia; obtienes competencia o Pericia si ya la tenías.",
+            "Búsqueda Rápida": "Puedes usar la acción de Buscar como acción adicional."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Perforador",
+        "categoria": "general",
+        "descripcion": "Te especializas en armas perforantes, buscando los puntos débiles de tus enemigos.",
+        "prerequisitos": {
+            "nivel": 4
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Fuerza o Destreza en 1, hasta 20.",
+            "Horadar": "Una vez por turno, cuando causas daño perforante, puedes repetir un dado y usar el nuevo resultado.",
+            "Crítico Potenciado": "Cuando causas un crítico con daño perforante, añades un dado extra al daño."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Rebanador",
+        "categoria": "general",
+        "descripcion": "Te especializas en armas cortantes, infligiendo heridas profundas que dificultan el movimiento.",
+        "prerequisitos": {
+            "nivel": 4
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Fuerza o Destreza en 1, hasta 20.",
+            "Lacerar": "Una vez por turno, cuando causas daño cortante, reduces la velocidad del objetivo en 3 metros hasta tu siguiente turno.",
+            "Crítico Potenciado": "Cuando causas un crítico con daño cortante, el objetivo tiene Desventaja en ataques hasta tu siguiente turno."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Resiliente",
+        "categoria": "general",
+        "descripcion": "Te has entrenado para resistir efectos dañinos, fortaleciendo tu voluntad o tu cuerpo.",
+        "prerequisitos": {
+            "nivel": 4
+        },
+        "beneficios": {
+            "Incremento": "Aumenta una característica en 1 (hasta 20) y obtienes competencia en sus tiradas de salvación."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Resistente",
+        "categoria": "general",
+        "descripcion": "Eres increíblemente resistente, capaz de sobrevivir a heridas que matarían a otros.",
+        "prerequisitos": {
+            "nivel": 4
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Constitución en 1, hasta 20.",
+            "Desafiar a la Muerte": "Tienes Ventaja en tiradas de salvación contra muerte.",
+            "Recuperación Rápida": "Como acción adicional, puedes gastar un dado de golpe y recuperar puntos de golpe igual al resultado."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Telepático",
+        "categoria": "general",
+        "descripcion": "Has desarrollado habilidades telepáticas que te permiten comunicarte mentalmente y leer mentes.",
+        "prerequisitos": {
+            "nivel": 4
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Inteligencia, Sabiduría o Carisma en 1, hasta 20.",
+            "Habla Telepática": "Puedes hablar telepáticamente con cualquier criatura que veas a 18 metros o menos, siempre que compartan un idioma.",
+            "Detectar Pensamientos": "Tienes siempre preparado el conjuro Detectar Pensamientos y puedes lanzarlo una vez sin gastar espacio ni componentes (recarga larga)."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Telequinético",
+        "categoria": "general",
+        "descripcion": "Has dominado la telequinesis, moviendo objetos y criaturas con la mente.",
+        "prerequisitos": {
+            "nivel": 4
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Inteligencia, Sabiduría o Carisma en 1, hasta 20.",
+            "Telequinesis Menor": "Aprendes Mano de Mago (invisible, alcance +9m) sin componentes verbales o somáticos.",
+            "Empellón Telequinético": "Como acción adicional, puedes empujar a una criatura a 9 metros o menos hacia ti o lejos de ti (CD 8 + característica + Competencia)."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Tirador de Primera",
+        "categoria": "general",
+        "descripcion": "Eres un arquero excepcional, capaz de disparar con precisión a larga distancia y en cualquier situación.",
+        "prerequisitos": {
+            "nivel": 4,
+            "caracteristica": "Destreza",
+            "valor_minimo": 13
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Destreza en 1, hasta 20.",
+            "Sortear Cobertura": "Ignoras cobertura media y tres cuartos con armas a distancia.",
+            "Disparo a Quemarropa": "No sufres Desventaja por estar a 1,5 metros de un enemigo.",
+            "Tiros Lejanos": "No sufres Desventaja por atacar a alcance largo."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Triturador",
+        "categoria": "general",
+        "descripcion": "Te especializas en armas contundentes, rompiendo defensas y desorientando a tus enemigos.",
+        "prerequisitos": {
+            "nivel": 4
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Fuerza o Constitución en 1, hasta 20.",
+            "Empujar": "Una vez por turno, cuando causas daño contundente, puedes mover al objetivo 1,5 metros (si su tamaño no es más de una categoría mayor que el tuyo).",
+            "Crítico Potenciado": "Cuando causas un crítico con daño contundente, los ataques contra el objetivo tienen Ventaja hasta tu siguiente turno."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Veloz",
+        "categoria": "general",
+        "descripcion": "Eres excepcionalmente rápido, moviéndote con agilidad y esquivando ataques.",
+        "prerequisitos": {
+            "nivel": 4,
+            "caracteristica": "Destreza o Constitución",
+            "valor_minimo": 13
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Destreza o Constitución en 1, hasta 20.",
+            "Aumento de Velocidad": "Tu velocidad aumenta en 3 metros.",
+            "Correr por Terreno Difícil": "Cuando usas Correr, ignoras el coste extra de terreno difícil.",
+            "Movimiento Ágil": "Los ataques de oportunidad tienen Desventaja contra ti."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Versado en un Elemento",
+        "categoria": "general",
+        "descripcion": "Has estudiado un elemento y aprendido a superar resistencias, haciendo tu magia más letal.",
+        "prerequisitos": {
+            "nivel": 4,
+            "rasgo": "Lanzamiento de Conjuros o Magia del Pacto"
+        },
+        "beneficios": {
+            "Incremento": "Aumenta tu Inteligencia, Sabiduría o Carisma en 1, hasta 20.",
+            "Dominio de la Energía": "Elige un tipo de daño (ácido, frío, fuego, rayo o trueno). Tus conjuros ignoran la resistencia a ese tipo de daño. Además, trata cualquier 1 en los dados de daño como 2.",
+            "Repetible": "Puedes tomar esta dote varias veces, eligiendo un tipo de daño diferente cada vez."
+        },
+        "incremento_caracteristica": true,
+        "repetible": true
+    },
+    {
+        "nombre": "Combate con Armas Arrojadizas",
+        "categoria": "estilo_combate",
+        "descripcion": "Te especializas en lanzar armas, aumentando el daño de tus proyectiles.",
+        "prerequisitos": {
+            "rasgo": "Estilo de Combate"
+        },
+        "beneficios": {
+            "Bonificador al Daño": "Cuando impactas con un arma arrojadiza, ganas +2 al daño."
+        },
+        "incremento_caracteristica": false,
+        "repetible": false
+    },
+    {
+        "nombre": "Combate sin Armas",
+        "categoria": "estilo_combate",
+        "descripcion": "Eres un luchador desarmado letal, capaz de infligir daño contundente con tus puños y patadas.",
+        "prerequisitos": {
+            "rasgo": "Estilo de Combate"
+        },
+        "beneficios": {
+            "Daño Desarmado Mejorado": "Tu ataque desarmado inflige 1d6 + Fuerza (o 1d8 si no llevas armas ni escudo).",
+            "Agarre Dañino": "Al principio de tu turno, puedes infligir 1d4 contundente a una criatura que tengas agarrada."
+        },
+        "incremento_caracteristica": false,
+        "repetible": false
+    },
+    {
+        "nombre": "Duelo",
+        "categoria": "estilo_combate",
+        "descripcion": "Te especializas en el combate con una sola arma, aprovechando la precisión y el control.",
+        "prerequisitos": {
+            "rasgo": "Estilo de Combate"
+        },
+        "beneficios": {
+            "Bonificador al Daño": "Cuando empuñas un arma cuerpo a cuerpo con una mano y nada en la otra, ganas +2 al daño."
+        },
+        "incremento_caracteristica": false,
+        "repetible": false
+    },
+    {
+        "nombre": "Intercepción",
+        "categoria": "estilo_combate",
+        "descripcion": "Eres un guardián que puede interponerse entre sus aliados y el daño enemigo.",
+        "prerequisitos": {
+            "rasgo": "Estilo de Combate"
+        },
+        "beneficios": {
+            "Reducción de Daño": "Cuando una criatura que puedes ver impacta a un aliado a 1,5 metros, puedes usar tu reacción para reducir el daño en 1d10 + tu bonificador de competencia. Debes llevar un escudo o un arma sencilla/marcial."
+        },
+        "incremento_caracteristica": false,
+        "repetible": false
+    },
+    {
+        "nombre": "Lucha a Ciegas",
+        "categoria": "estilo_combate",
+        "descripcion": "Has desarrollado sentidos agudizados que te permiten percibir a tu alrededor incluso en la oscuridad.",
+        "prerequisitos": {
+            "rasgo": "Estilo de Combate"
+        },
+        "beneficios": {
+            "Visión Ciega": "Tienes visión ciega con un alcance de 3 metros."
+        },
+        "incremento_caracteristica": false,
+        "repetible": false
+    },
+    {
+        "nombre": "Protección",
+        "categoria": "estilo_combate",
+        "descripcion": "Usas tu escudo para proteger a tus aliados, imponiendo desventaja a los ataques enemigos.",
+        "prerequisitos": {
+            "rasgo": "Estilo de Combate"
+        },
+        "beneficios": {
+            "Interponer Escudo": "Cuando una criatura que puedes ver ataca a un aliado a 1,5 metros, puedes usar tu reacción para imponer Desventaja a esa tirada de ataque y a las siguientes contra el mismo objetivo hasta tu siguiente turno (si permaneces a 1,5 metros)."
+        },
+        "incremento_caracteristica": false,
+        "repetible": false
+    },
+    {
+        "nombre": "Don de la Fortaleza",
+        "categoria": "epica",
+        "descripcion": "Tu vitalidad es legendaria, otorgándote una salud y resistencia sobrehumanas.",
+        "prerequisitos": {
+            "nivel": 19
+        },
+        "beneficios": {
+            "Incremento": "Aumenta una característica en 1, hasta 30.",
+            "Salud Fortalecida": "Tus puntos de golpe máximos aumentan en 40 y recuperas puntos de golpe adicionales igual a tu Constitución cada vez que te curan (una vez por turno)."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Don de la Habilidad",
+        "categoria": "epica",
+        "descripcion": "Eres un virtuoso en todas las habilidades, sin igual en tu versatilidad.",
+        "prerequisitos": {
+            "nivel": 19
+        },
+        "beneficios": {
+            "Incremento": "Aumenta una característica en 1, hasta 30.",
+            "Experto Polifacético": "Ganas competencia en todas las habilidades.",
+            "Pericia": "Elige una habilidad en la que no tengas Pericia y obténla."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Don de la Recuperación",
+        "categoria": "epica",
+        "descripcion": "Tu capacidad para recuperarte de las heridas es asombrosa, pudiendo incluso levantarte cuando todo parece perdido.",
+        "prerequisitos": {
+            "nivel": 19
+        },
+        "beneficios": {
+            "Incremento": "Aumenta una característica en 1, hasta 30.",
+            "Última Defensa": "Si tus puntos de golpe se reducen a 0, puedes quedarte con 1 y recuperar la mitad de tus pg máximos (recarga larga).",
+            "Recuperar Vitalidad": "Tienes una reserva de 10d10 que puedes usar para curarte como acción adicional; recuperas todos los dados tras un descanso largo."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Don de la Resistencia a Energías",
+        "categoria": "epica",
+        "descripcion": "Eres inmune a dos tipos de energía y puedes incluso redirigirlas contra tus enemigos.",
+        "prerequisitos": {
+            "nivel": 19
+        },
+        "beneficios": {
+            "Incremento": "Aumenta una característica en 1, hasta 30.",
+            "Resistencias a Energías": "Ganas resistencia a dos tipos de daño a tu elección (ácido, frío, fuego, necrótico, psíquico, radiante, rayo, trueno o veneno). Puedes cambiar los tipos tras un descanso largo.",
+            "Redirigir la Energía": "Cuando recibes daño de uno de esos tipos, puedes usar tu reacción para que otra criatura a 18 metros reciba 2d12 + Constitución del mismo tipo (salvación Destreza para mitigar)."
+        },
+        "incremento_caracteristica": true,
+        "repetible": false
+    },
+    {
+        "nombre": "Don de la Velocidad",
+        "categoria": "epica",
+        "descripcion": "Tu velocidad es legendaria, superando los límites de lo humano.",
+        "prerequisitos": {
+            "nivel": 19
+        },
+        "beneficios": {
+            "Incremento": "Aumenta una característica en 1, hasta 30.",
+            "Artista Escapista": "Como acción adicional, puedes Destrabarte y terminar cualquier agarre.",
+            "Celeridad": "Tu velocidad aumenta en 9 metros."
         },
         "incremento_caracteristica": true,
         "repetible": false

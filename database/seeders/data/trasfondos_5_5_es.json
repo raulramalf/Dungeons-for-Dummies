@@ -5,7 +5,14 @@
         "competencias_habilidades": ["Perspicacia", "Religión"],
         "competencias_herramientas": ["Utensilios de calígrafo"],
         "equipo_inicial": {
-            "opcion_a": ["Utensilios de calígrafo", "Libro (plegarias)", "Símbolo sagrado", "Pergamino (10 hojas)", "Túnica", "8 po"],
+            "opcion_a": [
+                "Utensilios de calígrafo",
+                "Libro (plegarias)",
+                "Símbolo sagrado",
+                "Pergamino (10 hojas)",
+                "Túnica",
+                "8 po"
+            ],
             "opcion_b": ["50 po"]
         },
         "mejora_caracteristicas": {
@@ -20,7 +27,14 @@
         "competencias_habilidades": ["Juego de Manos", "Sigilo"],
         "competencias_herramientas": ["Herramientas de ladrón"],
         "equipo_inicial": {
-            "opcion_a": ["2 Dagas", "Herramientas de ladrón", "Palanca", "2 Sacos", "Ropa de viajero", "16 po"],
+            "opcion_a": [
+                "2 Dagas",
+                "Herramientas de ladrón",
+                "Palanca",
+                "2 Sacos",
+                "Ropa de viajero",
+                "16 po"
+            ],
             "opcion_b": ["50 po"]
         },
         "mejora_caracteristicas": {
@@ -35,7 +49,14 @@
         "competencias_habilidades": ["Arcanos", "Historia"],
         "competencias_herramientas": ["Utensilios de calígrafo"],
         "equipo_inicial": {
-            "opcion_a": ["Bastón", "Utensilios de calígrafo", "Libro (historia)", "Pergamino (8 hojas)", "Túnica", "8 po"],
+            "opcion_a": [
+                "Bastón",
+                "Utensilios de calígrafo",
+                "Libro (historia)",
+                "Pergamino (8 hojas)",
+                "Túnica",
+                "8 po"
+            ],
             "opcion_b": ["50 po"]
         },
         "mejora_caracteristicas": {
@@ -48,9 +69,20 @@
         "nombre": "Soldado",
         "descripcion": "Serviste en un ejército, milicia o compañía mercenaria, entrenando en combate y disciplina táctica. Sabes manejar armas de guerra y llevar el peso del equipo militar.",
         "competencias_habilidades": ["Atletismo", "Intimidación"],
-        "competencias_herramientas": ["Un tipo de juego de herramientas de juego, a elegir"],
+        "competencias_herramientas": [
+            "Un tipo de juego de herramientas de juego, a elegir"
+        ],
         "equipo_inicial": {
-            "opcion_a": ["Lanza", "Arco corto", "20 Flechas", "Juego de herramientas de juego (el mismo elegido arriba)", "Kit de sanador", "Carcaj", "Ropa de viajero", "14 po"],
+            "opcion_a": [
+                "Lanza",
+                "Arco corto",
+                "20 Flechas",
+                "Juego de herramientas de juego (el mismo elegido arriba)",
+                "Kit de sanador",
+                "Carcaj",
+                "Ropa de viajero",
+                "14 po"
+            ],
             "opcion_b": ["50 po"]
         },
         "mejora_caracteristicas": {
@@ -58,5 +90,269 @@
             "modo": "2_1_o_3x1"
         },
         "dote_origen": "Atacante Salvaje"
+    },
+    {
+        "nombre": "Animador",
+        "descripcion": "Pasaste buena parte de tu juventud recorriendo ferias y festivales, desempeñando tareas para músicos y acróbatas a cambio de formación. Te creces con los aplausos y anhelas el escenario.",
+        "competencias_habilidades": ["Acrobacias", "Interpretación"],
+        "competencias_herramientas": ["Un instrumento musical a elegir"],
+        "equipo_inicial": {
+            "opcion_a": [
+                "Instrumento musical (el mismo)",
+                "2 Disfraces",
+                "Espejo",
+                "Perfume",
+                "Ropa de viajero",
+                "11 po"
+            ],
+            "opcion_b": ["50 po"]
+        },
+        "mejora_caracteristicas": {
+            "opciones": ["Fuerza", "Destreza", "Carisma"],
+            "modo": "2_1_o_3x1"
+        },
+        "dote_origen": "Músico"
+    },
+    {
+        "nombre": "Artesano",
+        "descripcion": "Comenzaste barriendo suelos en el taller de un artesano y con el tiempo aprendiste el oficio, creando tus propias obras. Tienes buen ojo para los detalles y habilidad para tratar con clientes.",
+        "competencias_habilidades": ["Investigación", "Persuasión"],
+        "competencias_herramientas": ["Herramientas de artesano a elegir"],
+        "equipo_inicial": {
+            "opcion_a": [
+                "Herramientas de artesano (las mismas)",
+                "2 Bolsas",
+                "Ropa de viajero",
+                "32 po"
+            ],
+            "opcion_b": ["50 po"]
+        },
+        "mejora_caracteristicas": {
+            "opciones": ["Fuerza", "Destreza", "Inteligencia"],
+            "modo": "2_1_o_3x1"
+        },
+        "dote_origen": "Fabricante"
+    },
+    {
+        "nombre": "Campesino",
+        "descripcion": "Te criaste en el campo, cuidando animales y cultivando la tierra. Has desarrollado una salud de hierro, paciencia y un profundo respeto por la naturaleza.",
+        "competencias_habilidades": ["Naturaleza", "Trato con Animales"],
+        "competencias_herramientas": ["Herramientas de carpintero"],
+        "equipo_inicial": {
+            "opcion_a": [
+                "Hoz",
+                "Herramientas de carpintero",
+                "Kit de sanador",
+                "Olla de hierro",
+                "Pala",
+                "Ropa de viajero",
+                "30 po"
+            ],
+            "opcion_b": ["50 po"]
+        },
+        "mejora_caracteristicas": {
+            "opciones": ["Fuerza", "Constitución", "Sabiduría"],
+            "modo": "2_1_o_3x1"
+        },
+        "dote_origen": "Duro"
+    },
+    {
+        "nombre": "Charlatán",
+        "descripcion": "Aprendiste a aprovecharte de los incautos en tabernas, vendiendo pociones falsas o genealogías inventadas. Eres un maestro del engaño y el disimulo.",
+        "competencias_habilidades": ["Engaño", "Juego de Manos"],
+        "competencias_herramientas": ["Utensilios de falsificador"],
+        "equipo_inicial": {
+            "opcion_a": [
+                "Utensilios de falsificador",
+                "Disfraz",
+                "Ropa de calidad",
+                "15 po"
+            ],
+            "opcion_b": ["50 po"]
+        },
+        "mejora_caracteristicas": {
+            "opciones": ["Destreza", "Constitución", "Carisma"],
+            "modo": "2_1_o_3x1"
+        },
+        "dote_origen": "Habilidoso"
+    },
+    {
+        "nombre": "Comerciante",
+        "descripcion": "Fuiste aprendiz de un comerciante, viajando por todas partes y aprendiendo los rudimentos del comercio. Sabes negociar y mover mercancías.",
+        "competencias_habilidades": ["Persuasión", "Trato con Animales"],
+        "competencias_herramientas": ["Herramientas de navegante"],
+        "equipo_inicial": {
+            "opcion_a": [
+                "Herramientas de navegante",
+                "2 Bolsas",
+                "Ropa de viajero",
+                "22 po"
+            ],
+            "opcion_b": ["50 po"]
+        },
+        "mejora_caracteristicas": {
+            "opciones": ["Constitución", "Inteligencia", "Carisma"],
+            "modo": "2_1_o_3x1"
+        },
+        "dote_origen": "Afortunado"
+    },
+    {
+        "nombre": "Ermitaño",
+        "descripcion": "Viviste en soledad en un refugio apartado, reflexionando sobre los misterios de la creación. Tu conexión con la naturaleza y lo divino es profunda.",
+        "competencias_habilidades": ["Medicina", "Religión"],
+        "competencias_herramientas": ["Utensilios de herborista"],
+        "equipo_inicial": {
+            "opcion_a": [
+                "Bastón",
+                "Utensilios de herborista",
+                "Aceite (3 frascos)",
+                "Lámpara",
+                "Libro (filosofía)",
+                "Petate",
+                "Ropa de viajero",
+                "16 po"
+            ],
+            "opcion_b": ["50 po"]
+        },
+        "mejora_caracteristicas": {
+            "opciones": ["Constitución", "Sabiduría", "Carisma"],
+            "modo": "2_1_o_3x1"
+        },
+        "dote_origen": "Sanador"
+    },
+    {
+        "nombre": "Escriba",
+        "descripcion": "Trabajaste en un scriptorium copiando textos y documentos con gran precisión. Tu atención al detalle y tu caligrafía son impecables.",
+        "competencias_habilidades": ["Investigación", "Percepción"],
+        "competencias_herramientas": ["Utensilios de calígrafo"],
+        "equipo_inicial": {
+            "opcion_a": [
+                "Utensilios de calígrafo",
+                "Aceite (3 frascos)",
+                "Lámpara",
+                "Pergamino (12 hojas)",
+                "Ropa de calidad",
+                "23 po"
+            ],
+            "opcion_b": ["50 po"]
+        },
+        "mejora_caracteristicas": {
+            "opciones": ["Destreza", "Inteligencia", "Sabiduría"],
+            "modo": "2_1_o_3x1"
+        },
+        "dote_origen": "Habilidoso"
+    },
+    {
+        "nombre": "Guardia",
+        "descripcion": "Pasaste largas horas en tu puesto de guardia, vigilando murallas y puertas. Eres observador, disciplinado y sabes cómo imponer la ley.",
+        "competencias_habilidades": ["Atletismo", "Percepción"],
+        "competencias_herramientas": ["Un juego a elegir"],
+        "equipo_inicial": {
+            "opcion_a": [
+                "Lanza",
+                "Ballesta ligera",
+                "20 Virotes",
+                "Juego (el mismo)",
+                "Carcaj",
+                "Esposas",
+                "Linterna sorda",
+                "Ropa de viajero",
+                "12 po"
+            ],
+            "opcion_b": ["50 po"]
+        },
+        "mejora_caracteristicas": {
+            "opciones": ["Fuerza", "Inteligencia", "Sabiduría"],
+            "modo": "2_1_o_3x1"
+        },
+        "dote_origen": "Alerta"
+    },
+    {
+        "nombre": "Guía",
+        "descripcion": "Creciste en la naturaleza, aprendiendo a sobrevivir y a guiar a otros a través de tierras salvajes. Tienes un vínculo especial con el mundo natural.",
+        "competencias_habilidades": ["Sigilo", "Supervivencia"],
+        "competencias_herramientas": ["Herramientas de cartógrafo"],
+        "equipo_inicial": {
+            "opcion_a": [
+                "Arco corto",
+                "20 Flechas",
+                "Herramientas de cartógrafo",
+                "Carcaj",
+                "Petate",
+                "Tienda",
+                "Ropa de viajero",
+                "3 po"
+            ],
+            "opcion_b": ["50 po"]
+        },
+        "mejora_caracteristicas": {
+            "opciones": ["Destreza", "Constitución", "Sabiduría"],
+            "modo": "2_1_o_3x1"
+        },
+        "dote_origen": "Iniciado en la Magia (Druida)"
+    },
+    {
+        "nombre": "Marinero",
+        "descripcion": "Has navegado los mares, enfrentado tormentas y visitado puertos lejanos. Eres resistente, ágil y sabes desenvolverte en cubierta.",
+        "competencias_habilidades": ["Acrobacias", "Percepción"],
+        "competencias_herramientas": ["Herramientas de navegante"],
+        "equipo_inicial": {
+            "opcion_a": [
+                "Daga",
+                "Herramientas de navegante",
+                "Cuerda",
+                "Ropa de viajero",
+                "20 po"
+            ],
+            "opcion_b": ["50 po"]
+        },
+        "mejora_caracteristicas": {
+            "opciones": ["Fuerza", "Destreza", "Sabiduría"],
+            "modo": "2_1_o_3x1"
+        },
+        "dote_origen": "Matón de Taberna"
+    },
+    {
+        "nombre": "Noble",
+        "descripcion": "Criado en un castillo entre riqueza y privilegios, has recibido educación en historia, política y liderazgo. Tu estatus abre puertas.",
+        "competencias_habilidades": ["Historia", "Persuasión"],
+        "competencias_herramientas": ["Un juego a elegir"],
+        "equipo_inicial": {
+            "opcion_a": [
+                "Juego (el mismo)",
+                "Perfume",
+                "Ropa de calidad",
+                "29 po"
+            ],
+            "opcion_b": ["50 po"]
+        },
+        "mejora_caracteristicas": {
+            "opciones": ["Fuerza", "Inteligencia", "Carisma"],
+            "modo": "2_1_o_3x1"
+        },
+        "dote_origen": "Habilidoso"
+    },
+    {
+        "nombre": "Vagabundo",
+        "descripcion": "Creciste en las calles, sobreviviendo con ingenio y astucia. Has conocido la pobreza y la dureza, pero nunca has perdido la esperanza.",
+        "competencias_habilidades": ["Perspicacia", "Sigilo"],
+        "competencias_herramientas": ["Herramientas de ladrón"],
+        "equipo_inicial": {
+            "opcion_a": [
+                "2 Dagas",
+                "Herramientas de ladrón",
+                "Un juego",
+                "2 Bolsas",
+                "Petate",
+                "Ropa de viajero",
+                "16 po"
+            ],
+            "opcion_b": ["50 po"]
+        },
+        "mejora_caracteristicas": {
+            "opciones": ["Destreza", "Sabiduría", "Carisma"],
+            "modo": "2_1_o_3x1"
+        },
+        "dote_origen": "Afortunado"
     }
 ]

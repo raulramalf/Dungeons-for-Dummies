@@ -1,11 +1,8 @@
 <?php
-
 namespace Database\Seeders;
-
 use App\Models\Clase;
 use App\Models\Subclase;
 use Illuminate\Database\Seeder;
-
 /**
  * Importa las subclases de la edición 5.5 (2024) en español, traducidas a
  * partir del SRD 5.2.1 (Wizards of the Coast, licencia CC BY 4.0), tomando
@@ -21,7 +18,8 @@ use Illuminate\Database\Seeder;
  *
  * Las clases ya están sembradas en inglés por ClasesSeeder (vienen de
  * dnd5eapi.co), así que aquí se resuelve `clase_id` buscando por el nombre
- * en inglés de la clase padre.
+ * en inglés de la clase padre. El dataset de subclases puede traer el
+ * nombre de la clase en español, por lo que se traduce antes de buscar.
  *
  * Fuente: https://github.com/open5e/open5e-api
  * Es seguro ejecutarlo varias veces: usa el nombre + edición como clave
@@ -31,48 +29,69 @@ class SubclasesEdicion55Seeder extends Seeder
 {
     public function run(): void
     {
-        $ruta = database_path('seeders/data/subclases_5_5_es.json');
-
+        $ruta = database_path("seeders/data/subclases_5_5_es.json");
         if (!file_exists($ruta)) {
             $this->command?->error("No se encuentra el dataset en: {$ruta}");
             return;
         }
+        $subclases = json_decode(
+            file_get_contents($ruta),
+            true,
+            flags: JSON_THROW_ON_ERROR,
+        );
 
-        $subclases = json_decode(file_get_contents($ruta), true, flags: JSON_THROW_ON_ERROR);
+        // Las clases se siembran en inglés (dnd5eapi.co vía ClasesSeeder),
+        // pero el dataset de subclases puede traer el nombre en español.
+        // Este mapa traduce para poder resolver clase_id en ambos casos.
+        $traduccion = [
+            "Bárbaro" => "Barbarian",
+            "Bardo" => "Bard",
+            "Brujo" => "Warlock",
+            "Clérigo" => "Cleric",
+            "Druida" => "Druid",
+            "Explorador" => "Ranger",
+            "Guerrero" => "Fighter",
+            "Hechicero" => "Sorcerer",
+            "Mago" => "Wizard",
+            "Monje" => "Monk",
+            "Paladín" => "Paladin",
+            "Pícaro" => "Rogue",
+        ];
 
         $creados = 0;
         $actualizados = 0;
         $sinClase = 0;
-
         foreach ($subclases as $item) {
-            $clase = Clase::where('nombre', $item['clase'])->first();
-
+            $nombreClase = $traduccion[$item["clase"]] ?? $item["clase"];
+            $clase = Clase::where("nombre", $nombreClase)->first();
             if (!$clase) {
-                $this->command?->warn("Clase '{$item['clase']}' no encontrada, se omite la subclase '{$item['nombre']}'. ¿Corriste ClasesSeeder antes?");
+                $this->command?->warn(
+                    "Clase '{$item["clase"]}' no encontrada, se omite la subclase '{$item["nombre"]}'. ¿Corriste ClasesSeeder antes?",
+                );
                 $sinClase++;
                 continue;
             }
-
-            $existia = Subclase::where('nombre', $item['nombre'])
-                ->where('edicion', '5.5')
+            $existia = Subclase::where("nombre", $item["nombre"])
+                ->where("edicion", "5.5")
                 ->exists();
-
             Subclase::updateOrCreate(
                 [
-                    'nombre'  => $item['nombre'],
-                    'edicion' => '5.5',
+                    "nombre" => $item["nombre"],
+                    "edicion" => "5.5",
                 ],
                 [
-                    'clase_id'          => $clase->id,
-                    'descripcion'       => $item['descripcion'],
-                    'nivel_disponible'  => $item['nivel_disponible'],
-                    'rasgos'            => $item['rasgos'],
-                ]
+                    "clase_id" => $clase->id,
+                    "descripcion" => $item["descripcion"],
+                    "nivel_disponible" => $item["nivel_disponible"],
+                    "rasgos" => $item["rasgos"],
+                ],
             );
-
             $existia ? $actualizados++ : $creados++;
         }
-
-        $this->command?->info("Subclases 5.5e: {$creados} creadas, {$actualizados} actualizadas, {$sinClase} omitidas por falta de clase (total dataset: " . count($subclases) . ").");
+        $this->command?->info(
+            "Subclases 5.5e: {$creados} creadas, {$actualizados} actualizadas, {$sinClase} omitidas por falta de clase (total dataset: " .
+                count($subclases) .
+                ").",
+        );
     }
 }
