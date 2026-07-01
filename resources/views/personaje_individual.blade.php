@@ -371,6 +371,7 @@
         color: #b8c0c8;
         line-height: 1.75;
         font-style: italic;
+        white-space: pre-line;
     }
 
     .rasgos-grid {

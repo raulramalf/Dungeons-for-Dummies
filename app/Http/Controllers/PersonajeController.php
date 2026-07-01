@@ -85,7 +85,9 @@ class PersonajeController extends Controller
             "pg_actuales" => 10,
             "clase_de_armadura" => 10,
             "velocidad" => 30,
-            "bonus_competencia" => $this->calcularBonusCompetencia($validated["nivel"]),
+            "bonus_competencia" => $this->calcularBonusCompetencia(
+                $validated["nivel"],
+            ),
         ]);
 
         return redirect()
@@ -121,6 +123,18 @@ class PersonajeController extends Controller
             "vista" => "personajes.ficha_pdf_oficial",
             "desc" =>
                 "Maquetación fiel a la disposición estándar de una hoja de personaje de 5e: mismas cajas, círculos y dos páginas.",
+        ],
+        "mistica" => [
+            "label" => "Mística",
+            "vista" => "personajes.ficha_pdf_mistica",
+            "desc" =>
+                "Columnas con círculos de característica, panel de combate central y rasgos a la derecha. Marco morado y dorado.",
+        ],
+        "clasica" => [
+            "label" => "Clásica Oscura",
+            "vista" => "personajes.ficha_pdf_clasica",
+            "desc" =>
+                "Cabecera con nombre/clase/especie, stats con casillas a la izquierda y trasfondo/rasgos a la derecha. Fondo granate oscuro.",
         ],
     ];
 
@@ -224,8 +238,8 @@ class PersonajeController extends Controller
 
         // Catálogo completo de conjuros, sin filtrar por clase
         // (hay rasgos, dotes y trasfondos que dan acceso a conjuros de otras clases)
-        $conjurosCatalogo = \App\Models\Conjuro::orderBy('nivel')
-            ->orderBy('nombre')
+        $conjurosCatalogo = \App\Models\Conjuro::orderBy("nivel")
+            ->orderBy("nombre")
             ->get();
 
         return view(
@@ -344,7 +358,8 @@ class PersonajeController extends Controller
         ]);
 
         // ——— Añadir dotes nuevas seleccionadas en el desplegable ———
-        $dotesNuevos = json_decode($validated["dotes_nuevos"] ?? "[]", true) ?? [];
+        $dotesNuevos =
+            json_decode($validated["dotes_nuevos"] ?? "[]", true) ?? [];
         if (count($dotesNuevos) > 0) {
             $yaTiene = $personaje->dotes()->pluck("dotes.id")->toArray();
             $aAnadir = array_diff($dotesNuevos, $yaTiene);
@@ -545,8 +560,8 @@ class PersonajeController extends Controller
     }
 
     /**
-    * Quita una dote concreta del personaje (equivalente a eliminarTruco, pero vía detach en la pivot)
-    */
+     * Quita una dote concreta del personaje (equivalente a eliminarTruco, pero vía detach en la pivot)
+     */
     public function eliminarDote(Personaje $personaje, \App\Models\Dote $dote)
     {
         if ($personaje->usuario_id !== auth()->id()) {

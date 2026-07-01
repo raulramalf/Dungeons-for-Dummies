@@ -11,7 +11,7 @@
         vectorial original. Dos páginas (combate / conjuros).
         Compatible con Dompdf: tablas/floats, sin flexbox/grid.
     */
-    @page { margin: 22px 26px; }
+    @page { margin: 0; }
     * { box-sizing: border-box; }
 
     body {
@@ -20,11 +20,18 @@
         font-size: 9.4px;
         line-height: 1.3;
         background: #f7f0dc;
+        padding: 22px 26px;
     }
 
     .caja {
         border: 1.6px solid #8a1c1c;
         border-radius: 6px;
+        padding: 7px 9px;
+        margin-bottom: 9px;
+        background: #faf4e4;
+    }
+
+    .caja-fluida {
         padding: 7px 9px;
         margin-bottom: 9px;
         background: #faf4e4;
@@ -74,12 +81,12 @@
     .mini-escudo svg { width: 50px; height: 50px; }
     .mini-escudo-valor { font-size: 17px; font-weight: bold; color: #6e0f0f; margin-top: -36px; position: relative; }
 
-    .pgbox { border: 1.6px solid #8a1c1c; border-radius: 6px; padding: 5px 7px; background: #faf4e4; text-align: center; }
+    .pgbox { border: 1.6px solid #8a1c1c; border-radius: 6px; padding: 5px 7px; background: #faf4e4; text-align: center; min-height: 48px; }
     .pgbox .titulo { font-size: 6.8px; text-transform: uppercase; color: #8a1c1c; font-weight: bold; }
     .pgbox .grande { font-size: 16px; font-weight: bold; color: #3a1c08; }
     .pgbox .fila2 { font-size: 7px; color: #4a3520; margin-top: 2px; }
 
-    .muerte-box { border: 1.6px solid #8a1c1c; border-radius: 6px; padding: 5px 7px; background: #faf4e4; text-align: center; }
+    .muerte-box { border: 1.6px solid #8a1c1c; border-radius: 6px; padding: 5px 7px; background: #faf4e4; text-align: center; min-height: 48px; }
     .muerte-box .titulo { font-size: 6.2px; text-transform: uppercase; color: #8a1c1c; font-weight: bold; line-height: 1.1; }
     .diamante-wrap {
         display: inline-block;
@@ -125,7 +132,7 @@
 
     table.datos { width: 100%; border-collapse: collapse; margin-bottom: 7px; border: 1px solid #d8b98a; }
     table.datos th, table.datos td { border-bottom: 1px solid #e9d8b3; padding: 2.6px 5px; text-align: left; font-size: 8.2px; }
-    table.datos th { background: linear-gradient(90deg, #8a1c1c, #a83333); color: #fdf3e3; font-weight: normal; text-transform: uppercase; letter-spacing: 0.02em; font-size: 7.2px; }
+    table.datos th { background: #8a1c1c; color: #fdf3e3; font-weight: normal; text-transform: uppercase; letter-spacing: 0.02em; font-size: 7.2px; padding: 2.6px 5px; }
     table.datos tr:nth-child(even) td { background: #f8efd9; }
 
     table.layout-2col-equis { width: 100%; border-collapse: separate; border-spacing: 8px 0; margin: 0 0 9px -8px; width: calc(100% + 8px); }
@@ -237,17 +244,17 @@
                 @if($personaje->divinidad)<div class="identidad-fila"><b>Divinidad:</b> {{ $personaje->divinidad }}</div>@endif
             </div>
         </td>
-        <td style="width:10%">
-            <div class="mini-circulo-wrap">
-                <div class="mini-label" style="margin-bottom:3px">Nivel @if($personaje->experiencia) · {{ number_format($personaje->experiencia) }} PX @endif</div>
-                <div class="mini-circulo" style="margin:0 auto">{{ $personaje->nivel }}</div>
+        <td style="width:11%">
+            <div class="pgbox">
+                <div class="titulo">Nivel</div>
+                <div class="grande" style="font-size:22px">{{ $personaje->nivel }}</div>
+                @if($personaje->experiencia)<div class="fila2">{{ number_format($personaje->experiencia) }} PX</div>@endif
             </div>
         </td>
         <td style="width:13%">
-            <div class="mini-escudo-wrap">
-                <div class="mini-escudo">{!! $escudoSvg !!}</div>
-                <div class="mini-escudo-valor">{{ $est->clase_de_armadura ?? '—' }}</div>
-                <div class="mini-label">Clase de Armadura</div>
+            <div class="pgbox">
+                <div class="titulo">Clase de Armadura</div>
+                <div class="grande" style="font-size:22px">{{ $est->clase_de_armadura ?? '—' }}</div>
             </div>
         </td>
         <td style="width:13%">
@@ -423,7 +430,7 @@
 @endunless
 
     {{-- TRUCOS Y CONJUROS PREPARADOS --}}
-    <div class="caja">
+    <div class="caja-fluida">
         <div class="caja-titulo">Trucos y Conjuros Preparados</div>
         @if($trucosOrdenados->count() > 0)
         <table class="datos">
@@ -471,7 +478,7 @@
 
     {{-- DOTES — descripción completa, debajo de trucos y conjuros --}}
     @if($personaje->dotes->isNotEmpty())
-    <div class="caja">
+    <div class="caja-fluida">
         <div class="caja-titulo">Dotes</div>
         <div class="desc-conjuros">
             @foreach($personaje->dotes as $dote)
@@ -537,11 +544,11 @@
     <div class="divisor-orn">· · ·</div>
 
     {{-- HISTORIA Y PERSONALIDAD --}}
-    <div class="caja">
+    <div class="caja-fluida">
         <div class="caja-titulo">Historia y Personalidad</div>
         @if($personaje->historia || $personaje->rasgos_personalidad || $personaje->ideales || $personaje->vinculos || $personaje->defectos || $personaje->alineamiento)
             @if($personaje->alineamiento)<div style="font-size:8px;margin-bottom:3px"><strong>Alineamiento:</strong> {{ $personaje->alineamiento }}</div>@endif
-            @if($personaje->historia)<div style="font-size:8px;margin-bottom:3px">{{ $personaje->historia }}</div>@endif
+            @if($personaje->historia)<div style="font-size:8px;margin-bottom:3px;white-space:pre-line">{{ $personaje->historia }}</div>@endif
             @if($personaje->rasgos_personalidad)<div style="font-size:8px"><strong>Rasgos:</strong> {{ $personaje->rasgos_personalidad }}</div>@endif
             @if($personaje->ideales)<div style="font-size:8px"><strong>Ideales:</strong> {{ $personaje->ideales }}</div>@endif
             @if($personaje->vinculos)<div style="font-size:8px"><strong>Vínculos:</strong> {{ $personaje->vinculos }}</div>@endif

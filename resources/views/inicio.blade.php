@@ -74,6 +74,7 @@
         </div>
 
         <div id="cal-sesiones-dia" class="cal-sesiones-dia"></div>
+        <br>
     </section>
 
     <script>
