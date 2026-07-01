@@ -1,14 +1,18 @@
 {{-- d20-button.blade.php --}}
 <div id="d20-container" role="button" tabindex="0" aria-label="Lanzar dado de 20 caras"
-     style="position: fixed; bottom: 30px; right: 30px; z-index: 9999; cursor: pointer; width: 160px; height: 191px; display: flex; flex-direction: column; align-items: center;">
+     style="position: fixed; bottom: 30px; right: 30px; z-index: 9999; cursor: pointer; width: 100px; height: 120px; display: flex; flex-direction: column; align-items: center;">
 
-    <div id="d20-canvas-wrapper" style="width: 160px; height: 160px; position: relative; background: transparent;">
-        <div id="result-badge" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); background: rgba(180, 0, 0, 0.95); color: #ffd700; font-size: 56px; font-weight: bold; width: 95px; height: 95px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid #ffd700; box-shadow: 0 0 80px rgba(255, 215, 0, 0.4); transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s; pointer-events: none; font-family: 'Georgia', serif; text-shadow: 0 0 30px rgba(255, 215, 0, 0.5); opacity: 0;">
+    <div id="d20-canvas-wrapper" style="width: 100px; height: 100px; position: relative; background: transparent;">
+        <div id="result-badge" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); background: rgba(180, 0, 0, 0.95); color: #ffd700; font-size: 34px; font-weight: bold; width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #ffd700; box-shadow: 0 0 50px rgba(255, 215, 0, 0.4); transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.4s; pointer-events: none; font-family: 'Georgia', serif; text-shadow: 0 0 20px rgba(255, 215, 0, 0.5); opacity: 0;">
             0
         </div>
     </div>
 
-    <div id="d20-shadow" style="width: 140px; height: 25px; background: radial-gradient(ellipse, rgba(0,0,0,0.25) 0%, transparent 70%); border-radius: 50%; margin-top: 6px; filter: blur(12px); transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);"></div>
+    <div id="d20-shadow" style="width: 86px; height: 16px; background: radial-gradient(ellipse, rgba(0,0,0,0.25) 0%, transparent 70%); border-radius: 50%; margin-top: 4px; filter: blur(8px); transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);"></div>
+</div>
+
+<div id="d20-crit-overlay" aria-hidden="true">
+    <span id="d20-crit-text">¡CRÍTICO!</span>
 </div>
 
 @once
@@ -49,6 +53,45 @@
         height: 100% !important;
         background: transparent !important;
     }
+
+    #d20-crit-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0);
+        opacity: 0;
+        pointer-events: none;
+        transition: background 0.35s ease, opacity 0.35s ease;
+    }
+    #d20-crit-overlay.show {
+        background: rgba(0, 0, 0, 0.55);
+        opacity: 1;
+        pointer-events: auto;
+    }
+    #d20-crit-text {
+        font-family: 'Cinzel', 'Georgia', serif;
+        font-weight: 900;
+        font-size: clamp(48px, 10vw, 130px);
+        letter-spacing: 4px;
+        color: #ffd700;
+        text-shadow:
+            0 0 20px rgba(255, 215, 0, 0.9),
+            0 0 60px rgba(255, 215, 0, 0.6),
+            0 4px 0 rgba(120, 80, 0, 0.9);
+        transform: scale(0) rotate(-8deg);
+        opacity: 0;
+    }
+    #d20-crit-overlay.show #d20-crit-text {
+        animation: d20CritPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    @keyframes d20CritPop {
+        0% { transform: scale(0) rotate(-8deg); opacity: 0; }
+        55% { transform: scale(1.15) rotate(2deg); opacity: 1; }
+        100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
 </style>
 
 <script>
@@ -61,6 +104,7 @@
         const wrapper = document.getElementById('d20-canvas-wrapper');
         const badge = document.getElementById('result-badge');
         const shadow = document.getElementById('d20-shadow');
+        const critOverlay = document.getElementById('d20-crit-overlay');
         let isRolling = false;
 
         // --- Escena y cámara ---
@@ -74,7 +118,7 @@
             alpha: true,
             powerPreference: 'high-performance',
         });
-        renderer.setSize(160, 160);
+        renderer.setSize(100, 100);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         renderer.setClearColor(0x000000, 0);
         renderer.toneMapping = THREE.NoToneMapping;
@@ -95,8 +139,9 @@
         rimLight.position.set(-2, 4, -4);
         scene.add(rimLight);
 
-        // --- Textura de cara: rojo sólido + número dorado, dibujado dentro
-        //     del mismo triángulo UV que se usa abajo para cada cara ---
+        // --- Textura de cara: rojo (algo más oscuro) con veteado marmoleado
+        //     interior + número dorado, dibujado dentro del mismo triángulo
+        //     UV que se usa abajo para cada cara ---
         function createFaceTexture(number) {
             const SIZE = 512;
             const canvas = document.createElement('canvas');
@@ -104,11 +149,52 @@
             canvas.height = SIZE;
             const ctx = canvas.getContext('2d');
 
-            // Fondo rojo sólido
-            ctx.fillStyle = '#cc0000';
+            // Rojo base, un punto más oscuro que antes (#cc0000 -> #a80404)
+            ctx.fillStyle = '#a80404';
             ctx.fillRect(0, 0, SIZE, SIZE);
 
-            // Brillo sutil de esquina para dar sensación 3D
+            // --- Veteado marmoleado interior ---
+            // Varias "vetas" curvas semitransparentes, más claras y más
+            // oscuras que el rojo base, para dar sensación de dado macizo
+            // con textura interna (como una piedra/resina veteada).
+            const veinColors = [
+                'rgba(210, 40, 40, 0.35)',   // veta clara
+                'rgba(255, 120, 100, 0.18)', // veta clara cálida
+                'rgba(70, 0, 0, 0.35)',      // veta oscura
+                'rgba(40, 0, 0, 0.25)',      // veta muy oscura
+            ];
+            for (let i = 0; i < 9; i++) {
+                ctx.strokeStyle = veinColors[i % veinColors.length];
+                ctx.lineWidth = SIZE * (0.03 + Math.random() * 0.05);
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                const startX = Math.random() * SIZE;
+                const startY = Math.random() * SIZE;
+                ctx.moveTo(startX, startY);
+                const cp1x = Math.random() * SIZE;
+                const cp1y = Math.random() * SIZE;
+                const cp2x = Math.random() * SIZE;
+                const cp2y = Math.random() * SIZE;
+                const endX = Math.random() * SIZE;
+                const endY = Math.random() * SIZE;
+                ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, endX, endY);
+                ctx.stroke();
+            }
+
+            // Grano fino para romper la superficie lisa
+            for (let i = 0; i < 260; i++) {
+                const gx = Math.random() * SIZE;
+                const gy = Math.random() * SIZE;
+                const r = Math.random() * SIZE * 0.006;
+                ctx.fillStyle = Math.random() > 0.5
+                    ? 'rgba(255,255,255,0.05)'
+                    : 'rgba(0,0,0,0.08)';
+                ctx.beginPath();
+                ctx.arc(gx, gy, r, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Brillo sutil de esquina para dar sensación 3D (por encima del veteado)
             const reflectGrad = ctx.createRadialGradient(SIZE * 0.2, SIZE * 0.2, 0, SIZE * 0.2, SIZE * 0.2, SIZE * 0.5);
             reflectGrad.addColorStop(0, 'rgba(255,255,255,0.12)');
             reflectGrad.addColorStop(1, 'rgba(255,255,255,0)');
@@ -217,9 +303,9 @@
         let rollStartTime = 0;
 
         const K_SPRING = 9;      // fuerza de atracción hacia el resultado (ya en rampa)
-        const K_DAMPING = 0.45;  // fricción angular (más bajo = gira más tiempo)
-        const FREE_SPIN_MS = 2600; // giro totalmente libre antes de que "tire" hacia el resultado
-        const RAMP_MS = 1400;     // tiempo en que la fuerza de atracción pasa de 0 a K_SPRING
+        const K_DAMPING = 1.8;   // fricción angular (más bajo = gira más tiempo)
+        const FREE_SPIN_MS = 900; // giro totalmente libre antes de que "tire" hacia el resultado
+        const RAMP_MS = 550;      // tiempo en que la fuerza de atracción pasa de 0 a K_SPRING
         const STOP_ANGLE = 0.01; // rad restantes para considerar "llegado"
         const STOP_SPEED = 0.05; // rad/s restantes para considerar "parado"
 
@@ -272,6 +358,14 @@
                     badge.textContent = pendingResult;
                     container.classList.add('result-show');
                     isRolling = false;
+
+                    if (pendingResult === 20) {
+                        critOverlay.classList.add('show');
+                        window.clearTimeout(critOverlay._hideTimer);
+                        critOverlay._hideTimer = window.setTimeout(function() {
+                            critOverlay.classList.remove('show');
+                        }, 2200);
+                    }
                 }
             } else if (!isRolling) {
                 const floatY = Math.sin(time * 0.0006) * 0.025;
@@ -292,6 +386,8 @@
             badge.style.transform = 'translate(-50%, -50%) scale(0)';
             badge.style.opacity = '0';
             badge.textContent = '0';
+            critOverlay.classList.remove('show');
+            window.clearTimeout(critOverlay._hideTimer);
 
             // Elegimos el resultado ANTES de girar; el muelle converge a él
             // tras la fase de giro libre, sin salto al final.
@@ -302,7 +398,7 @@
             const randomAxis = new THREE.Vector3(
                 Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5
             ).normalize();
-            angVel.copy(randomAxis).multiplyScalar(48 + Math.random() * 20);
+            angVel.copy(randomAxis).multiplyScalar(34 + Math.random() * 14);
 
             spinning = true;
         }
@@ -316,6 +412,10 @@
                 e.preventDefault();
                 rollDice();
             }
+        });
+        critOverlay.addEventListener('click', function() {
+            critOverlay.classList.remove('show');
+            window.clearTimeout(critOverlay._hideTimer);
         });
 
         // --- Responsive ---

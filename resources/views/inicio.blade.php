@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@include('partials.d20-button')
 
 @section('titulo', 'Inicio')
 
@@ -344,7 +345,7 @@
     background: rgba(0,0,0,0.15);
     transition: background 0.2s;
     overflow: hidden;
-}  
+}
 
 .cal-vacia { background: transparent; }
 
@@ -461,7 +462,7 @@
     height: 2.4em;
     max-width: 60px;
     max-height: 60px;
-} 
+}
 
 #bg-video-inicio {
     position: fixed;

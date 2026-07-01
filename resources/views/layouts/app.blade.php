@@ -6,7 +6,6 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('titulo', 'Dungeons for Dummies')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    @include('partials.d20-button')
 </head>
 <body>
 
