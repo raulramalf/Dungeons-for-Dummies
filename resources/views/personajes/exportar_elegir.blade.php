@@ -172,29 +172,29 @@
 .preview-oficial .pv-col-der .pv-line { background: #e3d2ad; }
 
 /* -- Mística -- */
-.preview-mistica { background: #4a2560; border: 3px solid #6b1d2e; }
+.preview-mistica { background: #0f2622; border: 3px solid #4d7a68; }
 .preview-mistica .pv-mi-banner {
-    height: 14%; border-radius: 999px; background: #f3ead8; border: 2px solid #c8a24a; margin-bottom: 8%;
+    height: 14%; border-radius: 4px; background: #f2f0e4; border: 2px solid #b7c9a8; margin-bottom: 8%;
 }
 .preview-mistica .pv-col-izq, .preview-mistica .pv-col-cen, .preview-mistica .pv-col-der-mi {
     width: 33%; display: flex; flex-direction: column; gap: 8%;
 }
-.preview-mistica .pv-col-izq span { height: 22%; border: 2px solid #c8a24a; border-radius: 50%; background: #f3ead8; }
-.preview-mistica .pv-col-cen span { height: 18%; border: 2px solid #c8a24a; border-radius: 3px; background: #f3ead8; }
-.preview-mistica .pv-col-der-mi span { height: 30%; border: 2px solid #c8a24a; border-radius: 3px; background: #f3ead8; }
+.preview-mistica .pv-col-izq span { height: 22%; border: 2px solid #4d7a68; border-radius: 3px; background: #f2f0e4; }
+.preview-mistica .pv-col-cen span { height: 18%; border: 2px solid #4d7a68; border-radius: 3px; background: #f2f0e4; }
+.preview-mistica .pv-col-der-mi span { height: 30%; border: 2px solid #4d7a68; border-radius: 3px; background: #f2f0e4; }
 
 /* -- Clásica -- */
-.preview-clasica { background: #1b0d12; border: 3px solid #7a1f2b; }
+.preview-clasica { background: #14161c; border: 3px solid #6b4a23; }
 .preview-clasica .pv-cl-titulo {
     text-align: center; font-family: var(--f-titulo); font-weight: 700;
-    color: #d8a94a; font-size: 0.6rem; margin-bottom: 8%; letter-spacing: 0.08em;
+    color: #c9974a; font-size: 0.6rem; margin-bottom: 8%; letter-spacing: 0.08em;
 }
 .preview-clasica .pv-col-izq-cl { width: 30%; display: flex; flex-direction: column; gap: 8%; }
-.preview-clasica .pv-col-izq-cl span { height: 20%; border: 1.5px solid #7a1f2b; border-radius: 3px; background: #24121a; }
+.preview-clasica .pv-col-izq-cl span { height: 20%; border: 1.5px solid #6b4a23; border-radius: 3px; background: #1e222c; }
 .preview-clasica .pv-col-cen-cl { width: 35%; }
-.preview-clasica .pv-col-cen-cl span { display: block; height: 40%; border: 1.5px solid #7a1f2b; border-radius: 3px; background: #24121a; }
+.preview-clasica .pv-col-cen-cl span { display: block; height: 40%; border: 1.5px solid #6b4a23; border-radius: 3px; background: #1e222c; }
 .preview-clasica .pv-col-der-cl { width: 35%; display: flex; flex-direction: column; gap: 10%; }
-.preview-clasica .pv-col-der-cl span { height: 28%; border: 1.5px solid #7a1f2b; border-radius: 3px; background: #24121a; }
+.preview-clasica .pv-col-der-cl span { height: 28%; border: 1.5px solid #6b4a23; border-radius: 3px; background: #1e222c; }
 
 @media (max-width: 560px) {
     .plantilla-opcion { max-width: 100%; }

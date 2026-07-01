@@ -38,8 +38,12 @@
     }
 
     .caja {
-        border: 1.4px solid #4d7a68; border-radius: 6px; padding: 9px 12px; margin-bottom: 13px;
-        background: #f2f0e4; page-break-inside: avoid;
+        border: 1.4px solid #4d7a68; border-radius: 6px; padding: 11px 14px; margin-bottom: 16px;
+        background: #f2f0e4;
+        /* Sin page-break-inside:avoid a propósito: esta caja puede contener
+           listas largas (conjuros, trasfondo) que superen el alto de una
+           página. Forzar "avoid" en un bloque más alto que una página
+           provoca que Dompdf pierda el contenido en vez de partirlo. */
     }
     .caja-titulo {
         font-size: 8.8px; text-transform: uppercase; letter-spacing: 0.06em;
@@ -56,7 +60,11 @@
     /* Entradas tipo "grimorio": nombre + metadatos + descripción, para
        conjuros y dotes. Más legible que meter la descripción en una
        columna de tabla. */
-    .entrada { margin-bottom: 9px; padding-bottom: 8px; border-bottom: 1px solid #dde3d3; }
+    .entrada { margin-bottom: 13px; padding-bottom: 11px; border-bottom: 1px solid #dde3d3; }
+    /* Sin avoid a propósito: una descripción de conjuro larga puede
+       acercarse al alto de una página, y "avoid" en eso hace que Dompdf
+       pierda el contenido en vez de partirlo. Preferible que, en el peor
+       caso, una entrada se reparta entre dos páginas a que desaparezca. */
     .entrada:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
     .entrada-nombre { font-weight: bold; color: #2f5f4f; font-size: 8.6px; }
     .entrada-meta { font-size: 7.2px; color: #5c6f5a; text-transform: uppercase; letter-spacing: 0.03em; margin: 1px 0 3px; }
@@ -349,19 +357,17 @@
 
 <div class="divisor-linea"><span class="rombo-centro"></span></div>
 
-<table class="cab-top" style="border-spacing:5px 0">
-    <tr>
-        <td style="width:40%; text-align:left">
-            <div class="caja-texto"><b>Idiomas:</b> {{ $personaje->idiomas ?? implode(', ', $personaje->raza->idiomas ?? []) ?: '—' }}</div>
-        </td>
-        <td style="width:20%"><div class="misc-box" style="margin-bottom:0; text-align:center"><b>PC</b><br>{{ $est->monedas_cobre ?? 0 }}</div></td>
-        <td style="width:20%"><div class="misc-box" style="margin-bottom:0; text-align:center"><b>PP</b><br>{{ $est->monedas_plata ?? 0 }}</div></td>
-        <td style="width:20%"><div class="misc-box" style="margin-bottom:0; text-align:center"><b>PO</b><br>{{ $est->monedas_oro ?? 0 }}</div></td>
-    </tr>
-</table>
+<div class="misc-box"><b>Idiomas:</b> {{ $personaje->idiomas ?? implode(', ', $personaje->raza->idiomas ?? []) ?: '—' }}</div>
 
 <div class="caja">
     <div class="caja-titulo">Equipo</div>
+    <table class="mini3" style="margin-bottom:9px;">
+        <tr>
+            <td><div class="lbl">PC</div><div class="val" style="font-size:11px">{{ $est->monedas_cobre ?? 0 }}</div></td>
+            <td><div class="lbl">PP</div><div class="val" style="font-size:11px">{{ $est->monedas_plata ?? 0 }}</div></td>
+            <td><div class="lbl">PO</div><div class="val" style="font-size:11px">{{ $est->monedas_oro ?? 0 }}</div></td>
+        </tr>
+    </table>
     @if($personaje->equipo && $personaje->equipo->count() > 0)
         @foreach($personaje->equipo as $item)
             <div class="caja-texto" style="margin-bottom:1px">• {{ $item->nombre }}{{ $item->equipado ? ' (equipado)' : '' }} @if($item->cantidad > 1) x{{ $item->cantidad }} @endif</div>
@@ -374,7 +380,7 @@
 
 <div class="pie">
     <span class="circulo-orn" style="margin:0 4px 0 0"></span><span class="rombo-orn" style="margin:0 5px"></span><span class="circulo-orn" style="margin:0 0 0 4px"></span>
-    <br>Dungeons for Dummies · Ficha generada el {{ now()->translatedFormat('d \d\e F \d\e Y') }} · v5-html-fix
+    <br>Dungeons for Dummies · Ficha generada el {{ now()->translatedFormat('d \d\e F \d\e Y') }} · v11-sin-avoid-entrada
 </div>
 
 </body>

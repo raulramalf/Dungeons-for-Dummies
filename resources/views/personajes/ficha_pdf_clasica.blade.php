@@ -45,8 +45,11 @@
     table.cab-top2 { width: 100%; border-collapse: separate; border-spacing: 4px 0; margin-bottom: 12px; }
 
     .caja {
-        border: 1.2px solid #6b4a23; border-radius: 4px; padding: 6px 8px; margin-bottom: 8px;
-        background: #1e222c; page-break-inside: avoid;
+        border: 1.2px solid #6b4a23; border-radius: 4px; padding: 8px 10px; margin-bottom: 11px;
+        background: #1e222c;
+        /* Sin page-break-inside:avoid a propósito: puede contener listas
+           largas (conjuros, trasfondo) que superen una página, y forzar
+           "avoid" en un bloque así hace que Dompdf pierda el contenido. */
     }
     .caja-titulo {
         font-size: 8.6px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: bold;
@@ -60,7 +63,8 @@
     .caja-texto { font-size: 7.8px; line-height: 1.5; word-wrap: break-word; overflow-wrap: break-word; }
     .lineas-vacias div { border-bottom: 1px solid #2a2e38; height: 11px; margin-bottom: 2px; }
 
-    .entrada { margin-bottom: 9px; padding-bottom: 8px; border-bottom: 1px solid #2a2e38; }
+    .entrada { margin-bottom: 13px; padding-bottom: 11px; border-bottom: 1px solid #2a2e38; }
+    /* Sin avoid a propósito: ver nota equivalente en la plantilla mística. */
     .entrada:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
     .entrada-nombre { font-weight: bold; color: #c9974a; font-size: 8.6px; }
     .entrada-meta { font-size: 7.2px; color: #b89968; text-transform: uppercase; letter-spacing: 0.03em; margin: 1px 0 3px; }
@@ -336,7 +340,7 @@
 </div>
 @endunless
 
-<div class="pie">Dungeons for Dummies · Ficha generada el {{ now()->translatedFormat('d \d\e F \d\e Y') }} · v5-html-fix</div>
+<div class="pie">Dungeons for Dummies · Ficha generada el {{ now()->translatedFormat('d \d\e F \d\e Y') }} · v11-sin-avoid-entrada</div>
 
 </body>
 </html>
