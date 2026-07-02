@@ -20,6 +20,9 @@
         <a href="{{ url('/enemigos') }}" class="{{ request()->is('enemigos*') ? 'active' : '' }}">
             @include('partials.icon', ['name' => 'skull']) Bestiario
         </a>
+        <a href="{{ url('/minijuego') }}" class="{{ request()->is('minijuego*') ? 'active' : '' }}">
+            @include('partials.icon', ['name' => 'dice']) Reto Diario
+        </a>
         <a href="{{ url('/perfil') }}" class="{{ request()->is('perfil*') ? 'active' : '' }}">
             @include('partials.icon', ['name' => 'user']) Perfil
         </a>
