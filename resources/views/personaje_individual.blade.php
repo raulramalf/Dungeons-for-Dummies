@@ -373,7 +373,7 @@
         font-style: italic;
         white-space: pre-line;
     }
-
+ 
     .rasgos-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;

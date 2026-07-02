@@ -17,12 +17,15 @@ class MinijuegoIntento extends Model
         "opciones_elegidas",
         "estado",
         "completado_en",
+        "pregunta_actual_id",
+        "pregunta_actual_opciones",
     ];
 
     protected function casts(): array
     {
         return [
             "opciones_elegidas" => "array",
+            "pregunta_actual_opciones" => "array",
             "completado_en" => "datetime",
         ];
     }
@@ -35,5 +38,10 @@ class MinijuegoIntento extends Model
     public function usuario()
     {
         return $this->belongsTo(Usuario::class, "usuario_id");
+    }
+
+    public function preguntaActual()
+    {
+        return $this->belongsTo(MinijuegoPregunta::class, "pregunta_actual_id");
     }
 }

@@ -348,5 +348,5 @@
 
 <div class="pie">Dungeons for Dummies · Ficha generada el {{ now()->translatedFormat('d \d\e F \d\e Y') }}</div>
 
-</body>
+</body> 
 </html>

@@ -8,14 +8,14 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table("minijuego_retos", function (Blueprint $table) {
-            $table->dateTime("fecha")->unique()->change();
+            $table->dateTime("fecha")->change();
         });
     }
 
     public function down(): void
     {
         Schema::table("minijuego_retos", function (Blueprint $table) {
-            $table->date("fecha")->unique()->change();
+            $table->date("fecha")->change();
         });
     }
 };

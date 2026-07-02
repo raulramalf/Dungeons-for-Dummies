@@ -1,5 +1,4 @@
 @extends('layouts.app')
-@include('partials.d20-button')
 
 @section('titulo', 'Inicio')
 
@@ -88,7 +87,7 @@
         renderCalendario();
     }
 
-    function renderCalendario() {
+    function renderCalendario() {   
         const year = calFecha.getFullYear();
         const month = calFecha.getMonth();
 

@@ -305,9 +305,6 @@
                         :disabled="enviando"
                         @click="responder(i)"
                     >
-                        <template x-if="opcion.es_trivia">
-                            <span class="badge-trivia">Trivia</span>
-                        </template>
                         <span x-text="opcion.texto"></span>
                     </button>
                 </template>
@@ -390,13 +387,9 @@ function retoDiario({ estadoInicial, vidaInicial, vidaMax, rondaInicial, rachaIn
                 this.racha = data.racha;
                 this.proximoCambio = data.proximo_cambio;
 
-                if (data.es_trivia) {
-                    this.feedback = data.correcta
-                        ? `¡Correcto! -${data.daño} PG`
-                        : `Incorrecto... solo -${data.daño} PG`;
-                } else {
-                    this.feedback = `-${data.daño} PG`;
-                }
+                this.feedback = data.correcta
+                    ? `¡Correcto! (${data.aciertos}/4 aciertos)`
+                    : `Incorrecto (${data.fallos}/4 fallos)`;
 
                 await this.esperar(900);
 

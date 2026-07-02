@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             PerfilSeeder::class,
             ClasesSeeder::class,
             RazasSeeder::class,
+            MinijuegoPreguntasSeeder::class,
             MinijuegoEnemigosSeeder::class,
             TraduccionRazasSeeder::class,
             SubclasesSeeder::class,

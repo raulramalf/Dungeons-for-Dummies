@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\DB;
 
 class MinijuegoController extends Controller
 {
+    private const INTERVALO_MINUTOS = 1440;
+
     public function index()
     {
         $reto = $this->retoDeHoy();
@@ -30,23 +32,20 @@ class MinijuegoController extends Controller
         );
 
         $rondaActual = null;
-        if (
-            $intento->estado === "en_curso" &&
-            $intento->ronda_actual < $enemigo->totalRondas()
-        ) {
-            $ronda = $enemigo->rondas[$intento->ronda_actual];
-            $rondaActual = [
-                "pregunta" => $ronda["pregunta"],
-                "opciones" => collect($ronda["opciones"])
-                    ->map(
-                        fn($o, $i) => [
-                            "indice" => $i,
-                            "texto" => $o["texto"],
-                            "es_trivia" => $o["es_trivia"] ?? false,
-                        ],
-                    )
-                    ->values(),
-            ];
+        if ($intento->estado === "en_curso") {
+            if ($intento->pregunta_actual_id && $intento->pregunta_actual_opciones) {
+                $preguntaActual = \App\Models\MinijuegoPregunta::find($intento->pregunta_actual_id);
+                $rondaActual = $preguntaActual
+                    ? [
+                        "pregunta" => $preguntaActual->pregunta,
+                        "opciones" => collect($intento->pregunta_actual_opciones)
+                            ->map(fn($o, $i) => ["indice" => $i, "texto" => $o["texto"]])
+                            ->values(),
+                    ]
+                    : $this->asignarNuevaPregunta($intento);
+            } else {
+                $rondaActual = $this->asignarNuevaPregunta($intento);
+            }
         }
 
         $racha = $this->calcularRacha();
@@ -86,69 +85,56 @@ class MinijuegoController extends Controller
             );
         }
 
-        if ($intento->ronda_actual >= $enemigo->totalRondas()) {
-            return response()->json(["error" => "No quedan más rondas."], 422);
-        }
-
-        $ronda = $enemigo->rondas[$intento->ronda_actual];
-        $opciones = $ronda["opciones"];
+        $opciones = $intento->pregunta_actual_opciones;
         $indice = $request->integer("opcion");
 
-        if (!isset($opciones[$indice])) {
+        if (!$opciones || !isset($opciones[$indice])) {
             return response()->json(["error" => "Opción inválida."], 422);
         }
 
-        $opcionElegida = $opciones[$indice];
-        $daño = (int) ($opcionElegida["daño"] ?? 0);
+        $correcta = (bool) ($opciones[$indice]["correcta"] ?? false);
 
-        $vidaRestante = max(0, $intento->vida_restante - $daño);
         $historial = $intento->opciones_elegidas ?? [];
         $historial[] = [
-            "ronda" => $intento->ronda_actual,
+            "pregunta_id" => $intento->pregunta_actual_id,
             "opcion" => $indice,
-            "daño" => $daño,
+            "correcta" => $correcta,
         ];
 
-        $siguienteRonda = $intento->ronda_actual + 1;
+        $aciertos = collect($historial)->where("correcta", true)->count();
+        $fallos = collect($historial)->where("correcta", false)->count();
+
+        $vidaRestante = max(0, (int) round($enemigo->vida_max * (1 - $aciertos / 4)));
 
         $estado = "en_curso";
-        if ($vidaRestante <= 0) {
+        if ($aciertos >= 4) {
             $estado = "ganado";
-        } elseif ($siguienteRonda >= $enemigo->totalRondas()) {
+            $vidaRestante = 0;
+        } elseif ($fallos >= 4) {
             $estado = "perdido";
         }
 
         $intento->update([
-            "ronda_actual" => $siguienteRonda,
+            "ronda_actual" => count($historial),
             "vida_restante" => $vidaRestante,
             "opciones_elegidas" => $historial,
             "estado" => $estado,
+            "pregunta_actual_id" => $estado === "en_curso" ? $intento->pregunta_actual_id : null,
+            "pregunta_actual_opciones" => $estado === "en_curso" ? $intento->pregunta_actual_opciones : null,
             "completado_en" => $estado !== "en_curso" ? now() : null,
         ]);
 
         $siguienteRondaPayload = null;
         if ($estado === "en_curso") {
-            $ronda = $enemigo->rondas[$siguienteRonda];
-            $siguienteRondaPayload = [
-                "pregunta" => $ronda["pregunta"],
-                "opciones" => collect($ronda["opciones"])
-                    ->map(
-                        fn($o, $i) => [
-                            "indice" => $i,
-                            "texto" => $o["texto"],
-                            "es_trivia" => $o["es_trivia"] ?? false,
-                        ],
-                    )
-                    ->values(),
-            ];
+            $siguienteRondaPayload = $this->asignarNuevaPregunta($intento);
         }
 
         return response()->json([
-            "daño" => $daño,
-            "es_trivia" => $opcionElegida["es_trivia"] ?? false,
-            "correcta" => $opcionElegida["correcta"] ?? null,
+            "correcta" => $correcta,
             "vida_restante" => $vidaRestante,
             "vida_max" => $enemigo->vida_max,
+            "aciertos" => $aciertos,
+            "fallos" => $fallos,
             "estado" => $estado,
             "ronda" => $siguienteRondaPayload,
             "racha" => $this->calcularRacha(),
@@ -238,5 +224,43 @@ class MinijuegoController extends Controller
         }
 
         return $racha;
+    }
+
+    private function elegirPreguntaAleatoria(array $idsExcluidos): ?\App\Models\MinijuegoPregunta
+    {
+        $pregunta = \App\Models\MinijuegoPregunta::where("activo", true)
+            ->when(!empty($idsExcluidos), fn($q) => $q->whereNotIn("id", $idsExcluidos))
+            ->inRandomOrder()
+            ->first();
+
+        // Si el pool se agota (raro, solo con muy pocas preguntas), reintenta sin excluir
+        return $pregunta ?? \App\Models\MinijuegoPregunta::where("activo", true)->inRandomOrder()->first();
+    }
+
+    private function asignarNuevaPregunta(MinijuegoIntento $intento): ?array
+    {
+        $idsUsados = collect($intento->opciones_elegidas ?? [])
+            ->pluck("pregunta_id")
+            ->filter()
+            ->all();
+
+        $pregunta = $this->elegirPreguntaAleatoria($idsUsados);
+        if (!$pregunta) {
+            return null;
+        }
+
+        $opcionesMezcladas = collect($pregunta->opciones)->shuffle()->values()->all();
+
+        $intento->update([
+            "pregunta_actual_id" => $pregunta->id,
+            "pregunta_actual_opciones" => $opcionesMezcladas,
+        ]);
+
+        return [
+            "pregunta" => $pregunta->pregunta,
+            "opciones" => collect($opcionesMezcladas)
+                ->map(fn($o, $i) => ["indice" => $i, "texto" => $o["texto"]])
+                ->values(),
+        ];
     }
 }

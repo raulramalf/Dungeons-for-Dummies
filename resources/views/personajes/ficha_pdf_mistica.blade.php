@@ -344,7 +344,7 @@
 </div>
 
 @if($personaje->historia)
-<div class="caja-fluida">
+<div class="caja-fluida"> 
     <div class="caja-titulo">Historia</div>
     <div class="caja-texto" style="white-space:pre-line">{{ $personaje->historia }}</div>
 </div>
