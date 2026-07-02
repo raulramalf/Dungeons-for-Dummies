@@ -12,7 +12,7 @@
         tabla con contenido muy largo dentro no pagina bien (páginas en
         blanco / texto cortado). Las secciones sueltas sí paginan bien.
     */
-    @page { margin: 32px 36px; background-color: #14161c; }
+    @page { margin: 0; background-color: #14161c; }
     * { box-sizing: border-box; }
 
     body {
@@ -21,6 +21,7 @@
         font-size: 9px;
         line-height: 1.35;
         background: #14161c;
+        padding: 32px 36px;
     }
 
     .titulo-top {
@@ -50,6 +51,11 @@
         /* Sin page-break-inside:avoid a propósito: puede contener listas
            largas (conjuros, trasfondo) que superen una página, y forzar
            "avoid" en un bloque así hace que Dompdf pierda el contenido. */
+    }
+    .caja-fluida {
+        padding: 8px 10px;
+        margin-bottom: 11px;
+        background: #1e222c;
     }
     .caja-titulo {
         font-size: 8.6px; text-transform: uppercase; letter-spacing: 0.08em; font-weight: bold;
@@ -292,8 +298,8 @@
 
 @unless($resumen)
 <div class="caja">
-    <div class="caja-titulo">Trasfondo</div>
-    <div class="caja-texto">{{ $personaje->historia ?: '—' }}</div>
+    <div class="caja-titulo">Historia</div>
+    <div class="caja-texto" style="white-space:pre-line">{{ $personaje->historia ?: '—' }}</div>
 </div>
 
 @if($personaje->rasgos_personalidad || $personaje->ideales)
@@ -340,7 +346,7 @@
 </div>
 @endunless
 
-<div class="pie">Dungeons for Dummies · Ficha generada el {{ now()->translatedFormat('d \d\e F \d\e Y') }} · v11-sin-avoid-entrada</div>
+<div class="pie">Dungeons for Dummies · Ficha generada el {{ now()->translatedFormat('d \d\e F \d\e Y') }}</div>
 
 </body>
 </html>

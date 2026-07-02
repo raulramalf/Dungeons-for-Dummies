@@ -11,7 +11,7 @@
         secciones de longitud variable apiladas a ancho completo debajo
         (necesario para que Dompdf pagine bien con textos largos).
     */
-    @page { margin: 32px 36px; background-color: #0f2622; }
+    @page { margin: 0; background-color: #0f2622; }
     * { box-sizing: border-box; }
 
     body {
@@ -20,6 +20,7 @@
         font-size: 9.2px;
         line-height: 1.55;
         background: #0f2622;
+        padding: 32px 36px;
     }
 
     .cabecera-orn { text-align: center; margin-bottom: 14px; }
@@ -44,6 +45,11 @@
            listas largas (conjuros, trasfondo) que superen el alto de una
            página. Forzar "avoid" en un bloque más alto que una página
            provoca que Dompdf pierda el contenido en vez de partirlo. */
+    }
+    .caja-fluida {
+        padding: 11px 14px;
+        margin-bottom: 16px;
+        background: #f2f0e4;
     }
     .caja-titulo {
         font-size: 8.8px; text-transform: uppercase; letter-spacing: 0.06em;
@@ -288,7 +294,7 @@
 </div>
 
 @if($habPrincipal)
-<div class="caja">
+<div class="caja-fluida">
     <div class="caja-titulo">Trucos y Conjuros</div>
     @if($trucosOrdenados->count() > 0)
         @foreach($trucosOrdenados as $truco)
@@ -313,7 +319,7 @@
 @endif
 
 @if($dotes->count() > 0)
-<div class="caja">
+<div class="caja-fluida">
     <div class="caja-titulo">Dotes</div>
     @foreach($dotes as $dote)
         <div class="entrada">
@@ -338,9 +344,9 @@
 </div>
 
 @if($personaje->historia)
-<div class="caja">
-    <div class="caja-titulo">Trasfondo</div>
-    <div class="caja-texto">{{ $personaje->historia }}</div>
+<div class="caja-fluida">
+    <div class="caja-titulo">Historia</div>
+    <div class="caja-texto" style="white-space:pre-line">{{ $personaje->historia }}</div>
 </div>
 @endif
 
@@ -380,7 +386,7 @@
 
 <div class="pie">
     <span class="circulo-orn" style="margin:0 4px 0 0"></span><span class="rombo-orn" style="margin:0 5px"></span><span class="circulo-orn" style="margin:0 0 0 4px"></span>
-    <br>Dungeons for Dummies · Ficha generada el {{ now()->translatedFormat('d \d\e F \d\e Y') }} · v11-sin-avoid-entrada
+    <br>Dungeons for Dummies · Ficha generada el {{ now()->translatedFormat('d \d\e F \d\e Y') }}
 </div>
 
 </body>

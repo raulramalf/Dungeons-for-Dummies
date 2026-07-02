@@ -678,8 +678,9 @@
                     </div>
                     <div class="form-group">
                         <label>Nivel <span class="req">*</span></label>
-                        <input type="number" name="nivel" class="form-control @error('nivel') is-error @enderror"
-                               value="{{ old('nivel', $personaje->nivel) }}" min="1" max="20" required>
+                        <input type="number" name="nivel" id="nivelInput" class="form-control @error('nivel') is-error @enderror"
+                                value="{{ old('nivel', $personaje->nivel) }}" min="1" max="20" required
+                                oninput="actualizarBonusCompetencia()">
                         @error('nivel') <span class="error-msg">{{ $message }}</span> @enderror
                     </div>
                 </div>
@@ -698,7 +699,7 @@
                     </div>
                     <div class="form-group">
                         <label>Clase <span class="req">*</span></label>
-                        <select name="clase_id" class="form-control" required>
+                        <select name="clase_id" id="claseSelect" class="form-control" required onchange="filtrarSubclases()">
                             <option value="">— Selecciona una clase —</option>
                             @foreach($clases as $clase)
                             <option value="{{ $clase->id }}" {{ old('clase_id', $personaje->clase_id) == $clase->id ? 'selected' : '' }}>
@@ -711,10 +712,10 @@
 
                 <div class="form-group">
                     <label>Subclase</label>
-                    <select name="subclase_id" class="form-control @error('subclase_id') error @enderror">
+                    <select name="subclase_id" id="subclaseSelect" class="form-control @error('subclase_id') error @enderror">
                         <option value="">Sin subclase todavía</option>
                         @foreach($subclases as $subclase)
-                            <option value="{{ $subclase->id }}" {{ old('subclase_id', $personaje->subclase_id) == $subclase->id ? 'selected' : '' }}>
+                            <option value="{{ $subclase->id }}" data-clase="{{ $subclase->clase_id }}" {{ old('subclase_id', $personaje->subclase_id) == $subclase->id ? 'selected' : '' }}>
                                 {{ $subclase->nombre }} ({{ $subclase->clase->nombre ?? '' }})
                             </option>
                         @endforeach
@@ -925,9 +926,10 @@
                                value="{{ old('velocidad', $est->velocidad ?? 30) }}" min="0">
                     </div>
                     <div class="combat-field">
-                        <label>🎯 Bonus Competencia</label>
-                        <input type="number" name="bonus_competencia"
-                               value="{{ old('bonus_competencia', $est->bonus_competencia ?? 2) }}" min="0" max="6">
+                        <label>🎯 Bonus Competencia (auto)</label>
+                        <input type="number" id="bonusCompetenciaDisplay"
+                            value="{{ $est->bonus_competencia ?? 2 }}" disabled
+                            style="opacity:.7;cursor:not-allowed">
                     </div>
                     <div class="combat-field">
                         <label>⚔️ Iniciativa (mod)</label>
@@ -1301,6 +1303,13 @@ function actualizarMod(input) {
     if (span) span.textContent = str;
 }
 
+/* ===== Bonus de competencia automático según nivel (regla estándar 5e) ===== */
+function actualizarBonusCompetencia() {
+    const nivel = parseInt(document.getElementById('nivelInput').value) || 1;
+    const bonus = 2 + Math.floor((Math.max(nivel, 1) - 1) / 4);
+    document.getElementById('bonusCompetenciaDisplay').value = bonus;
+}
+
 /* ===== Preview de imágenes antes de subir ===== */
 function previewImgs(input, containerId, max) {
     const container = document.getElementById(containerId);
@@ -1483,5 +1492,22 @@ function filtrarDotes(texto) {
         grupo.style.display = visibles ? '' : 'none';
     });
 }
+
+/* ===== Filtrar subclases según la clase elegida ===== */
+function filtrarSubclases() {
+    const claseId = document.getElementById('claseSelect').value;
+    const subclaseSelect = document.getElementById('subclaseSelect');
+    let seleccionValida = false;
+
+    [...subclaseSelect.options].forEach(opt => {
+        if (!opt.value) { opt.style.display = ''; return; }
+        const coincide = opt.dataset.clase === claseId;
+        opt.style.display = coincide ? '' : 'none';
+        if (coincide && opt.selected) seleccionValida = true;
+    });
+
+    if (!seleccionValida) subclaseSelect.value = '';
+}
+document.addEventListener('DOMContentLoaded', filtrarSubclases);
 </script>
 @endsection

@@ -29,6 +29,10 @@
     --c-oro: #c9a227; /* detalles decorativos */
     --c-oro-claro: #e3c25a;
 
+    --c-arcano: #2a3a5c; /* acento semántico: magia / conjuros */
+    --c-arcano-osc: #1e2b46;
+    --c-arcano-claro: #6b85b8;
+
     /* Texto */
     --t-principal: #f2e9e4; /* texto principal, blanco hueso */
     --t-secundario: #a89a92; /* texto secundario */
@@ -39,6 +43,7 @@
     --b-medio: rgba(179, 3, 3, 0.35);
     --b-fuerte: rgba(179, 3, 3, 0.6);
     --b-neutro: rgba(168, 154, 146, 0.15);
+    --b-arcano: rgba(107, 133, 184, 0.35);
 
     /* Tipografía */
     --f-titulo: "Cinzel", Georgia, serif;
@@ -1055,6 +1060,32 @@ textarea.control {
     color: var(--t-tenue);
     font-size: 0.75rem;
     flex-shrink: 0;
+}
+
+/* Acento arcano: solo para el picker de CONJUROS, no el de dotes
+   (comparten las mismas clases .conjuro-chip/.conjuro-row, así que hay
+   que escoparlo por el contenedor con id conjuroChips/conjuroLista para
+   no pintar de azul las dotes, que no son magia). */
+#conjuroChips .conjuro-chip {
+    background: rgba(107, 133, 184, 0.18);
+    border-color: var(--c-arcano-claro);
+}
+
+#conjuroChips .conjuro-chip button {
+    color: var(--c-arcano-claro);
+}
+
+#conjuroLista .conjuro-row.seleccionado {
+    background: rgba(107, 133, 184, 0.14);
+    border-color: var(--c-arcano-claro);
+}
+
+.conjuro-picker:has(#conjuroChips) .conjuro-picker-cab {
+    color: var(--c-arcano-claro);
+}
+
+.conjuro-picker:has(#conjuroChips) .conjuro-lista {
+    border-top-color: var(--b-arcano);
 }
 
 /* ----- CAMPAÑAS ----- */
