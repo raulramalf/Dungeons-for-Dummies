@@ -288,7 +288,7 @@
         </td>
     </tr>
 </table>
-
+ 
 @unless($resumen)
 {{-- FILA SECUNDARIA --}}
 <table class="fila-sec">
