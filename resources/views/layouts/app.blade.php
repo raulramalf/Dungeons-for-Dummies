@@ -30,8 +30,7 @@
         @yield('contenido')
     </main>
 
-    @include('partials.d20-button')
-
+    
 
 </body>
 </html>

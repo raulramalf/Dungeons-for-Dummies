@@ -3,6 +3,7 @@
 @section('titulo', 'Inicio')
 
 @section('contenido')
+@include('partials.d20-button')
 
 <video autoplay muted loop playsinline id="bg-video-inicio">
     <source src="{{ asset('videos/castillo-fondo.mp4') }}" type="video/mp4">

@@ -101,7 +101,7 @@ class MinijuegoPreguntasSeeder extends Seeder
                 "categoria" => "clases",
             ],
             [
-                "pregunta" => "¿Cómo se llama la clase especializada en lanzar conjuros mientras lucha cuerpo a cuerpo con armadura pesada, ganando espacios de conjuro extra al comprometerse a un juramento?",
+                "pregunta" => "¿Cómo se llama la clase especializada en lanzar conjuros mientras lucha cuerpo a cuerpo con armadura pesada?",
                 "opciones" => [
                     ["texto" => "Paladín", "correcta" => true],
                     ["texto" => "Clérigo", "correcta" => false],
