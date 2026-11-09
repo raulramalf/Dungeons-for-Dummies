@@ -8,7 +8,7 @@
 @endpush
 
 @section('contenido')
-@php($usuario = auth()->user())
+@php $usuario = auth()->user(); @endphp
 
 <div class="perfil">
 

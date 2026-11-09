@@ -7,7 +7,8 @@
    permitía ejecutar código en el navegador del DM al abrir su ficha. Ahora todo
    valor dinámico pasa por esc() o por textContent.
    ============================================================================ */
-import { abrirLightbox } from "../lightbox.js";
+import { abrirModal } from "../modal.js";
+import { toast } from "../ui.js";
 
 const campanaId = document.getElementById("campana-datos")?.dataset.campanaId;
 
@@ -16,45 +17,28 @@ const esc = (t) =>
     String(t ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
 const $ = (id) => document.getElementById(id);
+const signo = (n) => (n >= 0 ? "+" : "") + n;
 
-function abrirModal(id) {
-    const modal = $(id);
-    modal.scrollTop = 0;
-    modal.style.display = "flex";
-}
-
-function abrirModalEditar() {
-    abrirModal("modal-editar-campana");
-}
-
-function abrirModalSesion() {
-    abrirModal("modal-sesion");
-}
-
-function abrirModalNota() {
-    abrirModal("modal-nota");
-}
-
-function editarSesion(id, titulo, numero, fecha, resumen, duracion) {
-    $("form-editar-sesion").action = `/campanyas/${campanaId}/sesiones/${id}`;
-    $("edit-titulo").value = titulo;
-    $("edit-numero").value = numero;
-    $("edit-fecha").value = fecha ? fecha.substring(0, 10) : "";
-    $("edit-resumen").value = resumen;
-    $("edit-duracion").value = duracion || "";
+/* ----- Editar sesión / nota: los datos viajan en data-* del botón (Blade los escapa) ----- */
+function editarSesion(d) {
+    $("form-editar-sesion").action = `/campanyas/${campanaId}/sesiones/${d.id}`;
+    $("edit-titulo").value = d.titulo;
+    $("edit-numero").value = d.numero;
+    $("edit-fecha").value = d.fecha || "";
+    $("edit-resumen").value = d.resumen || "";
+    $("edit-duracion").value = d.duracion || "";
     abrirModal("modal-editar-sesion");
 }
 
-function editarNotaDesdeCard(el) {
-    $("form-editar-nota").action = `/campanyas/${campanaId}/notas/${el.dataset.notaId}`;
-    $("edit-nota-titulo").value = el.dataset.notaTitulo;
-    $("edit-nota-contenido").value = el.dataset.notaContenido;
-    $("edit-nota-visible").checked = el.dataset.notaVisible === "true";
+function editarNota(d) {
+    $("form-editar-nota").action = `/campanyas/${campanaId}/notas/${d.id}`;
+    $("edit-nota-titulo").value = d.titulo;
+    $("edit-nota-contenido").value = d.contenido;
+    $("edit-nota-visible").checked = d.visible === "true";
     abrirModal("modal-editar-nota");
 }
 
-const signo = (n) => (n >= 0 ? "+" : "") + n;
-
+/* ----- Ficha resumida de un personaje ----- */
 async function verPersonaje(id) {
     abrirModal("modal-personaje");
     $("modal-p-nombre").textContent = "Cargando…";
@@ -68,16 +52,12 @@ async function verPersonaje(id) {
         p = await res.json();
     } catch {
         $("modal-p-nombre").textContent = "No se pudo cargar la ficha";
-        return;
+        return toast("No se pudo cargar la ficha del personaje.", "error");
     }
 
     const avatar = $("modal-p-avatar");
     avatar.src = p.avatar_url;
-    avatar.style.cursor = "zoom-in";
-    avatar.onclick = (e) => {
-        e.stopPropagation();
-        abrirLightbox(p.avatar_url, p.nombre);
-    };
+    avatar.alt = p.nombre;
 
     $("modal-p-nombre").textContent = p.nombre;
     $("modal-p-subtitulo").textContent = [p.raza, p.clase, p.subclase].filter(Boolean).join(" · ");
@@ -107,7 +87,7 @@ async function verPersonaje(id) {
         .map(([et, val]) => `<div class="pjm-dato"><span class="pjm-dato-et">${esc(et)}</span><span class="pjm-dato-val">${esc(val)}</span></div>`)
         .join("");
 
-    $("modal-p-historia-sec").style.display = p.historia ? "block" : "none";
+    $("modal-p-historia-sec").hidden = !p.historia;
     if (p.historia) $("modal-p-historia").textContent = p.historia;
 
     const rasgos = [
@@ -116,13 +96,13 @@ async function verPersonaje(id) {
         ["Vínculos", p.vinculos],
         ["Defectos", p.defectos],
     ].filter(([, v]) => v);
-    $("modal-p-personalidad-sec").style.display = rasgos.length ? "block" : "none";
+    $("modal-p-personalidad-sec").hidden = rasgos.length === 0;
     $("modal-p-personalidad").innerHTML = rasgos
         .map(([et, v]) => `<div class="pjm-rasgo"><span class="pjm-rasgo-et">${esc(et)}</span><span class="pjm-rasgo-txt">${esc(v)}</span></div>`)
         .join("");
 
     const equipo = p.equipo ?? [];
-    $("modal-p-equipo-sec").style.display = equipo.length ? "block" : "none";
+    $("modal-p-equipo-sec").hidden = equipo.length === 0;
     $("modal-p-equipo").innerHTML = equipo
         .map(
             (e) =>
@@ -132,12 +112,14 @@ async function verPersonaje(id) {
         .join("");
 }
 
-// Accesibles desde los atributos on*="…" del marcado
-Object.assign(window, {
-    abrirModalEditar,
-    abrirModalNota,
-    abrirModalSesion,
-    editarNotaDesdeCard,
-    editarSesion,
-    verPersonaje,
+/* ----- Un único listener de clic ----- */
+document.addEventListener("click", (e) => {
+    const sesion = e.target.closest("[data-editar-sesion]");
+    if (sesion) return editarSesion(sesion.dataset);
+
+    const nota = e.target.closest("[data-editar-nota]");
+    if (nota) return editarNota(nota.dataset);
+
+    const pj = e.target.closest("[data-ver-personaje]");
+    if (pj) verPersonaje(pj.dataset.verPersonaje);
 });

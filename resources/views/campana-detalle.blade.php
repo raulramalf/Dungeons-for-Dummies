@@ -1,658 +1,545 @@
 @extends('layouts.app')
 
 @section('titulo', $campana->nombre)
+@section('descripcion', 'Sesiones, jugadores, enemigos y notas de la campaña '.$campana->nombre.'.')
 
 @push('head')
     @vite(['resources/css/pages/campana-detalle.css', 'resources/js/pages/campana-detalle.js'])
 @endpush
 
 @section('contenido')
-
-{{-- Dato que necesita campana-detalle.js (antes se interpolaba dentro del <script>) --}}
-<div id="campana-datos" data-campana-id="{{ $campana->id }}" hidden></div>
-
-<!-- CABECERA (igual para DM y jugador) -->
-<div class="tarjeta" style="margin-bottom: 1.5rem;">
-    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 15px;">
-        <div>
-            <h2 style="font-size: 1.4rem; margin-bottom: 6px;">{{ $campana->nombre }}</h2>
-            <div style="color: var(--t-secundario); font-size: 0.9rem; margin-bottom: 8px;">
-                {{ $campana->ambientacion ?? 'Sin ambientación' }} · Nivel {{ $campana->nivel_inicial }}{{ $campana->nivel_maximo ? '-'.$campana->nivel_maximo : '+' }}
-            </div>
-            @if($campana->descripcion)
-            <p style="color: var(--t-tenue); font-size: 0.95rem;">{{ $campana->descripcion }}</p>
-            @endif
-        </div>
-        <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 10px;">
-            <span style="background: rgba(179,3,3,0.1); color: var(--c-rojo-claro); border: 1px solid var(--b-medio); padding: 4px 14px; border-radius: 20px; font-size: 0.8rem; font-family: var(--f-titulo); letter-spacing: 1px; text-transform: uppercase;">{{ $campana->estado }}</span>
-            @if($esDM)
-            <div style="color: var(--t-secundario); font-size: 0.85rem;">
-                Código: <strong style="color: var(--c-oro); letter-spacing: 3px; font-size: 1rem;">{{ $campana->codigo_invitacion }}</strong>
-            </div>
-            @endif
-        </div>
-    </div>
-    <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
-        @if($esDM)
-            <button onclick="abrirModalEditar()" class="btn btn-secundario btn-sm">@include('partials.icon', ['name' => 'edit', 'class' => 'icon-sm']) Editar campaña</button>
-            <form method="POST" action="/campanyas/{{ $campana->id }}" data-confirm="¿Eliminar esta campaña?" style="display:inline">
-                @csrf @method('DELETE')
-                <button type="submit" class="btn btn-peligro btn-sm">@include('partials.icon', ['name' => 'trash', 'class' => 'icon-sm']) Eliminar</button>
-            </form>
-        @endif
-        <a href="/campanyas" class="btn btn-secundario btn-sm">← Volver</a>
-    </div>
-</div>
-
-@if($esDM)
-{{-- ============================================================
-     VISTA DM
-     ============================================================ --}}
-
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-
-    <!-- SESIONES -->
-    <section>
-        <div class="seccion-titulo">@include('partials.icon', ['name' => 'scroll']) Sesiones ({{ $campana->sesiones->count() }})</div>
-        @forelse($campana->sesiones->sortByDesc('numero_sesion') as $sesion)
-        <div class="tarjeta" style="margin-bottom: 10px;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="flex: 1; cursor: pointer;" onclick="editarSesion({{ $sesion->id }}, '{{ addslashes($sesion->titulo) }}', {{ $sesion->numero_sesion }}, '{{ $sesion->fecha_sesion }}', '{{ addslashes($sesion->resumen ?? '') }}', {{ $sesion->duracion_minutos ?? 0 }})">
-                    <div style="font-weight: bold;">Sesión {{ $sesion->numero_sesion }}: {{ $sesion->titulo }}</div>
-                    <div style="color: var(--t-secundario); font-size: 0.85rem;">
-                        {{ $sesion->fecha_sesion ? \Carbon\Carbon::parse($sesion->fecha_sesion)->format('d/m/Y') : 'Sin fecha' }}
-                        {{ $sesion->duracion_minutos ? '· '.$sesion->duracion_minutos.' min' : '' }}
-                    </div>
-                    @if($sesion->resumen)
-                    <div style="color: var(--t-tenue); font-size: 0.85rem; margin-top: 4px;">{{ Str::limit($sesion->resumen, 80) }}</div>
-                    @endif
-                </div>
-                <form method="POST" action="/campanyas/{{ $campana->id }}/sesiones/{{ $sesion->id }}" data-confirm="¿Eliminar esta sesión?">
-                    @csrf @method('DELETE')
-                    <button type="submit" class="btn btn-peligro btn-sm">🗑</button>
-                </form>
-            </div>
-        </div>
-        @empty
-        <div style="color: var(--t-tenue); font-size: 0.9rem; padding: 1rem 0;">No hay sesiones registradas aún.</div>
-        @endforelse
-        <button onclick="abrirModalSesion()" class="btn btn-secundario btn-sm" style="margin-top: 10px;">+ Añadir sesión</button>
-    </section>
-
-    <!-- ENEMIGOS -->
-    <section>
-        <div class="seccion-titulo">@include('partials.icon', ['name' => 'skull']) Enemigos ({{ $campana->enemigos->count() }})</div>
-        @forelse($campana->enemigos as $enemigo)
-        <div class="tarjeta" style="margin-bottom: 10px;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
-                    @if($enemigo->imagen)
-                    <img src="{{ Storage::url($enemigo->imagen) }}"
-                        style="width: 48px; height: 48px; object-fit: cover; border-radius: 6px; border: 1px solid rgba(179,3,3,0.3); cursor: zoom-in; flex-shrink: 0;" data-lightbox>
-                    @else
-                    <div style="width: 48px; height: 48px; border-radius: 6px; background: rgba(179,3,3,0.1); border: 1px solid rgba(179,3,3,0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.2rem;">💀</div>
-                    @endif
-                    <div>
-                        <div style="font-weight: bold; display: flex; align-items: center; gap: 6px;">
-                            @if($enemigo->es_boss)
-                            <span style="background: rgba(179,3,3,0.2); color: #d44141; border: 1px solid rgba(179,3,3,0.4); padding: 1px 6px; border-radius: 4px; font-size: 0.7rem; font-family: var(--f-titulo); letter-spacing: 1px;">BOSS</span>
-                            @endif
-                            {{ $enemigo->nombre }}
-                        </div>
-                        <div style="color: var(--t-secundario); font-size: 0.85rem;">{{ $enemigo->tipo }} · CR {{ $enemigo->clase_de_desafio }}</div>
-                        @if($enemigo->pivot->visible_jugadores)
-                        <span style="color: var(--c-verde-claro); font-size: 0.75rem;">👁 Visible para jugadores</span>
-                        @else
-                        <span style="color: var(--t-tenue); font-size: 0.75rem;">🔒 Solo DM</span>
-                        @endif
-                    </div>
-                </div>
-                <form method="POST" action="/campanyas/{{ $campana->id }}/enemigos/{{ $enemigo->id }}" data-confirm="¿Quitar este enemigo?">
-                    @csrf @method('DELETE')
-                    <button type="submit" class="btn btn-peligro btn-sm">✕</button>
-                </form>
-            </div>
-        </div>
-        @empty
-        <div style="color: var(--t-tenue); font-size: 0.9rem; padding: 1rem 0;">No hay enemigos asignados.</div>
-        @endforelse
-
-        @if($enemigos->count() > 0)
-        <form method="POST" action="/campanyas/{{ $campana->id }}/enemigos" style="margin-top: 10px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-            @csrf
-            <select name="enemigo_id" style="flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 8px 12px; color: white; font-family: var(--f-cuerpo);">
-                @foreach($enemigos as $e)
-                <option value="{{ $e->id }}">{{ $e->nombre }} (CR {{ $e->clase_de_desafio }})</option>
-                @endforeach
-            </select>
-            <label style="color: var(--t-secundario); font-size: 0.85rem; display: flex; align-items: center; gap: 5px;">
-                <input type="checkbox" name="visible_jugadores" style="accent-color: var(--c-rojo);"> Visible
-            </label>
-            <button type="submit" class="btn btn-primario btn-sm">+ Añadir</button>
-        </form>
-        @endif
-    </section>
-
-</div>
-
-<!-- JUGADORES DM -->
-<section style="margin-top: 1.5rem;">
-    <div class="seccion-titulo">@include('partials.icon', ['name' => 'user']) Jugadores ({{ $campana->usuarios->count() }})</div>
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem;">
-        <div class="tarjeta" style="border-top: 3px solid var(--c-rojo);">
-            <div style="display: flex; align-items: center; gap: 12px;">
-                @if($campana->dungeonMaster->avatar)
-            <img src="{{ $campana->dungeonMaster->avatar_url }}"
-                style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--c-rojo); flex-shrink: 0; cursor: zoom-in;" data-lightbox>
-            @else
-            <div style="width: 42px; height: 42px; border-radius: 50%; background: var(--c-rojo); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; flex-shrink: 0;">
-                {{ strtoupper(substr($campana->dungeonMaster->nombre, 0, 1)) }}
-            </div>
-            @endif
-                <div>
-                    <div style="font-weight: bold; font-size: 0.95rem;">{{ $campana->dungeonMaster->nombre }}</div>
-                    <div style="color: var(--c-rojo-claro); font-size: 0.78rem; font-family: var(--f-titulo); letter-spacing: 1px;">DUNGEON MASTER</div>
-                </div>
-            </div>
-        </div>
-
-        @foreach($campana->usuarios as $usuario)
-        @php $personajeUsuario = isset($personajesPorUsuario[$usuario->id]) ? $personajesPorUsuario[$usuario->id]->first() : null; @endphp
-        <div class="tarjeta" style="border-top: 3px solid var(--c-verde);">
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
-                @if($usuario->avatar)
-                <img src="{{ $usuario->avatar_url }}"
-                    style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--c-verde); flex-shrink: 0; cursor: zoom-in;" data-lightbox>
-                @else
-                <div style="width: 42px; height: 42px; border-radius: 50%; background: var(--c-verde); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; flex-shrink: 0;">
-                    {{ strtoupper(substr($usuario->nombre, 0, 1)) }}
-                </div>
-                @endif
-                <div style="flex: 1;">
-                    <div style="font-weight: bold; font-size: 0.95rem;">{{ $usuario->nombre }}</div>
-                    <div style="color: var(--t-secundario); font-size: 0.78rem; font-family: var(--f-titulo); letter-spacing: 1px;">JUGADOR</div>
-                </div>
-                <form method="POST" action="/campanyas/{{ $campana->id }}/usuarios/{{ $usuario->id }}" data-confirm="¿Expulsar a {{ $usuario->nombre }}?">
-                    @csrf @method('DELETE')
-                    <button type="submit" class="btn btn-peligro btn-sm">✕</button>
-                </form>
-            </div>
-            @if($personajeUsuario)
-            <div style="background: rgba(0,0,0,0.2); border-radius: 8px; padding: 12px; cursor: pointer;" onclick="verPersonaje({{ $personajeUsuario->id }})">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <img src="{{ $personajeUsuario->avatar_url }}" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid var(--c-rojo);">
-                    <div>
-                        <div style="font-weight: bold; font-size: 0.9rem;">{{ $personajeUsuario->nombre }}</div>
-                        <div style="color: var(--t-secundario); font-size: 0.78rem;">{{ $personajeUsuario->clase->nombre ?? '—' }} · Nivel {{ $personajeUsuario->nivel }}</div>
-                    </div>
-                </div>
-            </div>
-            @else
-            <div style="color: var(--t-tenue); font-size: 0.82rem;">Sin personaje asignado</div>
-            @endif
-        </div>
-        @endforeach
-
-        @if($campana->usuarios->count() === 0)
-        <div style="color: var(--t-tenue); font-size: 0.9rem; grid-column: 1/-1;">Aún no hay jugadores unidos.</div>
-        @endif
-    </div>
-</section>
-
-<!-- NOTAS DM -->
-<section style="margin-top: 1.5rem;">
-    <div class="seccion-titulo" style="display: flex; justify-content: space-between; align-items: center;">
-        <span style="display:inline-flex;align-items:center;gap:6px;">@include('partials.icon', ['name' => 'book']) Notas de la campaña ({{ $campana->notas->count() }})</span>
-        <button onclick="abrirModalNota()" class="btn btn-secundario btn-sm">+ Añadir nota</button>
-    </div>
-    @forelse($campana->notas->sortByDesc('created_at') as $nota)
-    <div class="tarjeta" style="margin-bottom: 10px; border-left: 4px solid var(--c-oro); cursor: pointer;"
-        data-nota-id="{{ $nota->id }}"
-        data-nota-titulo="{{ $nota->titulo }}"
-        data-nota-contenido="{{ $nota->contenido }}"
-        data-nota-visible="{{ $nota->visible_jugadores ? 'true' : 'false' }}"
-        onclick="editarNotaDesdeCard(this)">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-            <div style="flex: 1;">
-                <div style="font-weight: bold; margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
-                    {{ $nota->titulo }}
-                    @if($nota->visible_jugadores)
-                    <span style="color: var(--c-verde-claro); font-size: 0.75rem;">👁 Visible</span>
-                    @else
-                    <span style="color: var(--t-tenue); font-size: 0.75rem;">🔒 Solo DM</span>
-                    @endif
-                </div>
-                <div style="color: #b8c0c8; font-size: 0.9rem; line-height: 1.7; white-space: pre-wrap;">{{ $nota->contenido }}</div>
-                <div style="color: var(--t-tenue); font-size: 0.78rem; margin-top: 8px;">{{ $nota->created_at->format('d/m/Y H:i') }}</div>
-            </div>
-            <form method="POST" action="/campanyas/{{ $campana->id }}/notas/{{ $nota->id }}" data-confirm="¿Eliminar esta nota?" style="margin-left: 10px;" onclick="event.stopPropagation()">
-                @csrf @method('DELETE')
-                <button type="submit" class="btn btn-peligro btn-sm">🗑</button>
-            </form>
-        </div>
-    </div>
-    @empty
-    <div style="color: var(--t-tenue); font-size: 0.9rem; padding: 1rem 0;">No hay notas aún.</div>
-    @endforelse
-</section>
-
-@else
-{{-- ============================================================
-     VISTA JUGADOR
-     ============================================================ --}}
-
 @php
-    $miPersonaje = isset($personajesPorUsuario[Auth::id()]) ? $personajesPorUsuario[Auth::id()]->first() : null;
-    $companeros = $campana->usuarios->where('id', '!=', Auth::id());
-    $notasVisibles = $campana->notas->where('visible_jugadores', true);
-    $enemigosVisibles = $campana->enemigos->filter(fn($e) => $e->pivot->visible_jugadores);
+    $dm = $campana->dungeonMaster;
+    $sesiones = $campana->sesiones->sortByDesc('numero_sesion');
+    $fechaCorta = fn ($s) => $s->fecha_sesion ? \Carbon\Carbon::parse($s->fecha_sesion)->format('d/m/Y') : 'Sin fecha';
 @endphp
 
-{{-- 1. MI PERSONAJE --}}
-<section style="margin-bottom: 2rem;">
-    <div class="seccion-titulo">@include('partials.icon', ['name' => 'sword']) Tu personaje</div>
-    @if($miPersonaje)
-    <div class="tarjeta" style="display: flex; gap: 20px; align-items: center; border-left: 4px solid var(--c-rojo); flex-wrap: wrap;">
-        <img src="{{ $miPersonaje->avatar_url }}" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--c-rojo); box-shadow: 0 0 20px rgba(179,3,3,0.3); flex-shrink: 0; cursor: pointer;" onclick="verPersonaje({{ $miPersonaje->id }})">
-        <div style="flex: 1; min-width: 200px;">
-            <div style="font-size: 1.3rem; font-weight: bold; font-family: var(--f-titulo); margin-bottom: 4px;">{{ $miPersonaje->nombre }}</div>
-            <div style="color: var(--c-naranja); font-style: italic; margin-bottom: 10px;">
-                {{ $miPersonaje->raza->nombre ?? '—' }} · {{ $miPersonaje->clase->nombre ?? '—' }}
-            </div>
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                <span style="background: var(--c-rojo); color: white; padding: 3px 12px; border-radius: 20px; font-size: 0.8rem; font-family: var(--f-titulo);">Nivel {{ $miPersonaje->nivel }}</span>
-            </div>
+{{-- Dato que necesita campana-detalle.js --}}
+<div id="campana-datos" data-campana-id="{{ $campana->id }}" hidden></div>
+
+<div class="contenedor cd">
+
+    {{-- ================= CABECERA (DM y jugador) ================= --}}
+    <header class="tarjeta cd-cab">
+        <div class="cd-cab-info">
+            <h2>{{ $campana->nombre }}</h2>
+            <p class="cd-meta">
+                {{ $campana->ambientacion ?? 'Sin ambientación' }}
+                · Nivel {{ $campana->nivel_inicial }}{{ $campana->nivel_maximo ? '-'.$campana->nivel_maximo : '+' }}
+            </p>
+            @if ($campana->descripcion)
+                <p class="cd-desc">{{ $campana->descripcion }}</p>
+            @endif
         </div>
-        @php 
-            $pivotPersonaje = $campana->personajes->where('id', $miPersonaje->id)->first();
-            $historiaVisible = $pivotPersonaje?->pivot->historia_visible ?? false; 
-        @endphp
-        <form method="POST" action="/campanyas/{{ $campana->id }}/personaje/historia-visible" style="display:inline;">
-            @csrf
-            <button type="submit" class="btn btn-secundario btn-sm" style="border-color: {{ $historiaVisible ? 'var(--c-verde)' : 'var(--b-neutro)' }}; color: {{ $historiaVisible ? 'var(--c-verde-claro)' : 'var(--t-secundario)' }};">
-                {!! $historiaVisible ? view('partials.icon', ['name' => 'eye', 'class' => 'icon-sm'])->render().' Historia visible' : view('partials.icon', ['name' => 'lock', 'class' => 'icon-sm'])->render().' Historia privada' !!}
+
+        <div class="cd-cab-lado">
+            <span class="estado estado--{{ $campana->estado }}">{{ $campana->estado }}</span>
+            @if ($esDM)
+                <p class="cd-codigo">Código <strong>{{ $campana->codigo_invitacion }}</strong></p>
+            @endif
+        </div>
+
+        <div class="cd-cab-acciones">
+            @if ($esDM)
+                <button type="button" class="btn btn-secundario btn-sm" data-modal-abrir="modal-editar-campana">
+                    @include('partials.icon', ['name' => 'edit', 'class' => 'icon-sm']) Editar campaña
+                </button>
+                <form method="POST" action="/campanyas/{{ $campana->id }}" data-confirm="¿Eliminar la campaña «{{ $campana->nombre }}»? Se perderán sus sesiones y notas.">
+                    @csrf @method('DELETE')
+                    <button type="submit" class="btn btn-peligro btn-sm">
+                        @include('partials.icon', ['name' => 'trash', 'class' => 'icon-sm']) Eliminar
+                    </button>
+                </form>
+            @endif
+            <a href="/campanyas" class="btn btn-secundario btn-sm">
+                @include('partials.icon', ['name' => 'arrow-left', 'class' => 'icon-sm']) Volver
+            </a>
+        </div>
+    </header>
+
+    @if ($esDM)
+    {{-- ======================= VISTA DM ======================= --}}
+    <div class="cd-grid">
+
+        {{-- SESIONES --}}
+        <section aria-labelledby="t-sesiones">
+            <h2 class="seccion-titulo" id="t-sesiones">@include('partials.icon', ['name' => 'scroll']) Sesiones ({{ $campana->sesiones->count() }})</h2>
+
+            @forelse ($sesiones as $sesion)
+                <article class="cd-item">
+                    <div class="cd-item-cuerpo">
+                        <button type="button" class="cd-titulo-boton" data-editar-sesion
+                                data-id="{{ $sesion->id }}"
+                                data-titulo="{{ $sesion->titulo }}"
+                                data-numero="{{ $sesion->numero_sesion }}"
+                                data-fecha="{{ $sesion->fecha_sesion ? \Carbon\Carbon::parse($sesion->fecha_sesion)->format('Y-m-d') : '' }}"
+                                data-resumen="{{ $sesion->resumen }}"
+                                data-duracion="{{ $sesion->duracion_minutos }}">
+                            Sesión {{ $sesion->numero_sesion }}: {{ $sesion->titulo }}
+                        </button>
+                        <p class="cd-meta">
+                            {{ $fechaCorta($sesion) }}{{ $sesion->duracion_minutos ? ' · '.$sesion->duracion_minutos.' min' : '' }}
+                        </p>
+                        @if ($sesion->resumen)
+                            <p class="cd-texto-suave">{{ Str::limit($sesion->resumen, 80) }}</p>
+                        @endif
+                    </div>
+                    <form class="cd-item-acciones" method="POST" action="/campanyas/{{ $campana->id }}/sesiones/{{ $sesion->id }}" data-confirm="¿Eliminar la sesión {{ $sesion->numero_sesion }}?">
+                        @csrf @method('DELETE')
+                        <button type="submit" class="btn-icono btn-icono-peligro" aria-label="Eliminar la sesión {{ $sesion->numero_sesion }}" title="Eliminar">@include('partials.icon', ['name' => 'trash'])</button>
+                    </form>
+                </article>
+            @empty
+                <p class="cd-vacio">No hay sesiones registradas aún.</p>
+            @endforelse
+
+            <button type="button" class="btn btn-secundario btn-sm cd-anadir" data-modal-abrir="modal-sesion">
+                @include('partials.icon', ['name' => 'plus', 'class' => 'icon-sm']) Añadir sesión
             </button>
-        </form>
-        <button onclick="verPersonaje({{ $miPersonaje->id }})" class="btn btn-secundario btn-sm">Ver ficha completa →</button>
-    </div>
-    @else
-    <div class="tarjeta" style="border: 2px dashed var(--b-sutil);">
-        <p style="color: var(--t-tenue); margin-bottom: 10px;">Aún no tienes un personaje asignado a esta campaña.</p>
-        @if($misPersonajes->count() > 0)
-        <form method="POST" action="/campanyas/{{ $campana->id }}/personaje" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-            @csrf
-            <select name="personaje_id" style="flex: 1; min-width: 180px; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 10px 12px; color: white; font-family: var(--f-cuerpo);">
-                @foreach($misPersonajes as $p)
-                <option value="{{ $p->id }}">{{ $p->nombre }} (Nv. {{ $p->nivel }})</option>
-                @endforeach
-            </select>
-            <button type="submit" class="btn btn-primario">Unir personaje</button>
-        </form>
-        @else
-        <p style="color: var(--t-tenue); font-size: 0.85rem;">No tienes personajes creados.</p>
-        @endif
-    </div>
-    @endif
-</section>
+        </section>
 
-{{-- 2. COMPAÑEROS --}}
-<section style="margin-bottom: 2rem;">
-    <div class="seccion-titulo">@include('partials.icon', ['name' => 'user']) Compañeros de aventura</div>
-    <div style="display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start;">
+        {{-- ENEMIGOS --}}
+        <section aria-labelledby="t-enemigos">
+            <h2 class="seccion-titulo" id="t-enemigos">@include('partials.icon', ['name' => 'skull']) Enemigos ({{ $campana->enemigos->count() }})</h2>
 
-        {{-- DM --}}
-        <div style="text-align: center; min-width: 70px;">
-            @if($campana->dungeonMaster->avatar)
-            <img src="{{ $campana->dungeonMaster->avatar_url }}"
-                style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; margin: 0 auto 6px; border: 2px solid rgba(179,3,3,0.5); box-shadow: 0 0 14px rgba(179,3,3,0.25); cursor: zoom-in; display: block;" data-lightbox>
-            @else
-            <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--c-rojo); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.4rem; margin: 0 auto 6px; border: 2px solid rgba(179,3,3,0.5); box-shadow: 0 0 14px rgba(179,3,3,0.25);">
-                {{ strtoupper(substr($campana->dungeonMaster->nombre, 0, 1)) }}
-            </div>
+            @forelse ($campana->enemigos as $enemigo)
+                <article class="cd-item">
+                    <div class="cd-item-cuerpo cd-item-cuerpo--fila">
+                        @if ($enemigo->imagen)
+                            <img class="cd-miniatura" src="{{ Storage::url($enemigo->imagen) }}" alt="{{ $enemigo->nombre }}" width="48" height="48" loading="lazy" data-lightbox>
+                        @else
+                            <span class="cd-miniatura cd-miniatura--vacia">@include('partials.icon', ['name' => 'skull'])</span>
+                        @endif
+                        <div>
+                            <p class="cd-nombre">
+                                @if ($enemigo->es_boss)<span class="cd-boss">Boss</span>@endif
+                                {{ $enemigo->nombre }}
+                            </p>
+                            <p class="cd-meta">{{ $enemigo->tipo }} · CR {{ $enemigo->cr_texto }}</p>
+                            @if ($enemigo->pivot->visible_jugadores)
+                                <span class="cd-visibilidad cd-visibilidad--si">@include('partials.icon', ['name' => 'eye', 'class' => 'icon-sm']) Visible para jugadores</span>
+                            @else
+                                <span class="cd-visibilidad">@include('partials.icon', ['name' => 'lock', 'class' => 'icon-sm']) Solo DM</span>
+                            @endif
+                        </div>
+                    </div>
+                    <form class="cd-item-acciones" method="POST" action="/campanyas/{{ $campana->id }}/enemigos/{{ $enemigo->id }}" data-confirm="¿Quitar a {{ $enemigo->nombre }} de la campaña?">
+                        @csrf @method('DELETE')
+                        <button type="submit" class="btn-icono btn-icono-peligro" aria-label="Quitar a {{ $enemigo->nombre }}" title="Quitar">@include('partials.icon', ['name' => 'x'])</button>
+                    </form>
+                </article>
+            @empty
+                <p class="cd-vacio">No hay enemigos asignados.</p>
+            @endforelse
+
+            @php $disponibles = $enemigos->whereNotIn('id', $campana->enemigos->pluck('id')); @endphp
+            @if ($disponibles->isNotEmpty())
+                <form class="cd-form-enemigo" method="POST" action="/campanyas/{{ $campana->id }}/enemigos">
+                    @csrf
+                    <label class="sr-only" for="enemigo_id">Enemigo a añadir</label>
+                    <select id="enemigo_id" name="enemigo_id" class="control">
+                        @foreach ($disponibles as $e)
+                            <option value="{{ $e->id }}">{{ $e->nombre }} (CR {{ $e->cr_texto }})</option>
+                        @endforeach
+                    </select>
+                    <label class="check-inline" for="enemigo_visible">
+                        <input type="checkbox" name="visible_jugadores" id="enemigo_visible"> Visible
+                    </label>
+                    <button type="submit" class="btn btn-primario btn-sm">@include('partials.icon', ['name' => 'plus', 'class' => 'icon-sm']) Añadir</button>
+                </form>
             @endif
-            <div style="font-size: 0.82rem; font-weight: bold; color: var(--t-principal);">{{ $campana->dungeonMaster->nombre }}</div>
-            <div style="font-size: 0.68rem; color: var(--c-rojo-claro); font-family: var(--f-titulo); letter-spacing: 1px; margin-top: 2px;">DM</div>
-        </div>
-
-        {{-- Separador --}}
-        @if($companeros->count() > 0)
-        <div style="width: 1px; background: var(--b-neutro); align-self: stretch; margin: 0 4px;"></div>
-        @endif
-
-        {{-- Jugadores --}}
-        @foreach($companeros as $companero)
-        @php $pComp = isset($personajesPorUsuario[$companero->id]) ? $personajesPorUsuario[$companero->id]->first() : null; @endphp
-        <div style="text-align: center; min-width: 70px; cursor: {{ $pComp ? 'pointer' : 'default' }};" @if($pComp) onclick="verPersonaje({{ $pComp->id }})" @endif>
-            <div style="position: relative; width: 64px; margin: 0 auto 6px;">
-                <img src="{{ $pComp ? $pComp->avatar_url : $companero->avatar_url }}"
-                    style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid var(--c-verde); box-shadow: 0 0 10px rgba(90,107,63,0.2);">
-            </div>
-            <div style="font-size: 0.82rem; font-weight: bold; color: var(--t-principal);">{{ $companero->nombre }}</div>
-            @if($pComp)
-            <div style="font-size: 0.72rem; color: var(--c-naranja); margin-top: 2px;">{{ $pComp->nombre }}</div>
-            <div style="font-size: 0.68rem; color: var(--t-tenue);">{{ $pComp->clase->nombre ?? '' }} Nv.{{ $pComp->nivel }}</div>
-            @else
-            <div style="font-size: 0.7rem; color: var(--t-tenue); margin-top: 2px;">Sin personaje</div>
-            @endif
-        </div>
-        @endforeach
-
-        @if($companeros->count() === 0)
-        <div style="color: var(--t-tenue); font-size: 0.9rem; align-self: center;">Aún no hay más jugadores en esta campaña.</div>
-        @endif
+        </section>
     </div>
-</section>
 
-{{-- 3. NOTAS DEL DM --}}
-@if($notasVisibles->count() > 0)
-<section style="margin-bottom: 2rem;">
-    <div class="seccion-titulo">@include('partials.icon', ['name' => 'book']) Notas del Dungeon Master</div>
-    @foreach($notasVisibles->sortByDesc('created_at') as $nota)
-    <div style="background: rgba(0,0,0,0.25); border-left: 4px solid var(--c-oro); border-radius: 0 10px 10px 0; padding: 18px 22px; margin-bottom: 14px;">
-        <div style="font-family: var(--f-titulo); font-size: 0.9rem; color: var(--c-oro); margin-bottom: 8px; letter-spacing: 1px;">{{ $nota->titulo }}</div>
-        <div style="color: #b8c0c8; line-height: 1.8; font-family: var(--f-cuerpo); font-style: italic; white-space: pre-wrap;">{{ $nota->contenido }}</div>
-        <div style="color: var(--t-tenue); font-size: 0.75rem; margin-top: 10px;">{{ $nota->created_at->format('d/m/Y') }}</div>
-    </div>
-    @endforeach
-</section>
-@endif
+    {{-- JUGADORES --}}
+    <section class="cd-seccion" aria-labelledby="t-jugadores">
+        <h2 class="seccion-titulo" id="t-jugadores">@include('partials.icon', ['name' => 'user']) Jugadores ({{ $campana->usuarios->count() }})</h2>
+        <div class="cd-jugadores">
+            <article class="tarjeta cd-jugador cd-jugador--dm">
+                <div class="cd-jugador-cab">
+                    <img class="avatar avatar-md" src="{{ $dm->avatar_url }}" alt="" width="48" height="48" loading="lazy" data-lightbox>
+                    <div>
+                        <p class="cd-nombre">{{ $dm->nombre }}</p>
+                        <p class="cd-rol cd-rol--dm">Dungeon Master</p>
+                    </div>
+                </div>
+            </article>
 
-{{-- 4. SESIONES --}}
-@if($campana->sesiones->count() > 0)
-<section style="margin-bottom: 2rem;">
-    <div class="seccion-titulo">@include('partials.icon', ['name' => 'scroll']) Crónicas de la campaña</div>
-    @foreach($campana->sesiones->sortByDesc('numero_sesion') as $sesion)
-    <div class="tarjeta" style="margin-bottom: 12px; border-left: 3px solid var(--b-medio);">
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px; flex-wrap: wrap;">
-            <span style="background: rgba(179,3,3,0.15); color: var(--c-rojo-claro); border: 1px solid var(--b-sutil); padding: 2px 10px; border-radius: 20px; font-size: 0.75rem; font-family: var(--f-titulo); white-space: nowrap; flex-shrink: 0;">Sesión {{ $sesion->numero_sesion }}</span>
-            <div style="font-weight: bold; font-size: 1rem;">{{ $sesion->titulo }}</div>
-            @if($sesion->fecha_sesion)
-            <div style="color: var(--t-tenue); font-size: 0.8rem; margin-left: auto;">{{ \Carbon\Carbon::parse($sesion->fecha_sesion)->format('d/m/Y') }}</div>
-            @endif
-        </div>
-        @if($sesion->resumen)
-        <div style="color: var(--t-secundario); font-size: 0.92rem; line-height: 1.75; font-family: var(--f-cuerpo); font-style: italic;">{{ $sesion->resumen }}</div>
-        @endif
-        @if($sesion->duracion_minutos)
-        <div style="color: var(--t-tenue); font-size: 0.78rem; margin-top: 8px;">⏱ {{ $sesion->duracion_minutos }} min</div>
-        @endif
-    </div>
-    @endforeach
-</section>
-@endif
-
-{{-- 5. ENEMIGOS VISIBLES --}}
-@if($enemigosVisibles->count() > 0)
-<section style="margin-bottom: 2rem;">
-    <div class="seccion-titulo">@include('partials.icon', ['name' => 'skull']) Amenazas conocidas</div>
-    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 12px;">
-        @foreach($enemigosVisibles as $enemigo)
-        <div class="tarjeta" style="padding: 0; overflow: hidden; cursor: {{ $enemigo->imagen ? 'zoom-in' : 'default' }};"
-            @if($enemigo->imagen) data-lightbox
-            @endif>
-            @if($enemigo->imagen)
-            <img src="{{ Storage::url($enemigo->imagen) }}" style="width: 100%; height: 115px; object-fit: cover; display: block;">
-            @else
-            <div style="width: 100%; height: 115px; background: rgba(179,3,3,0.08); display: flex; align-items: center; justify-content: center; font-size: 2.5rem;">💀</div>
-            @endif
-            <div style="padding: 10px 12px;">
-                <div style="font-weight: bold; font-size: 0.88rem; display: flex; align-items: center; gap: 4px; flex-wrap: wrap;">
-                    @if($enemigo->es_boss)
-                    <span style="background: rgba(179,3,3,0.2); color: #d44141; border: 1px solid rgba(179,3,3,0.4); padding: 1px 5px; border-radius: 3px; font-size: 0.62rem; font-family: var(--f-titulo); letter-spacing: 1px;">BOSS</span>
+            @foreach ($campana->usuarios as $usuario)
+                @php $pj = optional($personajesPorUsuario[$usuario->id] ?? null)->first(); @endphp
+                <article class="tarjeta cd-jugador">
+                    <div class="cd-jugador-cab">
+                        <img class="avatar avatar-md" src="{{ $usuario->avatar_url }}" alt="" width="48" height="48" loading="lazy" data-lightbox>
+                        <div class="cd-jugador-datos">
+                            <p class="cd-nombre">{{ $usuario->nombre }}</p>
+                            <p class="cd-rol">Jugador</p>
+                        </div>
+                        <form method="POST" action="/campanyas/{{ $campana->id }}/usuarios/{{ $usuario->id }}" data-confirm="¿Expulsar a {{ $usuario->nombre }} de la campaña?">
+                            @csrf @method('DELETE')
+                            <button type="submit" class="btn-icono btn-icono-peligro" aria-label="Expulsar a {{ $usuario->nombre }}" title="Expulsar">@include('partials.icon', ['name' => 'x'])</button>
+                        </form>
+                    </div>
+                    @if ($pj)
+                        <button type="button" class="cd-pj" data-ver-personaje="{{ $pj->id }}">
+                            <img class="avatar" src="{{ $pj->avatar_url }}" alt="" width="40" height="40" loading="lazy">
+                            <span>
+                                <strong>{{ $pj->nombre }}</strong>
+                                <small>{{ $pj->clase->nombre ?? '—' }} · Nivel {{ $pj->nivel }}</small>
+                            </span>
+                        </button>
+                    @else
+                        <p class="cd-texto-suave">Sin personaje asignado</p>
                     @endif
-                    {{ $enemigo->nombre }}
-                </div>
-                <div style="color: var(--t-tenue); font-size: 0.75rem; margin-top: 2px;">{{ $enemigo->tipo }} · CR {{ $enemigo->clase_de_desafio }}</div>
-            </div>
+                </article>
+            @endforeach
+
+            @if ($campana->usuarios->isEmpty())
+                <p class="cd-vacio">Aún no hay jugadores unidos.</p>
+            @endif
         </div>
-        @endforeach
-    </div>
-</section>
-@endif
+    </section>
 
-@endif
-{{-- FIN VISTA JUGADOR --}}
-
-
-{{-- ============================================================
-     MODALES DM
-     ============================================================ --}}
-@if($esDM)
-
-<!-- MODAL EDITAR CAMPAÑA -->
-<div id="modal-editar-campana" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:flex-start; justify-content:center; padding: 20px; overflow-y: auto;">
-    <div style="background: var(--c-fondo-alt); border: 1px solid var(--b-medio); border-radius: 12px; padding: 30px; width: 100%; max-width: 600px; margin: auto;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-            <h2 style="font-size: 1.2rem; letter-spacing: 2px; text-transform: uppercase;">Editar Campaña</h2>
-            <button onclick="document.getElementById('modal-editar-campana').style.display='none'" style="background: none; border: none; color: var(--t-secundario); font-size: 1.5rem; cursor: pointer;">✕</button>
+    {{-- NOTAS DEL DM --}}
+    <section class="cd-seccion" aria-labelledby="t-notas">
+        <div class="cd-seccion-cab">
+            <h2 class="seccion-titulo" id="t-notas">@include('partials.icon', ['name' => 'book']) Notas de la campaña ({{ $campana->notas->count() }})</h2>
+            <button type="button" class="btn btn-secundario btn-sm" data-modal-abrir="modal-nota">
+                @include('partials.icon', ['name' => 'plus', 'class' => 'icon-sm']) Añadir nota
+            </button>
         </div>
-        <form method="POST" action="/campanyas/{{ $campana->id }}">
-            @csrf @method('PATCH')
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-                <div>
-                    <label style="color: var(--t-secundario); font-size: 0.8rem; display: block; margin-bottom: 6px; font-family: var(--f-titulo); text-transform: uppercase; letter-spacing: 1px;">Nombre *</label>
-                    <input type="text" name="nombre" value="{{ $campana->nombre }}" required style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo);">
-                </div>
-                <div>
-                    <label style="color: var(--t-secundario); font-size: 0.8rem; display: block; margin-bottom: 6px; font-family: var(--f-titulo); text-transform: uppercase; letter-spacing: 1px;">Descripción</label>
-                    <textarea name="descripcion" rows="3" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo); resize: vertical;">{{ $campana->descripcion }}</textarea>
-                </div>
-                <div>
-                    <label style="color: var(--t-secundario); font-size: 0.8rem; display: block; margin-bottom: 6px; font-family: var(--f-titulo); text-transform: uppercase; letter-spacing: 1px;">Ambientación</label>
-                    <input type="text" name="ambientacion" value="{{ $campana->ambientacion }}" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo);">
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
-                    <div>
-                        <label style="color: var(--t-secundario); font-size: 0.8rem; display: block; margin-bottom: 6px; font-family: var(--f-titulo); text-transform: uppercase; letter-spacing: 1px;">Nivel inicial *</label>
-                        <input type="number" name="nivel_inicial" value="{{ $campana->nivel_inicial }}" min="1" max="20" required style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo);">
+
+        @forelse ($campana->notas->sortByDesc('created_at') as $nota)
+            <article class="cd-item cd-item--nota">
+                <div class="cd-item-cuerpo">
+                    <div class="cd-nota-cab">
+                        <button type="button" class="cd-titulo-boton" data-editar-nota
+                                data-id="{{ $nota->id }}"
+                                data-titulo="{{ $nota->titulo }}"
+                                data-contenido="{{ $nota->contenido }}"
+                                data-visible="{{ $nota->visible_jugadores ? 'true' : 'false' }}">{{ $nota->titulo }}</button>
+                        @if ($nota->visible_jugadores)
+                            <span class="cd-visibilidad cd-visibilidad--si">@include('partials.icon', ['name' => 'eye', 'class' => 'icon-sm']) Visible</span>
+                        @else
+                            <span class="cd-visibilidad">@include('partials.icon', ['name' => 'lock', 'class' => 'icon-sm']) Solo DM</span>
+                        @endif
                     </div>
-                    <div>
-                        <label style="color: var(--t-secundario); font-size: 0.8rem; display: block; margin-bottom: 6px; font-family: var(--f-titulo); text-transform: uppercase; letter-spacing: 1px;">Nivel máximo</label>
-                        <input type="number" name="nivel_maximo" value="{{ $campana->nivel_maximo }}" min="1" max="20" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo);">
-                    </div>
-                    <div>
-                        <label style="color: var(--t-secundario); font-size: 0.8rem; display: block; margin-bottom: 6px; font-family: var(--f-titulo); text-transform: uppercase; letter-spacing: 1px;">Estado *</label>
-                        <select name="estado" required style="width: 100%; background: var(--c-fondo-alt); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo);">
-                            <option value="activa" {{ $campana->estado == 'activa' ? 'selected' : '' }}>Activa</option>
-                            <option value="pausada" {{ $campana->estado == 'pausada' ? 'selected' : '' }}>Pausada</option>
-                            <option value="finalizada" {{ $campana->estado == 'finalizada' ? 'selected' : '' }}>Finalizada</option>
+                    <p class="cd-nota-texto">{{ $nota->contenido }}</p>
+                    <p class="cd-texto-suave">{{ $nota->created_at->format('d/m/Y H:i') }}</p>
+                </div>
+                <form class="cd-item-acciones" method="POST" action="/campanyas/{{ $campana->id }}/notas/{{ $nota->id }}" data-confirm="¿Eliminar la nota «{{ $nota->titulo }}»?">
+                    @csrf @method('DELETE')
+                    <button type="submit" class="btn-icono btn-icono-peligro" aria-label="Eliminar la nota {{ $nota->titulo }}" title="Eliminar">@include('partials.icon', ['name' => 'trash'])</button>
+                </form>
+            </article>
+        @empty
+            <p class="cd-vacio">No hay notas aún.</p>
+        @endforelse
+    </section>
+
+    @else
+    {{-- ======================= VISTA JUGADOR ======================= --}}
+    @php
+        $miPersonaje = optional($personajesPorUsuario[Auth::id()] ?? null)->first();
+        $companeros = $campana->usuarios->where('id', '!=', Auth::id());
+        $notasVisibles = $campana->notas->where('visible_jugadores', true);
+        $enemigosVisibles = $campana->enemigos->filter(fn ($e) => $e->pivot->visible_jugadores);
+    @endphp
+
+    {{-- 1. MI PERSONAJE --}}
+    <section class="cd-seccion" aria-labelledby="t-mi-pj">
+        <h2 class="seccion-titulo" id="t-mi-pj">@include('partials.icon', ['name' => 'sword']) Tu personaje</h2>
+        @if ($miPersonaje)
+            @php
+                $pivotPersonaje = $campana->personajes->where('id', $miPersonaje->id)->first();
+                $historiaVisible = $pivotPersonaje?->pivot->historia_visible ?? false;
+            @endphp
+            <article class="tarjeta cd-mi-pj">
+                <img class="avatar-lg" src="{{ $miPersonaje->avatar_url }}" alt="{{ $miPersonaje->nombre }}" width="90" height="90" data-lightbox>
+                <div class="cd-mi-pj-datos">
+                    <h3>{{ $miPersonaje->nombre }}</h3>
+                    <p class="cd-subtitulo">{{ $miPersonaje->raza->nombre ?? '—' }} · {{ $miPersonaje->clase->nombre ?? '—' }}</p>
+                    <span class="pjm-badge pjm-badge--nivel">Nivel {{ $miPersonaje->nivel }}</span>
+                </div>
+                <div class="cd-mi-pj-acciones">
+                    <form method="POST" action="/campanyas/{{ $campana->id }}/personaje/historia-visible">
+                        @csrf
+                        <button type="submit" class="btn btn-secundario btn-sm">
+                            @include('partials.icon', ['name' => $historiaVisible ? 'eye' : 'lock', 'class' => 'icon-sm'])
+                            {{ $historiaVisible ? 'Historia visible' : 'Historia privada' }}
+                        </button>
+                    </form>
+                    <button type="button" class="btn btn-secundario btn-sm" data-ver-personaje="{{ $miPersonaje->id }}">Ver ficha completa</button>
+                </div>
+            </article>
+        @else
+            <div class="tarjeta cd-sin-pj">
+                <p>Aún no tienes un personaje asignado a esta campaña.</p>
+                @if ($misPersonajes->isNotEmpty())
+                    <form class="cd-form-enemigo" method="POST" action="/campanyas/{{ $campana->id }}/personaje">
+                        @csrf
+                        <label class="sr-only" for="personaje_id">Personaje</label>
+                        <select id="personaje_id" name="personaje_id" class="control">
+                            @foreach ($misPersonajes as $p)
+                                <option value="{{ $p->id }}">{{ $p->nombre }} (Nv. {{ $p->nivel }})</option>
+                            @endforeach
                         </select>
-                    </div>
-                </div>
-                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
-                    <button type="button" onclick="document.getElementById('modal-editar-campana').style.display='none'" class="btn btn-secundario">Cancelar</button>
-                    <button type="submit" class="btn btn-primario">Guardar Cambios</button>
-                </div>
+                        <button type="submit" class="btn btn-primario">Unir personaje</button>
+                    </form>
+                @else
+                    <p class="cd-texto-suave">No tienes personajes creados.</p>
+                @endif
             </div>
-        </form>
-    </div>
+        @endif
+    </section>
+
+    {{-- 2. COMPAÑEROS --}}
+    <section class="cd-seccion" aria-labelledby="t-companeros">
+        <h2 class="seccion-titulo" id="t-companeros">@include('partials.icon', ['name' => 'user']) Compañeros de aventura</h2>
+        <ul class="cd-companeros" role="list">
+            <li class="cd-companero">
+                <img class="avatar-lg avatar-lg--sm" src="{{ $dm->avatar_url }}" alt="" width="64" height="64" loading="lazy" data-lightbox>
+                <strong>{{ $dm->nombre }}</strong>
+                <span class="cd-rol cd-rol--dm">DM</span>
+            </li>
+            @foreach ($companeros as $companero)
+                @php $pComp = optional($personajesPorUsuario[$companero->id] ?? null)->first(); @endphp
+                <li class="cd-companero">
+                    @if ($pComp)
+                        <button type="button" class="cd-companero-boton" data-ver-personaje="{{ $pComp->id }}" aria-label="Ver la ficha de {{ $pComp->nombre }}">
+                            <img class="avatar-lg avatar-lg--sm" src="{{ $pComp->avatar_url }}" alt="" width="64" height="64" loading="lazy">
+                        </button>
+                    @else
+                        <img class="avatar-lg avatar-lg--sm" src="{{ $companero->avatar_url }}" alt="" width="64" height="64" loading="lazy">
+                    @endif
+                    <strong>{{ $companero->nombre }}</strong>
+                    @if ($pComp)
+                        <span class="cd-pj-nombre">{{ $pComp->nombre }}</span>
+                        <span class="cd-texto-suave">{{ $pComp->clase->nombre ?? '' }} Nv.{{ $pComp->nivel }}</span>
+                    @else
+                        <span class="cd-texto-suave">Sin personaje</span>
+                    @endif
+                </li>
+            @endforeach
+        </ul>
+        @if ($companeros->isEmpty())
+            <p class="cd-vacio">Aún no hay más jugadores en esta campaña.</p>
+        @endif
+    </section>
+
+    {{-- 3. NOTAS DEL DM --}}
+    @if ($notasVisibles->isNotEmpty())
+        <section class="cd-seccion" aria-labelledby="t-notas-dm">
+            <h2 class="seccion-titulo" id="t-notas-dm">@include('partials.icon', ['name' => 'book']) Notas del Dungeon Master</h2>
+            @foreach ($notasVisibles->sortByDesc('created_at') as $nota)
+                <article class="tarjeta cd-nota-lectura">
+                    <h3>{{ $nota->titulo }}</h3>
+                    <p class="cd-nota-texto">{{ $nota->contenido }}</p>
+                    <p class="cd-texto-suave">{{ $nota->created_at->format('d/m/Y') }}</p>
+                </article>
+            @endforeach
+        </section>
+    @endif
+
+    {{-- 4. CRÓNICAS --}}
+    @if ($campana->sesiones->isNotEmpty())
+        <section class="cd-seccion" aria-labelledby="t-cronicas">
+            <h2 class="seccion-titulo" id="t-cronicas">@include('partials.icon', ['name' => 'scroll']) Crónicas de la campaña</h2>
+            @foreach ($sesiones as $sesion)
+                <article class="tarjeta cd-cronica">
+                    <div class="cd-cronica-cab">
+                        <span class="estado">Sesión {{ $sesion->numero_sesion }}</span>
+                        <h3>{{ $sesion->titulo }}</h3>
+                        @if ($sesion->fecha_sesion)
+                            <time class="cd-texto-suave cd-cronica-fecha">{{ $fechaCorta($sesion) }}</time>
+                        @endif
+                    </div>
+                    @if ($sesion->resumen)
+                        <p class="cd-nota-texto">{{ $sesion->resumen }}</p>
+                    @endif
+                    @if ($sesion->duracion_minutos)
+                        <p class="cd-texto-suave">{{ $sesion->duracion_minutos }} min</p>
+                    @endif
+                </article>
+            @endforeach
+        </section>
+    @endif
+
+    {{-- 5. ENEMIGOS VISIBLES --}}
+    @if ($enemigosVisibles->isNotEmpty())
+        <section class="cd-seccion" aria-labelledby="t-amenazas">
+            <h2 class="seccion-titulo" id="t-amenazas">@include('partials.icon', ['name' => 'skull']) Amenazas conocidas</h2>
+            <ul class="cd-amenazas" role="list">
+                @foreach ($enemigosVisibles as $enemigo)
+                    <li class="tarjeta cd-amenaza">
+                        @if ($enemigo->imagen)
+                            <img src="{{ Storage::url($enemigo->imagen) }}" alt="{{ $enemigo->nombre }}" width="300" height="115" loading="lazy" data-lightbox>
+                        @else
+                            <span class="cd-amenaza-vacia">@include('partials.icon', ['name' => 'skull', 'class' => 'icon-lg'])</span>
+                        @endif
+                        <div class="cd-amenaza-cuerpo">
+                            <p class="cd-nombre">@if ($enemigo->es_boss)<span class="cd-boss">Boss</span>@endif {{ $enemigo->nombre }}</p>
+                            <p class="cd-texto-suave">{{ $enemigo->tipo }} · CR {{ $enemigo->cr_texto }}</p>
+                        </div>
+                    </li>
+                @endforeach
+            </ul>
+        </section>
+    @endif
+    @endif
 </div>
 
-<!-- MODAL AÑADIR SESIÓN -->
-<div id="modal-sesion" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:flex-start; justify-content:center; padding: 20px; overflow-y: auto;">
-    <div style="background: var(--c-fondo-alt); border: 1px solid var(--b-medio); border-radius: 12px; padding: 30px; width: 100%; max-width: 600px; margin: auto;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-            <h2 style="font-size: 1.2rem; letter-spacing: 2px; text-transform: uppercase;">Nueva Sesión</h2>
-            <button onclick="document.getElementById('modal-sesion').style.display='none'" style="background: none; border: none; color: var(--t-secundario); font-size: 1.5rem; cursor: pointer;">✕</button>
+@if ($esDM)
+{{-- ======================= MODALES DM ======================= --}}
+
+<dialog class="modal" id="modal-editar-campana" aria-labelledby="t-editar-campana">
+    <form class="modal-form" method="POST" action="/campanyas/{{ $campana->id }}">
+        @csrf @method('PATCH')
+        <header class="modal-cab">
+            <h2 id="t-editar-campana">Editar campaña</h2>
+            <button type="button" class="btn-icono" data-modal-cerrar aria-label="Cerrar">@include('partials.icon', ['name' => 'x'])</button>
+        </header>
+        <div class="modal-cuerpo">
+            <div class="campo">
+                <label for="ec-nombre">Nombre <span class="req">*</span></label>
+                <input type="text" name="nombre" id="ec-nombre" class="control" value="{{ $campana->nombre }}" required maxlength="255">
+            </div>
+            <div class="campo">
+                <label for="ec-descripcion">Descripción</label>
+                <textarea name="descripcion" id="ec-descripcion" class="control" rows="3">{{ $campana->descripcion }}</textarea>
+            </div>
+            <div class="campo">
+                <label for="ec-ambientacion">Ambientación</label>
+                <input type="text" name="ambientacion" id="ec-ambientacion" class="control" value="{{ $campana->ambientacion }}" maxlength="255">
+            </div>
+            <div class="campos-grid campos-grid--3">
+                <div class="campo">
+                    <label for="ec-nivel-ini">Nivel inicial <span class="req">*</span></label>
+                    <input type="number" name="nivel_inicial" id="ec-nivel-ini" class="control" value="{{ $campana->nivel_inicial }}" min="1" max="20" inputmode="numeric" required>
+                </div>
+                <div class="campo">
+                    <label for="ec-nivel-max">Nivel máximo</label>
+                    <input type="number" name="nivel_maximo" id="ec-nivel-max" class="control" value="{{ $campana->nivel_maximo }}" min="1" max="20" inputmode="numeric">
+                </div>
+                <div class="campo">
+                    <label for="ec-estado">Estado <span class="req">*</span></label>
+                    <select name="estado" id="ec-estado" class="control" required>
+                        @foreach (['activa' => 'Activa', 'pausada' => 'Pausada', 'finalizada' => 'Finalizada'] as $valor => $texto)
+                            <option value="{{ $valor }}" @selected($campana->estado === $valor)>{{ $texto }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
         </div>
-        <form method="POST" action="/campanyas/{{ $campana->id }}/sesiones">
-            @csrf
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div>
-                        <label style="color: var(--t-secundario); font-size: 0.8rem; display: block; margin-bottom: 6px; font-family: var(--f-titulo); text-transform: uppercase; letter-spacing: 1px;">Número *</label>
-                        <input type="number" name="numero_sesion" value="{{ $campana->sesiones->count() + 1 }}" min="1" required style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo);">
-                    </div>
-                    <div>
-                        <label style="color: var(--t-secundario); font-size: 0.8rem; display: block; margin-bottom: 6px; font-family: var(--f-titulo); text-transform: uppercase; letter-spacing: 1px;">Fecha</label>
-                        <input type="date" name="fecha_sesion" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo);">
-                    </div>
-                </div>
-                <div>
-                    <label style="color: var(--t-secundario); font-size: 0.8rem; display: block; margin-bottom: 6px; font-family: var(--f-titulo); text-transform: uppercase; letter-spacing: 1px;">Título *</label>
-                    <input type="text" name="titulo" required style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo);">
-                </div>
-                <div>
-                    <label style="color: var(--t-secundario); font-size: 0.8rem; display: block; margin-bottom: 6px; font-family: var(--f-titulo); text-transform: uppercase; letter-spacing: 1px;">Resumen</label>
-                    <textarea name="resumen" rows="4" placeholder="¿Qué pasó en esta sesión?..." style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo); resize: vertical;"></textarea>
-                </div>
-                <div>
-                    <label style="color: var(--t-secundario); font-size: 0.8rem; display: block; margin-bottom: 6px; font-family: var(--f-titulo); text-transform: uppercase; letter-spacing: 1px;">Duración (minutos)</label>
-                    <input type="number" name="duracion_minutos" min="0" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo);">
-                </div>
-                <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                    <button type="button" onclick="document.getElementById('modal-sesion').style.display='none'" class="btn btn-secundario">Cancelar</button>
-                    <button type="submit" class="btn btn-primario">Guardar Sesión</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
+        <footer class="modal-pie">
+            <button type="button" class="btn btn-secundario" data-modal-cerrar>Cancelar</button>
+            <button type="submit" class="btn btn-primario">Guardar cambios</button>
+        </footer>
+    </form>
+</dialog>
 
-<!-- MODAL EDITAR SESIÓN -->
-<div id="modal-editar-sesion" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:flex-start; justify-content:center; padding: 20px; overflow-y: auto;">
-    <div style="background: var(--c-fondo-alt); border: 1px solid var(--b-medio); border-radius: 12px; padding: 30px; width: 100%; max-width: 600px; margin: auto;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-            <h2 style="font-size: 1.2rem; letter-spacing: 2px; text-transform: uppercase;">Editar Sesión</h2>
-            <button onclick="document.getElementById('modal-editar-sesion').style.display='none'" style="background: none; border: none; color: var(--t-secundario); font-size: 1.5rem; cursor: pointer;">✕</button>
+<dialog class="modal" id="modal-sesion" aria-labelledby="t-nueva-sesion">
+    <form class="modal-form" method="POST" action="/campanyas/{{ $campana->id }}/sesiones">
+        @csrf
+        <header class="modal-cab">
+            <h2 id="t-nueva-sesion">Nueva sesión</h2>
+            <button type="button" class="btn-icono" data-modal-cerrar aria-label="Cerrar">@include('partials.icon', ['name' => 'x'])</button>
+        </header>
+        <div class="modal-cuerpo">
+            @include('partials.campana.sesion-form', ['p' => 'nueva', 'numero' => $campana->sesiones->count() + 1])
         </div>
-        <form id="form-editar-sesion" method="POST">
-            @csrf @method('PATCH')
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div>
-                        <label style="color: var(--t-secundario); font-size: 0.8rem; display: block; margin-bottom: 6px; font-family: var(--f-titulo); text-transform: uppercase; letter-spacing: 1px;">Número *</label>
-                        <input type="number" name="numero_sesion" id="edit-numero" min="1" required style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo);">
-                    </div>
-                    <div>
-                        <label style="color: var(--t-secundario); font-size: 0.8rem; display: block; margin-bottom: 6px; font-family: var(--f-titulo); text-transform: uppercase; letter-spacing: 1px;">Fecha</label>
-                        <input type="date" name="fecha_sesion" id="edit-fecha" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo);">
-                    </div>
-                </div>
-                <div>
-                    <label style="color: var(--t-secundario); font-size: 0.8rem; display: block; margin-bottom: 6px; font-family: var(--f-titulo); text-transform: uppercase; letter-spacing: 1px;">Título *</label>
-                    <input type="text" name="titulo" id="edit-titulo" required style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo);">
-                </div>
-                <div>
-                    <label style="color: var(--t-secundario); font-size: 0.8rem; display: block; margin-bottom: 6px; font-family: var(--f-titulo); text-transform: uppercase; letter-spacing: 1px;">Resumen</label>
-                    <textarea name="resumen" id="edit-resumen" rows="4" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo); resize: vertical;"></textarea>
-                </div>
-                <div>
-                    <label style="color: var(--t-secundario); font-size: 0.8rem; display: block; margin-bottom: 6px; font-family: var(--f-titulo); text-transform: uppercase; letter-spacing: 1px;">Duración (minutos)</label>
-                    <input type="number" name="duracion_minutos" id="edit-duracion" min="0" style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo);">
-                </div>
-                <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                    <button type="button" onclick="document.getElementById('modal-editar-sesion').style.display='none'" class="btn btn-secundario">Cancelar</button>
-                    <button type="submit" class="btn btn-primario">Guardar Cambios</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
+        <footer class="modal-pie">
+            <button type="button" class="btn btn-secundario" data-modal-cerrar>Cancelar</button>
+            <button type="submit" class="btn btn-primario">Guardar sesión</button>
+        </footer>
+    </form>
+</dialog>
 
-<!-- MODAL AÑADIR NOTA -->
-<div id="modal-nota" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:flex-start; justify-content:center; padding: 20px; overflow-y: auto;">
-    <div style="background: var(--c-fondo-alt); border: 1px solid var(--b-medio); border-radius: 12px; padding: 30px; width: 100%; max-width: 600px; margin: auto;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-            <h2 style="font-size: 1.2rem; letter-spacing: 2px; text-transform: uppercase;">Nueva Nota</h2>
-            <button onclick="document.getElementById('modal-nota').style.display='none'" style="background: none; border: none; color: var(--t-secundario); font-size: 1.5rem; cursor: pointer;">✕</button>
+<dialog class="modal" id="modal-editar-sesion" aria-labelledby="t-editar-sesion">
+    <form class="modal-form" id="form-editar-sesion" method="POST">
+        @csrf @method('PATCH')
+        <header class="modal-cab">
+            <h2 id="t-editar-sesion">Editar sesión</h2>
+            <button type="button" class="btn-icono" data-modal-cerrar aria-label="Cerrar">@include('partials.icon', ['name' => 'x'])</button>
+        </header>
+        <div class="modal-cuerpo">
+            @include('partials.campana.sesion-form', ['p' => 'edit'])
         </div>
-        <form method="POST" action="/campanyas/{{ $campana->id }}/notas">
-            @csrf
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-                <div>
-                    <label style="color: var(--t-secundario); font-size: 0.8rem; display: block; margin-bottom: 6px; font-family: var(--f-titulo); text-transform: uppercase; letter-spacing: 1px;">Título *</label>
-                    <input type="text" name="titulo" required style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo);">
-                </div>
-                <div>
-                    <label style="color: var(--t-secundario); font-size: 0.8rem; display: block; margin-bottom: 6px; font-family: var(--f-titulo); text-transform: uppercase; letter-spacing: 1px;">Contenido *</label>
-                    <textarea name="contenido" rows="6" required style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo); resize: vertical;"></textarea>
-                </div>
-                <label style="display: flex; align-items: center; gap: 8px; color: var(--t-secundario); font-size: 0.85rem; cursor: pointer;">
-                    <input type="checkbox" name="visible_jugadores" checked style="accent-color: var(--c-rojo); width: 16px; height: 16px;">
-                    Visible para los jugadores
-                </label>
-                <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                    <button type="button" onclick="document.getElementById('modal-nota').style.display='none'" class="btn btn-secundario">Cancelar</button>
-                    <button type="submit" class="btn btn-primario">Guardar Nota</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
+        <footer class="modal-pie">
+            <button type="button" class="btn btn-secundario" data-modal-cerrar>Cancelar</button>
+            <button type="submit" class="btn btn-primario">Guardar cambios</button>
+        </footer>
+    </form>
+</dialog>
 
-<!-- MODAL EDITAR NOTA -->
-<div id="modal-editar-nota" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:1000; align-items:flex-start; justify-content:center; padding: 20px; overflow-y: auto;">
-    <div style="background: var(--c-fondo-alt); border: 1px solid var(--b-medio); border-radius: 12px; padding: 30px; width: 100%; max-width: 600px; margin: auto;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-            <h2 style="font-size: 1.2rem; letter-spacing: 2px; text-transform: uppercase;">Editar Nota</h2>
-            <button onclick="document.getElementById('modal-editar-nota').style.display='none'" style="background: none; border: none; color: var(--t-secundario); font-size: 1.5rem; cursor: pointer;">✕</button>
+<dialog class="modal" id="modal-nota" aria-labelledby="t-nueva-nota">
+    <form class="modal-form" method="POST" action="/campanyas/{{ $campana->id }}/notas">
+        @csrf
+        <header class="modal-cab">
+            <h2 id="t-nueva-nota">Nueva nota</h2>
+            <button type="button" class="btn-icono" data-modal-cerrar aria-label="Cerrar">@include('partials.icon', ['name' => 'x'])</button>
+        </header>
+        <div class="modal-cuerpo">
+            @include('partials.campana.nota-form', ['p' => 'nueva-nota', 'visibleDefecto' => true])
         </div>
-        <form id="form-editar-nota" method="POST">
-            @csrf @method('PATCH')
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-                <div>
-                    <label style="color: var(--t-secundario); font-size: 0.8rem; display: block; margin-bottom: 6px; font-family: var(--f-titulo); text-transform: uppercase; letter-spacing: 1px;">Título *</label>
-                    <input type="text" name="titulo" id="edit-nota-titulo" required style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo);">
-                </div>
-                <div>
-                    <label style="color: var(--t-secundario); font-size: 0.8rem; display: block; margin-bottom: 6px; font-family: var(--f-titulo); text-transform: uppercase; letter-spacing: 1px;">Contenido *</label>
-                    <textarea name="contenido" id="edit-nota-contenido" rows="6" required style="width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--b-neutro); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo); resize: vertical;"></textarea>
-                </div>
-                <label style="display: flex; align-items: center; gap: 8px; color: var(--t-secundario); font-size: 0.85rem; cursor: pointer;">
-                    <input type="checkbox" name="visible_jugadores" id="edit-nota-visible" style="accent-color: var(--c-rojo); width: 16px; height: 16px;">
-                    Visible para los jugadores
-                </label>
-                <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                    <button type="button" onclick="document.getElementById('modal-editar-nota').style.display='none'" class="btn btn-secundario">Cancelar</button>
-                    <button type="submit" class="btn btn-primario">Guardar Cambios</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
+        <footer class="modal-pie">
+            <button type="button" class="btn btn-secundario" data-modal-cerrar>Cancelar</button>
+            <button type="submit" class="btn btn-primario">Guardar nota</button>
+        </footer>
+    </form>
+</dialog>
 
+<dialog class="modal" id="modal-editar-nota" aria-labelledby="t-editar-nota">
+    <form class="modal-form" id="form-editar-nota" method="POST">
+        @csrf @method('PATCH')
+        <header class="modal-cab">
+            <h2 id="t-editar-nota">Editar nota</h2>
+            <button type="button" class="btn-icono" data-modal-cerrar aria-label="Cerrar">@include('partials.icon', ['name' => 'x'])</button>
+        </header>
+        <div class="modal-cuerpo">
+            @include('partials.campana.nota-form', ['p' => 'edit-nota'])
+        </div>
+        <footer class="modal-pie">
+            <button type="button" class="btn btn-secundario" data-modal-cerrar>Cancelar</button>
+            <button type="submit" class="btn btn-primario">Guardar cambios</button>
+        </footer>
+    </form>
+</dialog>
 @endif
-{{-- FIN MODALES DM --}}
 
-
-{{-- ============================================================
-     MODAL VER PERSONAJE (común para DM y jugador)
-     ============================================================ --}}
-<div id="modal-personaje" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:1000; align-items:flex-start; justify-content:center; padding: 20px; overflow-y: auto;">
-    <div style="background: linear-gradient(150deg, rgba(18,8,4,0.97), rgba(36,16,8,0.99)); border: 1px solid rgba(179,3,3,0.3); border-radius: 14px; width: 100%; max-width: 900px; margin: auto; overflow: hidden;">
-        <div id="modal-personaje-header" style="display: flex; align-items: center; gap: 20px; background: rgba(0,0,0,0.5); border-bottom: 2px solid var(--c-rojo); padding: 25px;">
-            <img id="modal-p-avatar" src="" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid var(--c-rojo); box-shadow: 0 0 20px rgba(179,3,3,0.3); flex-shrink: 0;">
-            <div>
-                <h2 id="modal-p-nombre" style="font-size: 1.6rem; letter-spacing: 2px; margin-bottom: 4px;"></h2>
-                <div id="modal-p-subtitulo" style="color: var(--c-naranja); font-style: italic; margin-bottom: 8px;"></div>
-                <div id="modal-p-badges" style="display: flex; gap: 8px; flex-wrap: wrap;"></div>
+{{-- ======================= FICHA RESUMIDA (DM y jugador) ======================= --}}
+<dialog class="modal modal--ancho" id="modal-personaje" aria-labelledby="modal-p-nombre">
+    <div class="modal-form">
+        <header class="modal-cab pjm-cab">
+            <img id="modal-p-avatar" class="avatar-lg" src="" alt="" width="90" height="90" data-lightbox>
+            <div class="pjm-titulo">
+                <h2 id="modal-p-nombre"></h2>
+                <p id="modal-p-subtitulo"></p>
+                <div id="modal-p-badges" class="pjm-badges"></div>
             </div>
-            <button onclick="document.getElementById('modal-personaje').style.display='none'" style="background: none; border: none; color: var(--t-secundario); font-size: 1.5rem; cursor: pointer; margin-left: auto; align-self: flex-start;">✕</button>
-        </div>
-        <div style="padding: 25px;">
-            <div style="margin-bottom: 25px;">
-                <div style="color: var(--t-secundario); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid rgba(118,133,150,0.12); padding-bottom: 8px; margin-bottom: 15px;">🎯 Características</div>
-                <div id="modal-p-stats" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px;"></div>
-            </div>
-            <div style="margin-bottom: 25px;">
-                <div style="color: var(--t-secundario); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid rgba(118,133,150,0.12); padding-bottom: 8px; margin-bottom: 15px;">⚔️ Combate</div>
-                <div id="modal-p-combate" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px;"></div>
-            </div>
-            <div id="modal-p-historia-sec" style="margin-bottom: 25px; display: none;">
-                <div style="color: var(--t-secundario); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid rgba(118,133,150,0.12); padding-bottom: 8px; margin-bottom: 15px;">📖 Historia</div>
-                <div id="modal-p-historia" style="background: rgba(0,0,0,0.25); border-left: 4px solid var(--c-rojo); border-radius: 0 8px 8px 0; padding: 15px 20px; color: #b8c0c8; line-height: 1.75; font-style: italic;"></div>
-            </div>
-            <div id="modal-p-personalidad-sec" style="margin-bottom: 25px; display: none;">
-                <div style="color: var(--t-secundario); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid rgba(118,133,150,0.12); padding-bottom: 8px; margin-bottom: 15px;">💭 Personalidad</div>
-                <div id="modal-p-personalidad" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;"></div>
-            </div>
-            <div id="modal-p-equipo-sec" style="margin-bottom: 25px; display: none;">
-                <div style="color: var(--t-secundario); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid rgba(118,133,150,0.12); padding-bottom: 8px; margin-bottom: 15px;">🎒 Equipo</div>
-                <div id="modal-p-equipo" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px;"></div>
-            </div>
+            <button type="button" class="btn-icono" data-modal-cerrar aria-label="Cerrar">@include('partials.icon', ['name' => 'x'])</button>
+        </header>
+        <div class="modal-cuerpo">
+            <section class="pjm-seccion">
+                <h3 class="form-subtitulo">Características</h3>
+                <div id="modal-p-stats" class="pjm-grid pjm-grid--stats"></div>
+            </section>
+            <section class="pjm-seccion">
+                <h3 class="form-subtitulo">Combate</h3>
+                <div id="modal-p-combate" class="pjm-grid pjm-grid--combate"></div>
+            </section>
+            <section class="pjm-seccion" id="modal-p-historia-sec" hidden>
+                <h3 class="form-subtitulo">Historia</h3>
+                <p id="modal-p-historia" class="pjm-historia"></p>
+            </section>
+            <section class="pjm-seccion" id="modal-p-personalidad-sec" hidden>
+                <h3 class="form-subtitulo">Personalidad</h3>
+                <div id="modal-p-personalidad" class="pjm-grid pjm-grid--personalidad"></div>
+            </section>
+            <section class="pjm-seccion" id="modal-p-equipo-sec" hidden>
+                <h3 class="form-subtitulo">Equipo</h3>
+                <div id="modal-p-equipo" class="pjm-grid pjm-grid--equipo"></div>
+            </section>
         </div>
     </div>
-</div>
-
+</dialog>
 @endsection
