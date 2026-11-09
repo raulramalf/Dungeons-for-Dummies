@@ -67,9 +67,9 @@
         <div class="edit-body">
 
             @if($errors->any())
-            <div style="background:rgba(179,3,3,0.12);border:1px solid rgba(179,3,3,0.4);border-radius:6px;padding:1rem 1.3rem;margin-bottom:1.5rem;">
-                <strong style="color:#cc4444">Errores de validación:</strong>
-                <ul style="margin:.5rem 0 0 1.2rem;color:#cc4444;font-size:.9rem">
+            <div class="alerta alerta-error ed-errores" role="alert">
+                <strong>Errores de validación:</strong>
+                <ul>
                     @foreach($errors->all() as $err)
                         <li>{{ $err }}</li>
                     @endforeach
@@ -78,8 +78,8 @@
             @endif
 
             {{-- ======= INFORMACIÓN BÁSICA ======= --}}
-            <div class="seccion">
-                <div class="seccion-titulo">@include('partials.icon', ['name' => 'scroll']) Información Básica</div>
+            <details class="seccion" open>
+                <summary class="seccion-titulo">@include('partials.icon', ['name' => 'scroll']) Información Básica</summary>
 
                 <div class="form-row">
                     <div class="form-group">
@@ -184,18 +184,18 @@
                     <textarea name="historia" class="form-control" rows="4"
                               placeholder="Cuenta el origen y motivaciones de tu héroe...">{{ old('historia', $personaje->historia) }}</textarea>
                 </div>
-            </div>
+            </details>
 
             {{-- ======= IMÁGENES ======= --}}
-            <div class="seccion">
-                <div class="seccion-titulo">@include('partials.icon', ['name' => 'image']) Imágenes</div>
+            <details class="seccion" open>
+                <summary class="seccion-titulo">@include('partials.icon', ['name' => 'image']) Imágenes</summary>
 
                 {{-- Imágenes del personaje --}}
                 <div class="form-group">
                     <label>Imágenes del Personaje (máx. 5 — {{ count($imgsPersonaje) }}/5 actuales)</label>
 
                     @if(count($imgsPersonaje) < 5)
-                    <div class="upload-zone" onclick="document.getElementById('uploadPersonaje').click()" style="margin-bottom: 0.8rem;">
+                    <div class="upload-zone" onclick="document.getElementById('uploadPersonaje').click()">
                         <input type="file" id="uploadPersonaje" name="imagenes_personaje[]"
                             multiple accept="image/jpeg,image/png,image/webp"
                             onchange="previewImgs(this, 'previewP', {{ 5 - count($imgsPersonaje) }})">
@@ -203,9 +203,9 @@
                             📁 <span>Selecciona hasta {{ 5 - count($imgsPersonaje) }} imágenes de golpe</span> — JPG, PNG, WEBP · Máx. 2MB
                         </div>
                     </div>
-                    <div id="previewP" class="imgs-grid" style="margin-bottom: 0.8rem;"></div>
+                    <div id="previewP" class="imgs-grid"></div>
                     @else
-                    <p style="color:#768596;font-size:.85rem;margin-top:.4rem;margin-bottom:0.8rem;">Has alcanzado el límite de 5 imágenes. Elimina alguna para añadir más.</p>
+                    <p class="ed-nota">Has alcanzado el límite de 5 imágenes. Elimina alguna para añadir más.</p>
                     @endif
 
                     @if(count($imgsPersonaje) > 0)
@@ -225,7 +225,7 @@
                     <label>Imágenes de Armas (máx. 5 — {{ count($imgsArmas) }}/5 actuales)</label>
 
                     @if(count($imgsArmas) < 5)
-                    <div class="upload-zone" onclick="document.getElementById('uploadArmas').click()" style="margin-bottom: 0.8rem;">
+                    <div class="upload-zone" onclick="document.getElementById('uploadArmas').click()">
                         <input type="file" id="uploadArmas" name="imagenes_armas[]"
                             multiple accept="image/jpeg,image/png,image/webp"
                             onchange="previewImgs(this, 'previewA', {{ 5 - count($imgsArmas) }})">
@@ -233,9 +233,9 @@
                             ⚔️ <span>Selecciona hasta {{ 5 - count($imgsArmas) }} imágenes de golpe</span> — JPG, PNG, WEBP · Máx. 2MB
                         </div>
                     </div>
-                    <div id="previewA" class="imgs-grid" style="margin-bottom: 0.8rem;"></div>
+                    <div id="previewA" class="imgs-grid"></div>
                     @else
-                    <p style="color:#768596;font-size:.85rem;margin-top:.4rem;margin-bottom:0.8rem;">Has alcanzado el límite de 5 imágenes. Elimina alguna para añadir más.</p>
+                    <p class="ed-nota">Has alcanzado el límite de 5 imágenes. Elimina alguna para añadir más.</p>
                     @endif
 
                     @if(count($imgsArmas) > 0)
@@ -249,11 +249,11 @@
                     </div>
                     @endif
                 </div>
-            </div>
+            </details>
 
             {{-- ======= ESTADÍSTICAS ======= --}}
-            <div class="seccion">
-                <div class="seccion-titulo">@include('partials.icon', ['name' => 'star']) Características</div>
+            <details class="seccion" open>
+                <summary class="seccion-titulo">@include('partials.icon', ['name' => 'star']) Características</summary>
                 <div class="stats-grid">
                     @foreach($statsMap as $label => $attr)
                     @php
@@ -267,15 +267,15 @@
                                value="{{ $val }}" min="1" max="30" required
                                oninput="actualizarMod(this)">
                         <span class="stat-mod" id="mod-{{ $attr }}">{{ $modStr }}</span>
-                        @error($attr) <span class="error-msg" style="font-size:.72rem">{{ $message }}</span> @enderror
+                        @error($attr) <span class="error-msg">{{ $message }}</span> @enderror
                     </div>
                     @endforeach
                 </div>
-            </div>
+            </details>
 
             {{-- ======= TIRADAS DE SALVACIÓN ======= --}}
-            <div class="seccion">
-                <div class="seccion-titulo">@include('partials.icon', ['name' => 'shield']) Competencia en Tiradas de Salvación</div>
+            <details class="seccion" open>
+                <summary class="seccion-titulo">@include('partials.icon', ['name' => 'shield']) Competencia en Tiradas de Salvación</summary>
                 <div class="check-grid">
                     @foreach($statsMap as $label => $attr)
                     <label class="check-item">
@@ -288,28 +288,28 @@
                 </div>
                 <input type="hidden" name="competencias_salvaciones"
                        id="hiddenSal" value="{{ old('competencias_salvaciones', $personaje->competencias_salvaciones ?? '[]') }}">
-            </div>
+            </details>
 
             {{-- ======= HABILIDADES ======= --}}
-            <div class="seccion">
-                <div class="seccion-titulo">@include('partials.icon', ['name' => 'book']) Competencia en Habilidades</div>
+            <details class="seccion" open>
+                <summary class="seccion-titulo">@include('partials.icon', ['name' => 'book']) Competencia en Habilidades</summary>
                 <div class="check-grid">
                     @foreach($habilidades as $nombre => $base)
                     <label class="check-item">
                         <input type="checkbox" name="competencias_habilidades[]"
                                value="{{ $nombre }}"
                                {{ in_array($nombre, $compHab) ? 'checked' : '' }}>
-                        <span>{{ $nombre }} <span style="opacity:.5;font-size:.8em">({{ strtoupper(substr($base,0,3)) }})</span></span>
+                        <span>{{ $nombre }} <span class="ed-sigla">({{ strtoupper(substr($base,0,3)) }})</span></span>
                     </label>
                     @endforeach
                 </div>
                 <input type="hidden" name="competencias_habilidades"
                        id="hiddenHab" value="{{ old('competencias_habilidades', $personaje->competencias_habilidades ?? '[]') }}">
-            </div>
+            </details>
 
             {{-- ======= COMBATE ======= --}}
-            <div class="seccion">
-                <div class="seccion-titulo">@include('partials.icon', ['name' => 'sword']) Combate</div>
+            <details class="seccion" open>
+                <summary class="seccion-titulo">@include('partials.icon', ['name' => 'sword']) Combate</summary>
                 <div class="combat-grid">
                     @php $est = $personaje->estadisticas; @endphp
                     <div class="combat-field">
@@ -341,7 +341,7 @@
                         <label>🎯 Bonus Competencia (auto)</label>
                         <input type="number" id="bonusCompetenciaDisplay"
                             value="{{ $est->bonus_competencia ?? 2 }}" disabled
-                            style="opacity:.7;cursor:not-allowed">
+                            class="campo-auto">
                     </div>
                     <div class="combat-field">
                         <label>⚔️ Iniciativa (mod)</label>
@@ -357,20 +357,20 @@
                 </div>
 
                 {{-- Muerte / inspiración --}}
-                <div style="margin-top:1.2rem;display:flex;gap:2rem;flex-wrap:wrap;align-items:center">
+                <div class="ed-muerte">
                     <div>
-                        <label style="color:#768596;font-size:.75rem;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:.5rem">✔ Éxitos de muerte</label>
+                        <label class="ed-muerte-et">✔ Éxitos de muerte</label>
                         <input type="number" name="exitos_muerte" min="0" max="3"
                                value="{{ old('exitos_muerte', $est->exitos_muerte ?? 0) }}"
-                               style="width:70px;padding:.4rem;background:rgba(0,0,0,.3);border:1px solid rgba(118,133,150,.25);border-radius:5px;color:#fff;text-align:center;font-size:1.1rem">
+                               class="ed-contador">
                     </div>
                     <div>
-                        <label style="color:#768596;font-size:.75rem;text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:.5rem">✖ Fallos de muerte</label>
+                        <label class="ed-muerte-et">✖ Fallos de muerte</label>
                         <input type="number" name="fallos_muerte" min="0" max="3"
                                value="{{ old('fallos_muerte', $est->fallos_muerte ?? 0) }}"
-                               style="width:70px;padding:.4rem;background:rgba(0,0,0,.3);border:1px solid rgba(118,133,150,.25);border-radius:5px;color:#fff;text-align:center;font-size:1.1rem">
+                               class="ed-contador">
                     </div>
-                    <div style="margin-top:auto">
+                    <div class="ed-muerte-auto">
                         <label class="check-item">
                             <input type="checkbox" name="inspiracion" value="1"
                                    {{ old('inspiracion', $est->inspiracion ?? false) ? 'checked' : '' }}>
@@ -378,15 +378,15 @@
                         </label>
                     </div>
                 </div>
-            </div>
+            </details>
 
             {{-- ======= ARMAS Y ATAQUES ======= --}}
-            <div class="seccion">
-                <div class="seccion-titulo">@include('partials.icon', ['name' => 'swords']) Armas y Ataques</div>
-                <div style="font-size:.78rem;color:#768596;margin-bottom:.8rem">Nombre · Bonificador de ataque · Daño/Tipo</div>
+            <details class="seccion" open>
+                <summary class="seccion-titulo">@include('partials.icon', ['name' => 'swords']) Armas y Ataques</summary>
+                <div class="ed-nota">Nombre · Bonificador de ataque · Daño/Tipo</div>
 
                 @if($personaje->equipo && $personaje->equipo->count() > 0)
-                <div class="form-group" style="margin-bottom:.8rem">
+                <div class="form-group ed-ataque-rapido">
                     <label>Añadir rápido desde tu equipo</label>
                     <select class="form-control" id="armaDesdeEquipo" onchange="addAtaqueDesdeEquipo(this)">
                         <option value="">— Elige un objeto de tu inventario —</option>
@@ -413,14 +413,14 @@
 
                 <button type="button" class="btn-add-ataque" onclick="addAtaque()">@include('partials.icon', ['name' => 'plus', 'class' => 'icon-sm']) Añadir ataque</button>
                 <input type="hidden" name="ataques" id="ataquesHidden">
-            </div>
+            </details>
 
             {{-- ======= CONJUROS Y TRUCOS ======= --}}
-            <div class="seccion">
-                <div class="seccion-titulo">@include('partials.icon', ['name' => 'book']) Conjuros y Trucos</div>
+            <details class="seccion" open>
+                <summary class="seccion-titulo">@include('partials.icon', ['name' => 'book']) Conjuros y Trucos</summary>
 
                 @if($personaje->trucos && $personaje->trucos->count() > 0)
-                <div class="equipo-existente" style="margin-bottom:1rem">
+                <div class="equipo-existente ed-sep">
                     @foreach($personaje->trucos as $truco)
                     <div class="equipo-item">
                         <span class="equipo-nombre">{{ $truco->conjuro->nombre ?? $truco->nombre }}</span>
@@ -433,7 +433,7 @@
                     @endforeach
                 </div>
                 @else
-                <p style="color:#768596;margin-bottom:1rem">Este personaje no tiene conjuros ni trucos todavía.</p>
+                <p class="ed-vacio">Este personaje no tiene conjuros ni trucos todavía.</p>
                 @endif
 
                 @php $idsExistentes = $personaje->trucos->pluck('conjuro_id')->filter()->values(); @endphp
@@ -471,14 +471,14 @@
                 </div>
 
                 <input type="hidden" name="conjuros_nuevos" id="conjurosNuevosHidden">
-            </div>
+            </details>
 
             {{-- ======= DOTES ======= --}}
-            <div class="seccion">
-                <div class="seccion-titulo">@include('partials.icon', ['name' => 'star']) Dotes</div>
+            <details class="seccion" open>
+                <summary class="seccion-titulo">@include('partials.icon', ['name' => 'star']) Dotes</summary>
 
                 @if($personaje->dotes && $personaje->dotes->count() > 0)
-                <div class="equipo-existente" style="margin-bottom:1rem">
+                <div class="equipo-existente ed-sep">
                     @foreach($personaje->dotes as $dote)
                     <div class="equipo-item">
                         <span class="equipo-nombre">{{ $dote->nombre }}</span>
@@ -489,7 +489,7 @@
                     @endforeach
                 </div>
                 @else
-                <p style="color:#768596;margin-bottom:1rem">Este personaje no tiene dotes todavía.</p>
+                <p class="ed-vacio">Este personaje no tiene dotes todavía.</p>
                 @endif
 
                 @php $doteIdsExistentes = $personaje->dotes->pluck('id')->values(); @endphp
@@ -527,11 +527,11 @@
                 </div>
 
                 <input type="hidden" name="dotes_nuevos" id="dotesNuevosHidden">
-            </div>
+            </details>
 
             {{-- ======= PERSONALIDAD ======= --}}
-            <div class="seccion">
-                <div class="seccion-titulo">@include('partials.icon', ['name' => 'user']) Personalidad</div>
+            <details class="seccion" open>
+                <summary class="seccion-titulo">@include('partials.icon', ['name' => 'user']) Personalidad</summary>
                 <div class="form-row">
                     <div class="form-group">
                         <label>Rasgos de personalidad</label>
@@ -554,11 +554,11 @@
                                   placeholder="¿Cuál es la debilidad de tu personaje?">{{ old('defectos', $personaje->defectos) }}</textarea>
                     </div>
                 </div>
-            </div>
+            </details>
 
             {{-- ======= APARIENCIA ======= --}}
-            <div class="seccion">
-                <div class="seccion-titulo">@include('partials.icon', ['name' => 'helmet']) Apariencia</div>
+            <details class="seccion" open>
+                <summary class="seccion-titulo">@include('partials.icon', ['name' => 'helmet']) Apariencia</summary>
                 <div class="form-row-3">
                     @foreach(['edad' => 'Edad', 'altura' => 'Altura', 'peso' => 'Peso', 'ojos' => 'Ojos', 'piel' => 'Piel', 'pelo' => 'Pelo'] as $campo => $etiq)
                     <div class="form-group">
@@ -574,7 +574,7 @@
                            placeholder="Común, Élfico, Enano..."
                            value="{{ old('idiomas', $personaje->idiomas) }}">
                 </div>
-            </div>
+            </details>
 
             {{-- BOTONES --}}
             <div class="form-actions">
@@ -586,21 +586,21 @@
     </form>
 
     {{-- ======= EQUIPO (formulario separado) ======= --}}
-    <div class="edit-body" style="padding-top:0">
-        <div class="seccion">
-            <div class="seccion-titulo">@include('partials.icon', ['name' => 'coins']) Equipo</div>
+    <div class="edit-body edit-body--sin-arriba">
+        <details class="seccion" open>
+            <summary class="seccion-titulo">@include('partials.icon', ['name' => 'coins']) Equipo</summary>
 
             @if($personaje->equipo && $personaje->equipo->count() > 0)
             <div class="equipo-existente">
                 @foreach($personaje->equipo as $item)
                 <div class="equipo-item">
                     <span class="equipo-nombre">{{ $item->nombre }}
-                        @if($item->equipado) <span style="color:#9ab090;font-size:.75rem;margin-left:.3rem">✓</span> @endif
+                        @if($item->equipado) <span class="ed-equipado">✓</span> @endif
                     </span>
                     <div class="equipo-det">{{ $item->tipo }}@if($item->magico) · ✨ Mágico @endif</div>
                     @if($item->cantidad > 1) <div class="equipo-det">×{{ $item->cantidad }}</div> @endif
                     @if($item->valor_po)     <div class="equipo-det">💰 {{ $item->valor_po }} PO</div> @endif
-                    <form action="{{ route('equipo.destroy', ['personaje' => $personaje, 'equipo' => $item]) }}" method="POST" style="display:inline">
+                    <form action="{{ route('equipo.destroy', ['personaje' => $personaje, 'equipo' => $item]) }}" method="POST" class="ed-en-linea">
                         @csrf @method('DELETE')
                         <button type="submit" class="btn-del-equipo"
                                 data-confirm="¿Eliminar {{ $item->nombre }}?">✕</button>
@@ -609,7 +609,7 @@
                 @endforeach
             </div>
             @else
-            <p style="color:#768596;margin-bottom:1rem">No hay equipo todavía.</p>
+            <p class="ed-vacio">No hay equipo todavía.</p>
             @endif
 
             <div class="form-equipo">
@@ -636,11 +636,11 @@
                     <button type="submit" class="btn-add-equipo">@include('partials.icon', ['name' => 'plus', 'class' => 'icon-sm']) Añadir al inventario</button>
                 </form>
             </div>
-        </div>
+        </details>
 
         {{-- ======= MONEDAS (formulario separado) ======= --}}
-        <div class="seccion">
-            <div class="seccion-titulo">@include('partials.icon', ['name' => 'coins']) Tesoro</div>
+        <details class="seccion" open>
+            <summary class="seccion-titulo">@include('partials.icon', ['name' => 'coins']) Tesoro</summary>
             <form action="{{ route('personajes.actualizar_monedas', $personaje) }}" method="POST">
                 @csrf @method('PUT')
                 @php $est = $personaje->estadisticas; @endphp
@@ -656,24 +656,24 @@
                 </div>
                 <button type="submit" class="btn-monedas">@include('partials.icon', ['name' => 'coins', 'class' => 'icon-sm']) Actualizar monedas</button>
             </form>
-        </div>
+        </details>
     </div>
 
     {{-- Formularios ocultos compartidos (fuera del form principal a propósito:
          HTML no permite anidar <form>, así que estos botones de borrado que viven
          dentro de .edit-body / dentro del form de edición se controlan por JS) --}}
-    <form id="formEliminarImagen" action="{{ route('personajes.eliminarImagen', $personaje) }}" method="POST" style="display:none">
+    <form id="formEliminarImagen" action="{{ route('personajes.eliminarImagen', $personaje) }}" method="POST" hidden>
         @csrf
         <input type="hidden" name="tipo" id="eliminarImagenTipo">
         <input type="hidden" name="index" id="eliminarImagenIndex">
     </form>
 
-    <form id="formEliminarTruco" action="" method="POST" style="display:none">
+    <form id="formEliminarTruco" action="" method="POST" hidden>
         @csrf
         @method('DELETE')
     </form>
 
-    <form id="formEliminarDote" action="" method="POST" style="display:none">
+    <form id="formEliminarDote" action="" method="POST" hidden>
         @csrf
         @method('DELETE')
     </form>

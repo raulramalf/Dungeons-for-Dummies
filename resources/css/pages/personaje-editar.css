@@ -9,7 +9,7 @@
     border-radius: 14px;
     border: 1px solid rgba(179,3,3,0.22);
     box-shadow: 0 20px 60px rgba(0,0,0,0.75);
-    overflow: hidden;
+    overflow: clip; /* clip (no hidden): hidden crea un contenedor de scroll y rompe position: sticky de la barra de guardado */
 }
 
 /* =============================================
@@ -577,8 +577,9 @@ select.form-control option { background: #1a0808; color: #fff; }
     .form-row, .form-row-3 { grid-template-columns: 1fr; }
     .stats-grid { grid-template-columns: repeat(3, 1fr); }
     .combat-grid { grid-template-columns: 1fr 1fr; }
-    .ataque-row { grid-template-columns: 1fr auto; }
-    .ataque-row input:nth-child(2), .ataque-row input:nth-child(3) { display: none; }
+    /* Antes se ocultaban bonificador y daño en móvil: ahora se apilan */
+    .ataque-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; }
+    .ataque-row input:nth-child(1) { grid-column: 1 / -1; }
     .equipo-inputs { grid-template-columns: 1fr; }
     .form-actions { flex-direction: column; }
     .form-actions > * { width: 100%; text-align: center; justify-content: center; }
@@ -588,4 +589,90 @@ select.form-control option { background: #1a0808; color: #fff; }
     .stats-grid { grid-template-columns: repeat(2, 1fr); }
     .combat-grid { grid-template-columns: 1fr; }
     .check-grid { grid-template-columns: 1fr; }
+}
+
+
+/* =============================================
+   SECCIONES PLEGABLES (<details>) y barra de guardado
+============================================= */
+details.seccion > summary.seccion-titulo {
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    min-height: 44px;
+    margin-bottom: 0;
+    transition: color 0.2s;
+}
+
+details.seccion > summary.seccion-titulo::-webkit-details-marker { display: none; }
+
+details.seccion > summary.seccion-titulo::after {
+    content: "";
+    flex-shrink: 0;
+    width: 0.55rem;
+    height: 0.55rem;
+    margin-left: auto;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform 0.25s var(--ease);
+}
+
+details.seccion[open] > summary.seccion-titulo {
+    margin-bottom: 1.5rem;
+    color: var(--t-secundario);
+}
+
+details.seccion[open] > summary.seccion-titulo::after { transform: rotate(-135deg); }
+
+details.seccion > summary.seccion-titulo:hover { color: var(--t-principal); }
+
+/* ---- Clases que sustituyen a estilos inline ---- */
+.ed-errores ul { margin: 0.5rem 0 0 1.2rem; font-size: 0.9rem; }
+.ed-errores { display: block; }
+.upload-zone, .imgs-grid { margin-bottom: 0.8rem; }
+.ed-nota { margin: 0.4rem 0 0.8rem; font-size: 0.85rem; color: var(--t-secundario); }
+.error-msg { font-size: 0.72rem; }
+.ed-sigla { font-size: 0.8em; opacity: 0.55; }
+.campo-auto { opacity: 0.7; cursor: not-allowed; }
+.ed-muerte { display: flex; flex-wrap: wrap; align-items: center; gap: 2rem; margin-top: 1.2rem; }
+.ed-muerte-et { display: block; margin-bottom: 0.5rem; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; color: var(--t-secundario); }
+.ed-muerte-auto { margin-top: auto; }
+.ed-contador { width: 70px; padding: 0.4rem; text-align: center; font-size: 1rem; color: #fff; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(118, 133, 150, 0.25); border-radius: 5px; }
+.ed-ataque-rapido { margin-bottom: 0.8rem; }
+.ed-sep { margin-bottom: 1rem; }
+.ed-vacio { margin-bottom: 1rem; color: var(--t-secundario); }
+.edit-body--sin-arriba { padding-top: 0; }
+.ed-equipado { margin-left: 0.3rem; font-size: 0.75rem; color: var(--c-verde-claro); }
+.ed-en-linea { display: inline; }
+
+/* ---- Móvil: el botón Guardar siempre a mano (antes estaba al final de ~19.000 px) ---- */
+@media (max-width: 768px) {
+    #formPersonaje .form-actions {
+        position: sticky;
+        bottom: calc(var(--bottomnav-h) + var(--safe-b));
+        z-index: 40;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 0.6rem;
+        margin: 1rem -1.5rem -1.5rem;
+        padding: 0.7rem 1.5rem;
+        background: var(--c-fondo-alt);
+        border-top: 1px solid var(--b-medio);
+    }
+
+    #formPersonaje .form-actions > .btn-cancel {
+        flex: 0 0 auto;
+        width: auto;
+    }
+
+    #formPersonaje .form-actions > .btn-save {
+        flex: 1;
+        width: auto;
+    }
+
+    .btn-del-equipo {
+        min-width: 40px;
+        min-height: 40px;
+    }
 }

@@ -268,3 +268,18 @@ Object.assign(window, {
     toggleConjuro,
     toggleDote,
 });
+
+/* ----- Secciones plegables (<details>) -----
+   · En móvil arrancan plegadas salvo la primera: la página ya no mide ~19.000 px.
+   · Si el navegador va a señalar un campo inválido dentro de una sección plegada,
+     se abre (si no, "An invalid form control is not focusable" y el envío falla en silencio). */
+if (window.matchMedia('(max-width: 768px)').matches) {
+    document.querySelectorAll('details.seccion').forEach((d, i) => {
+        if (i > 0) d.open = false;
+    });
+}
+
+document.addEventListener('invalid', (e) => {
+    const d = e.target.closest('details');
+    if (d && !d.open) d.open = true;
+}, true);
