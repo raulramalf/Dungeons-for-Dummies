@@ -1,0 +1,17 @@
+# Lo que NO hace falta subir a Vercel (se reconstruye en el despliegue o es local)
+/node_modules
+/vendor
+/.git
+/.github
+/tests
+/database/*.sqlite
+/storage/logs
+/storage/framework
+/public/build
+/public/hot
+/public/storage
+/.env
+/.env.*
+!/.env.example
+/phpunit.xml
+/.phpunit.result.cache

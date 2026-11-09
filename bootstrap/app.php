@@ -12,7 +12,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Detrás de un proxy/CDN (p. ej. Vercel) la petición llega a la app por HTTP
+        // interno: sin esto asset()/url() generan http:// y el navegador bloquea el
+        // CSS por contenido mixto. Se activa solo si TRUSTED_PROXIES está definido
+        // ("*" o una lista de IPs separadas por comas).
+        if ($proxies = env('TRUSTED_PROXIES')) {
+            $middleware->trustProxies(
+                at: $proxies === '*' ? '*' : array_map('trim', explode(',', $proxies)),
+            );
+        }
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

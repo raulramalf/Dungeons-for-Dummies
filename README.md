@@ -24,6 +24,42 @@ php artisan serve
 Los seeders de contenido 5.5e (subclases, trasfondos, dotes, conjuros) leen JSON locales de
 `database/seeders/data/` y no necesitan red.
 
+## Despliegue en Vercel
+
+Vercel no es un hosting PHP: sin configuración trata el repo como un sitio estático (por eso fallaba
+con `No Output Directory named "dist"`). Con `vercel.json` + `api/index.php` + el runtime
+[`vercel-php`](https://github.com/juicyfx/vercel-php) (PHP 8.5) la app corre como función serverless.
+
+**Qué hay en el repo**
+
+| Fichero | Para qué |
+|---|---|
+| `vercel.json` | `npm run build` + `public/` como salida estática, función PHP y variables no secretas (rutas en `/tmp`, logs a stderr, sesión en cookie…) |
+| `api/index.php` | Entrada de la función: crea los directorios de `/tmp` y delega en `public/index.php` |
+| `composer.json` → script `vercel` | Compila Vite también *dentro* de la función PHP (`@vite` lee `public/build/manifest.json` del disco) |
+| `.vercelignore` | Evita subir `node_modules`, `vendor`, tests… |
+
+**Variables que debes definir en Vercel → Settings → Environment Variables** (son secretas, no van en el repo):
+
+| Variable | Valor |
+|---|---|
+| `APP_KEY` | `php artisan key:generate --show` en local |
+| `APP_URL` | `https://tu-proyecto.vercel.app` |
+| `DB_CONNECTION`, `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` | Una base **MySQL/MariaDB accesible desde internet** (la de tu PC/XAMPP no sirve). Si exige TLS: `MYSQL_ATTR_SSL_CA=/etc/ssl/certs/ca-certificates.crt` |
+
+Vercel **no ejecuta migraciones**: lánzalas tú contra esa base desde local
+(`DB_HOST=… DB_DATABASE=… php artisan migrate --force` y los seeders que necesites).
+
+**Limitaciones de un entorno serverless** (importantes para esta app):
+
+- **Las subidas de archivos no persisten.** El disco es de solo lectura salvo `/tmp`, que es efímero y no se
+  comparte entre instancias. Avatares de usuario, imágenes de enemigos/campañas y de personajes
+  (`Storage::disk('public')`) necesitan un disco externo (S3, Cloudflare R2, Vercel Blob…).
+- Sesión en cookie cifrada y caché en memoria (no hay Redis/ficheros compartidos); la cola es síncrona.
+- El tiempo máximo por petición lo fija tu plan de Vercel.
+
+Si el despliegue falla, el log de *Build* y el de *Functions* de Vercel indican qué falta.
+
 ## Estructura del frontend
 
 ```
