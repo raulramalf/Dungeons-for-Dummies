@@ -7,11 +7,11 @@
 @endpush
 
 @section('contenido')
-<div class="contenedor" style="color-scheme: dark light">
+<div class="contenedor">
 
     <div class="exportar-cabecera">
         <a href="{{ route('personajes.show', $personaje) }}" class="btn btn-volver">← Volver a {{ $personaje->nombre }}</a>
-        <h1 class="seccion-titulo" style="margin-top:1rem">Exportar ficha de {{ $personaje->nombre }}</h1>
+        <h1 class="seccion-titulo exp-titulo">Exportar ficha de {{ $personaje->nombre }}</h1>
         <p class="seccion-subtitulo">Elige qué quieres incluir en el PDF</p>
     </div>
 
@@ -28,7 +28,7 @@
     </div>
 
     {{-- PLANTILLA: selector con vista previa --}}
-    <p class="seccion-subtitulo" style="margin-bottom: 0.8rem;">Elige el estilo de la plantilla</p>
+    <p class="seccion-subtitulo exp-subtitulo">Elige el estilo de la plantilla</p>
     <div class="plantilla-selector" role="radiogroup" aria-label="Plantilla de ficha">
         @foreach($plantillas as $clave => $info)
         <label class="plantilla-opcion">

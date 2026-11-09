@@ -21,7 +21,7 @@
      })"
      x-cloak
 >
-    <div style="text-align:center;">
+    <div class="rd-centrado">
         <span class="rd-racha">
             @include('partials.icon', ['name' => 'flame'])
             Racha: <span x-text="racha"></span> día<span x-show="racha !== 1">s</span>

@@ -465,3 +465,13 @@
     .equipo-grid { grid-template-columns: 1fr; }
     .monedas-grid { grid-template-columns: repeat(3, 1fr); }
 }
+
+/* Clases que sustituyen a estilos inline */
+img[data-lightbox] { cursor: zoom-in; }
+.badge-naranja { color: var(--c-naranja); background: rgba(212, 96, 67, 0.2); border: 1px solid rgba(212, 96, 67, 0.3); }
+.en-linea { display: inline; }
+.sigla { font-size: 0.8em; opacity: 0.55; }
+.mt-bloque { margin-top: 1.2rem; }
+.texto-suave { font-size: 0.95rem; color: #a8b0b8; }
+.texto-vacio { color: var(--t-secundario); }
+.equipo-desc { margin-top: 0.3rem; font-size: 0.8rem; }

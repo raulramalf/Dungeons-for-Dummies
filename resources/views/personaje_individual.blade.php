@@ -44,7 +44,7 @@
     {{-- CABECERA --}}
     <div class="ficha-header">
         <img class="ficha-avatar" src="{{ $personaje->avatar_url }}" alt="{{ $personaje->nombre }}"
-            style="cursor:zoom-in" data-lightbox>
+            data-lightbox>
 
         <div class="ficha-titulo">
             <h1>{{ $personaje->nombre }}</h1>
@@ -64,15 +64,14 @@
                     <span class="badge badge-divinidad">@include('partials.icon', ['name' => 'shield', 'class' => 'icon-sm']) {{ $personaje->divinidad }}</span>
                 @endif
                 @if($est && $est->inspiracion)
-                    <span class="badge" style="background:rgba(212,96,67,0.2);color:#D46043;border:1px solid rgba(212,96,67,0.3)">@include('partials.icon', ['name' => 'star', 'class' => 'icon-sm']) Inspiración</span>
+                    <span class="badge badge-naranja">@include('partials.icon', ['name' => 'star', 'class' => 'icon-sm']) Inspiración</span>
                 @endif
             </div>
             <div class="ficha-acciones">
                 <a href="{{ route('personajes.index') }}" class="btn btn-volver">@include('partials.icon', ['name' => 'arrow-left', 'class' => 'icon-sm']) Volver</a>
                 <a href="{{ route('personajes.edit', $personaje) }}" class="btn btn-editar">@include('partials.icon', ['name' => 'edit', 'class' => 'icon-sm']) Editar</a>
                 <a href="{{ route('personajes.exportar', $personaje) }}" class="btn btn-editar">@include('partials.icon', ['name' => 'scroll', 'class' => 'icon-sm']) Exportar Ficha</a>
-                <form action="{{ route('personajes.destroy', $personaje) }}" method="POST"
-                    style="display:inline"
+                <form action="{{ route('personajes.destroy', $personaje) }}" method="POST" class="en-linea"
                     data-confirm="¿Eliminar a {{ $personaje->nombre }}? Esta acción no se puede deshacer.">
                     @csrf @method('DELETE')
                     <button type="submit" class="btn btn-eliminar">@include('partials.icon', ['name' => 'trash', 'class' => 'icon-sm']) Eliminar</button>
@@ -127,7 +126,7 @@
                     @php $activa = in_array($nombre, $compHab); @endphp
                     <div class="competencia-item {{ $activa ? 'activa' : 'inactiva' }}">
                         <span class="comp-dot {{ $activa ? 'activa' : 'inactiva' }}"></span>
-                        {{ $nombre }} <span style="opacity:.5;font-size:.8em">({{ strtoupper(substr($base,0,3)) }})</span>
+                        {{ $nombre }} <span class="sigla">({{ strtoupper(substr($base,0,3)) }})</span>
                     </div>
                 @endforeach
             </div>
@@ -178,7 +177,7 @@
 
             {{-- Tiradas de muerte --}}
             @if(($est->exitos_muerte ?? 0) > 0 || ($est->fallos_muerte ?? 0) > 0)
-            <div style="margin-top:1.2rem">
+            <div class="mt-bloque">
                 <div class="muerte-grid">
                     <div class="muerte-grupo">
                         <label>✔ Éxitos de muerte</label>
@@ -297,7 +296,7 @@
         @if($personaje->idiomas)
         <div class="seccion">
             <div class="seccion-titulo">@include('partials.icon', ['name' => 'map']) Idiomas</div>
-            <p style="color:#a8b0b8;font-size:0.95rem">{{ $personaje->idiomas }}</p>
+            <p class="texto-suave">{{ $personaje->idiomas }}</p>
         </div>
         @endif
 
@@ -344,11 +343,11 @@
                     @if($item->cantidad > 1) <div class="equipo-det">×{{ $item->cantidad }}</div> @endif
                     @if($item->valor_po)     <div class="equipo-det">💰 {{ $item->valor_po }} PO</div> @endif
                     @if($item->peso)         <div class="equipo-det">⚖️ {{ $item->peso }} lb</div> @endif
-                    @if($item->descripcion)  <div class="equipo-det" style="font-size:.8rem;margin-top:.3rem">{!! $item->descripcion !!}</div> @endif                </div>
+                    @if($item->descripcion)  <div class="equipo-det equipo-desc">{!! nl2br(e($item->descripcion)) !!}</div> @endif                </div>
                 @endforeach
             </div>
             @else
-            <p style="color:#768596">Este aventurero no lleva equipo.</p>
+            <p class="texto-vacio">Este aventurero no lleva equipo.</p>
             @endif
         </div>
 

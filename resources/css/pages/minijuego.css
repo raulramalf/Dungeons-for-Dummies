@@ -233,3 +233,5 @@
     color: var(--t-tenue);
     text-transform: uppercase;
 }
+
+.rd-centrado { text-align: center; }

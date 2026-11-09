@@ -9,7 +9,7 @@
 @section('contenido')
 
 <div class="form-container">
-    <h2 style="display:flex;align-items:center;justify-content:center;gap:10px;">@include('partials.icon', ['name' => 'swords']) Crear Nuevo Personaje</h2>
+    <h2 class="form-titulo">@include('partials.icon', ['name' => 'swords']) Crear Nuevo Personaje</h2>
 
     <form action="{{ route('personajes.store') }}" method="POST">
         @csrf
@@ -95,7 +95,7 @@
             @enderror
         </div>
 
-        <h3 style="color: var(--color-gris); margin-top: 2rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px; display:flex; align-items:center; gap:8px;">@include('partials.icon', ['name' => 'star']) Estadísticas</h3>
+        <h3 class="form-seccion-titulo">@include('partials.icon', ['name' => 'star']) Estadísticas</h3>
 
         <div class="form-row">
             @foreach(['fuerza', 'destreza', 'constitucion', 'inteligencia', 'sabiduria', 'carisma'] as $stat)

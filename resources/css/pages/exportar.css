@@ -127,3 +127,7 @@
 @media (max-width: 560px) {
     .plantilla-opcion { max-width: 100%; }
 }
+
+/* Clases que sustituyen a estilos inline */
+.exp-titulo { margin-top: 1rem; }
+.exp-subtitulo { margin-bottom: 0.8rem; color: var(--t-secundario); }
