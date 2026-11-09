@@ -7,3 +7,5 @@ import "./ui.js";
 import "./bg-media.js";
 import "./confirm.js";
 import "./lightbox.js";
+import "./modal.js";
+import "./tabs.js";

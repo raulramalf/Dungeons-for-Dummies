@@ -127,3 +127,41 @@
         width: 100%;
     }
 }
+
+/* ----- Badge de estado (campañas, sesiones…) ----- */
+.estado {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.15rem 0.75rem;
+    font-family: var(--f-titulo);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--t-secundario);
+    background: rgba(118, 133, 150, 0.1);
+    border: 1px solid var(--b-neutro);
+    border-radius: 999px;
+}
+
+.estado--activa,
+.estado--planificada {
+    color: var(--c-rojo-claro);
+    background: rgba(179, 3, 3, 0.1);
+    border-color: var(--b-medio);
+}
+
+.estado--finalizada,
+.estado--completada {
+    color: var(--c-verde-claro);
+    background: rgba(90, 107, 63, 0.25);
+    border-color: var(--c-verde);
+}
+
+/* Mensaje de validación bajo un campo */
+.campo-error {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: 0.84rem;
+    color: var(--c-rojo-claro);
+}

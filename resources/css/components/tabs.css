@@ -1,0 +1,49 @@
+/* ============================================================================
+   PESTAÑAS (role=tablist) — js/tabs.js
+   ============================================================================ */
+.tabs-lista {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 1.4rem;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--b-neutro);
+    scrollbar-width: none;
+}
+
+.tabs-lista::-webkit-scrollbar {
+    display: none;
+}
+
+.tab-boton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex: 0 0 auto;
+    min-height: 44px;
+    padding: 0.6rem 1.2rem;
+    font-family: var(--f-titulo);
+    font-size: 0.86rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--t-secundario);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    transition:
+        color var(--dur),
+        border-color var(--dur);
+}
+
+.tab-boton:hover {
+    color: var(--t-principal);
+}
+
+.tab-boton[aria-selected="true"] {
+    color: #fff;
+    border-bottom-color: var(--c-rojo);
+}
+
+.tab-panel[hidden] {
+    display: none;
+}

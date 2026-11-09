@@ -20,6 +20,7 @@ class CampanaController extends Controller
         $campanasJugador = Campana::whereHas('usuarios', function($q) {
                                         $q->where('usuario_id', Auth::id());
                                 })
+                                ->with('dungeonMaster:id,nombre') // evita una consulta por campaña en la vista
                                 ->withCount('sesiones')
                                 ->orderBy('created_at', 'desc')
                                 ->get();
