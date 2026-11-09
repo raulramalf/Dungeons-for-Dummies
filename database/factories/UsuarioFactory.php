@@ -25,4 +25,10 @@ class UsuarioFactory extends Factory
             'rol' => 'jugador',
         ];
     }
+
+    /** Usuario con el correo sin verificar. */
+    public function unverified(): static
+    {
+        return $this->state(fn (array $atributos) => ['email_verified_at' => null]);
+    }
 }

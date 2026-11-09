@@ -2,98 +2,73 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
+use App\Models\Usuario;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
+/**
+ * /profile es la antigua pantalla de Breeze: ahora redirige a /perfil, pero los
+ * endpoints PATCH/DELETE se conservan y deben funcionar con el modelo Usuario.
+ */
 class ProfileTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_profile_page_is_displayed(): void
+    public function test_la_pantalla_antigua_redirige_al_perfil(): void
     {
-        $user = User::factory()->create();
-
-        $response = $this
-            ->actingAs($user)
-            ->get('/profile');
-
-        $response->assertOk();
+        $this->actingAs(Usuario::factory()->create())
+            ->get('/profile')
+            ->assertRedirect(route('perfil.index'));
     }
 
-    public function test_profile_information_can_be_updated(): void
+    public function test_los_datos_del_perfil_se_pueden_actualizar(): void
     {
-        $user = User::factory()->create();
+        $usuario = Usuario::factory()->create();
 
-        $response = $this
-            ->actingAs($user)
-            ->patch('/profile', [
-                'name' => 'Test User',
-                'email' => 'test@example.com',
-            ]);
-
-        $response
+        $this->actingAs($usuario)
+            ->patch('/profile', ['nombre' => 'Nuevo Nombre', 'email' => 'nuevo@example.com'])
             ->assertSessionHasNoErrors()
             ->assertRedirect('/profile');
 
-        $user->refresh();
-
-        $this->assertSame('Test User', $user->name);
-        $this->assertSame('test@example.com', $user->email);
-        $this->assertNull($user->email_verified_at);
+        $usuario->refresh();
+        $this->assertSame('Nuevo Nombre', $usuario->nombre);
+        $this->assertSame('nuevo@example.com', $usuario->email);
+        $this->assertNull($usuario->email_verified_at, 'Cambiar el correo invalida su verificación');
     }
 
-    public function test_email_verification_status_is_unchanged_when_the_email_address_is_unchanged(): void
+    public function test_el_estado_de_verificacion_no_cambia_si_el_correo_es_el_mismo(): void
     {
-        $user = User::factory()->create();
+        $usuario = Usuario::factory()->create();
 
-        $response = $this
-            ->actingAs($user)
-            ->patch('/profile', [
-                'name' => 'Test User',
-                'email' => $user->email,
-            ]);
+        $this->actingAs($usuario)
+            ->patch('/profile', ['nombre' => 'Otro Nombre', 'email' => $usuario->email])
+            ->assertSessionHasNoErrors();
 
-        $response
-            ->assertSessionHasNoErrors()
-            ->assertRedirect('/profile');
-
-        $this->assertNotNull($user->refresh()->email_verified_at);
+        $this->assertNotNull($usuario->refresh()->email_verified_at);
     }
 
-    public function test_user_can_delete_their_account(): void
+    public function test_un_usuario_puede_borrar_su_cuenta(): void
     {
-        $user = User::factory()->create();
+        $usuario = Usuario::factory()->create();
 
-        $response = $this
-            ->actingAs($user)
-            ->delete('/profile', [
-                'password' => 'password',
-            ]);
-
-        $response
-            ->assertSessionHasNoErrors()
+        $this->actingAs($usuario)
+            ->delete('/profile', ['password' => 'password'])
             ->assertRedirect('/');
 
         $this->assertGuest();
-        $this->assertNull($user->fresh());
+        $this->assertSoftDeleted($usuario); // Usuario usa SoftDeletes
     }
 
-    public function test_correct_password_must_be_provided_to_delete_account(): void
+    public function test_hay_que_dar_la_contrasena_correcta_para_borrar_la_cuenta(): void
     {
-        $user = User::factory()->create();
+        $usuario = Usuario::factory()->create();
 
-        $response = $this
-            ->actingAs($user)
-            ->from('/profile')
-            ->delete('/profile', [
-                'password' => 'wrong-password',
-            ]);
-
-        $response
+        $this->actingAs($usuario)
+            ->from('/perfil')
+            ->delete('/profile', ['password' => 'incorrecta'])
             ->assertSessionHasErrorsIn('userDeletion', 'password')
-            ->assertRedirect('/profile');
+            ->assertRedirect('/perfil');
 
-        $this->assertNotNull($user->fresh());
+        $this->assertNotNull($usuario->fresh());
     }
 }

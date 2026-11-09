@@ -118,11 +118,12 @@ táctiles de 44 px y la app es instalable (manifiesto PWA + iconos en `public/ic
 
 ## Notas
 
-- **Tests**: `phpunit.xml` apunta a MySQL (`dungeons_test`; créala antes con `CREATE DATABASE dungeons_test`).
-  `tests/Unit/AvatarTest.php` y `tests/Feature/FeedTest.php` cubren avatares, paginación de la Taberna,
-  que las consultas no crezcan con los comentarios (guarda anti N+1) y el saneado de etiquetas.
-  Los demás (`tests/Feature/Auth/*`, `ProfileTest`) son los de plantilla de Laravel Breeze: usan
-  `App\Models\User` y el campo `name`, que no existen aquí, y fallan desde antes. Conviene reescribirlos
-  contra `Usuario` (hay una `UsuarioFactory` lista).
+- **Tests** (`composer test`): `phpunit.xml` apunta a MySQL (`dungeons_test`; créala antes con
+  `CREATE DATABASE dungeons_test`). Cubren autenticación y restablecer contraseña (con `Usuario`), perfil,
+  avatares y la Taberna (paginación, guarda anti N+1, saneado de etiquetas y escapado). Los 3 tests de
+  verificación de correo se omiten a propósito: `Usuario` no implementa `MustVerifyEmail`.
+  Faltan tests de autorización de campañas/fichas (ver «Seguridad pendiente» abajo).
+- **Seguridad pendiente**: `CampanaController::show` y `PersonajeController::json` no comprueban que el usuario
+  sea DM/miembro/dueño, y `EquipoController::store` no comprueba que el personaje sea suyo.
 - Las plantillas de ficha PDF (`views/personajes/ficha_pdf_*.blade.php`) mantienen su CSS en línea a
   propósito: las renderiza DomPDF en servidor, que no ejecuta Vite.
