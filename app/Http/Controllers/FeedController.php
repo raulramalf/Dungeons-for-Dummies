@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\Comentario;
 use App\Models\Like;
+use Illuminate\Support\Facades\Cache;
 
 class FeedController extends Controller
 {
@@ -27,41 +28,78 @@ class FeedController extends Controller
         }
 
         $etiquetaActual = $request->get('etiqueta');
+        $usuarioId      = auth()->id();
 
-        $query = Post::with([
+        // "Me gusta" del usuario actual como columna (liked_by_me) en la propia
+        // consulta: sin un EXISTS por publicación/comentario.
+        $likeMio = fn ($q) => $q->where('user_id', $usuarioId);
+
+        $posts = Post::with([
                 'usuario',
-                'comentarios' => function ($query) {
-                    $query->whereNull('parent_id')
-                        ->with(['usuario', 'respuestas.usuario', 'likes'])
+                'comentarios' => function ($q) use ($likeMio) {
+                    $q->whereNull('parent_id')
+                        ->with([
+                            'usuario',
+                            'respuestas' => fn ($r) => $r->without('respuestas')
+                                ->with('usuario')
+                                ->withCount('likes')
+                                ->withExists(['likes as liked_by_me' => $likeMio]),
+                        ])
+                        ->withCount('likes')
+                        ->withExists(['likes as liked_by_me' => $likeMio])
                         ->latest();
                 },
-                'likes',
             ])
-            ->withCount('likes')
-            ->where('sala', $salaActual);
+            ->withCount(['likes', 'comentarios'])
+            ->withExists(['likes as liked_by_me' => $likeMio])
+            ->where('sala', $salaActual)
+            ->when($etiquetaActual, fn ($q) => $q->whereJsonContains('etiquetas', $etiquetaActual))
+            ->latest()
+            ->simplePaginate(10)
+            ->withQueryString();
 
-        if ($etiquetaActual) {
-            $query->whereJsonContains('etiquetas', $etiquetaActual);
+        // "Cargar más": solo las tarjetas, sin el layout
+        if ($request->boolean('parcial')) {
+            return view('partials.feed-posts', compact('posts', 'salaActual'));
         }
-
-        $posts = $query->latest()->get();
-
-        // Recopilar todas las etiquetas únicas usadas en esta sala
-        $todasLasEtiquetas = Post::where('sala', $salaActual)
-            ->whereNotNull('etiquetas')
-            ->pluck('etiquetas')
-            ->flatten()
-            ->unique()
-            ->sort()
-            ->values();
 
         return view('feed', [
             'posts'          => $posts,
             'salas'          => self::SALAS,
             'salaActual'     => $salaActual,
-            'etiquetas'      => $todasLasEtiquetas,
+            'etiquetas'      => $this->etiquetasDeSala($salaActual),
             'etiquetaActual' => $etiquetaActual,
         ]);
+    }
+
+    /**
+     * Etiquetas usadas en una sala. Antes se leían las de TODAS las publicaciones
+     * en cada visita; ahora se cachean 5 min y se invalidan al publicar/borrar.
+     */
+    private function etiquetasDeSala(string $sala)
+    {
+        // Se cachea un array plano: Laravel no deserializa objetos (Collection) de la caché
+        return collect(Cache::remember("feed.etiquetas.$sala", 300, fn () => Post::where('sala', $sala)
+            ->whereNotNull('etiquetas')
+            ->pluck('etiquetas')
+            ->flatten()
+            ->unique()
+            ->sort()
+            ->values()
+            ->all()));
+    }
+
+    /** Máx. 8 etiquetas de texto, de hasta 30 caracteres y sin duplicados. */
+    private function limpiarEtiquetas(?string $json): array
+    {
+        return collect(json_decode($json ?? '[]', true) ?: [])
+            ->filter(fn ($t) => is_string($t))
+            ->map(fn ($t) => mb_substr(trim($t), 0, 30))
+            ->filter()
+            ->unique()
+            ->take(8)
+            ->values()
+            ->all();
     }
 
     public function store(Request $request)
@@ -80,9 +118,11 @@ class FeedController extends Controller
         Post::create([
             'user_id'   => auth()->id(),
             'contenido' => $request->contenido,
-            'etiquetas' => json_decode($request->etiquetas, true) ?? [],
+            'etiquetas' => $this->limpiarEtiquetas($request->etiquetas),
             'sala'      => $sala,
         ]);
+
+        Cache::forget("feed.etiquetas.$sala");
 
         return back()->with('success', '¡Tu hazaña ha sido publicada en la taberna!');
     }
@@ -101,6 +141,7 @@ class FeedController extends Controller
         }
 
         $post->delete();
+        Cache::forget("feed.etiquetas.{$post->sala}");
 
         if (request()->ajax()) {
             return response()->json(['success' => true]);

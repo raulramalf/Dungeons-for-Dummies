@@ -1,22 +1,24 @@
-<x-guest-layout>
-    <div class="mb-4" style="color: var(--color-gris); font-size: 0.85rem; line-height: 1.6;">
+<x-guest-layout titulo="Recuperar contraseña">
+    <p class="auth-texto">
         ¿Olvidaste tu contraseña? No hay problema. Indícanos tu correo electrónico y te enviaremos un enlace para restablecerla.
-    </div>
+    </p>
 
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+    <x-auth-session-status :status="session('status')" />
 
     <form method="POST" action="{{ route('password.email') }}">
         @csrf
 
-        <div>
+        <div class="campo">
             <label for="email">Correo electrónico</label>
-            <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+            <input id="email" type="email" name="email" value="{{ old('email') }}" required autofocus
+                   inputmode="email" autocapitalize="none" spellcheck="false" />
+            <x-input-error :messages="$errors->get('email')" />
         </div>
 
-        <div class="mt-4" style="display: flex; justify-content: space-between; align-items: center;">
-            <a href="{{ route('login') }}">Volver al login</a>
-            <button type="submit">Enviar enlace</button>
+        <button type="submit">Enviar enlace</button>
+
+        <div class="auth-pie">
+            <a href="{{ route('login') }}">Volver al inicio de sesión</a>
         </div>
     </form>
 </x-guest-layout>

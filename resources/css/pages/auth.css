@@ -1,0 +1,215 @@
+/* ============================================================================
+   PÁGINAS DE ACCESO (login, registro, recuperar contraseña…)
+   Tarjeta centrada sobre el póster del castillo. Usa los mismos tokens que la
+   app; antes redefinía sus propios colores y pisaba selectores globales
+   (input, label, a, button) de TODA la hoja de estilos.
+   ============================================================================ */
+
+.auth-page {
+    align-items: center;
+    justify-content: center;
+    padding: max(1.2rem, var(--safe-t)) max(1rem, var(--safe-r)) max(1.2rem, var(--safe-b)) max(1rem, var(--safe-l));
+}
+
+.auth-page .bg-media {
+    inset: 0; /* sin barra lateral en estas pantallas */
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 440px;
+    padding: clamp(1.5rem, 6vw, 2.4rem);
+    background: rgba(18, 3, 9, 0.88);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--b-medio);
+    border-radius: var(--r-xl);
+    box-shadow: var(--sombra-lg), var(--brillo-rojo);
+}
+
+.auth-logo {
+    display: flex;
+    justify-content: center;
+}
+
+.auth-logo .logo-mark {
+    width: 52px;
+    height: 52px;
+}
+
+.auth-logo .marca {
+    font-size: 1.9rem;
+}
+
+.auth-lema {
+    margin: 0.7rem 0 1.8rem;
+    text-align: center;
+    font-family: var(--f-titulo);
+    font-size: 0.72rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--t-tenue);
+}
+
+/* ----- Formulario ----- */
+.auth-card label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-family: var(--f-titulo);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--t-secundario);
+}
+
+.auth-card input[type="text"],
+.auth-card input[type="email"],
+.auth-card input[type="password"] {
+    width: 100%;
+    min-height: 48px;
+    padding: 0.7rem 1rem;
+    color: var(--t-principal);
+    font-family: var(--f-cuerpo);
+    font-size: 1rem;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid var(--b-neutro);
+    border-radius: var(--r-md);
+    transition:
+        border-color var(--dur),
+        box-shadow var(--dur);
+}
+
+.auth-card input:focus {
+    outline: none;
+    border-color: var(--c-rojo);
+    box-shadow: var(--foco);
+}
+
+.auth-card .campo-recordar {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 44px;
+    margin-top: 0.8rem;
+}
+
+.auth-card .campo-recordar label {
+    margin: 0;
+    font-family: var(--f-cuerpo);
+    font-size: 0.92rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    cursor: pointer;
+}
+
+.auth-card button[type="submit"] {
+    width: 100%;
+    min-height: 50px;
+    margin-top: 1.2rem;
+    color: #fff;
+    font-family: var(--f-titulo);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    background: var(--c-rojo);
+    border: none;
+    border-radius: var(--r-md);
+    box-shadow: 0 4px 14px rgba(179, 3, 3, 0.35);
+    cursor: pointer;
+    transition:
+        background var(--dur),
+        transform var(--dur) var(--ease);
+}
+
+.auth-card button[type="submit"]:hover {
+    background: var(--c-rojo-osc);
+    transform: translateY(-1px);
+}
+
+.auth-card button[type="submit"]:active {
+    transform: translateY(0);
+}
+
+/* ----- Enlaces ----- */
+.auth-card a:not(.marca-logo) {
+    display: inline-block;
+    padding: 0.5rem 0;
+    font-size: 0.92rem;
+    color: var(--t-secundario);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color var(--dur);
+}
+
+.auth-card a:not(.marca-logo):hover {
+    color: #fff;
+}
+
+.auth-pie {
+    margin-top: 1.4rem;
+    padding-top: 0.6rem;
+    text-align: center;
+    border-top: 1px solid var(--b-sutil);
+}
+
+.auth-enlaces {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0 1rem;
+    margin-top: 0.4rem;
+}
+
+/* ----- Mensajes ----- */
+.auth-card .campo-error {
+    margin-top: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--c-naranja);
+    list-style: none;
+}
+
+.auth-card .estado-ok {
+    margin-bottom: 1rem;
+    padding: 0.7rem 1rem;
+    font-size: 0.92rem;
+    color: var(--c-verde-claro);
+    background: rgba(90, 107, 63, 0.25);
+    border: 1px solid var(--c-verde);
+    border-radius: var(--r-md);
+}
+
+.auth-card p.auth-texto {
+    margin-bottom: 1.2rem;
+    font-size: 0.94rem;
+    color: var(--t-secundario);
+}
+
+.auth-card .campo + .campo,
+.auth-card .campo ~ .campo {
+    margin-top: 1rem;
+}
+
+/* Botón con aspecto de enlace (p. ej. "Cerrar sesión" en verificar correo) */
+.auth-card .auth-enlace-boton {
+    width: auto;
+    min-height: 44px;
+    margin: 0;
+    padding: 0.5rem 1rem;
+    color: var(--t-secundario);
+    font-family: var(--f-cuerpo);
+    font-size: 0.92rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    background: transparent;
+    box-shadow: none;
+}
+
+.auth-card .auth-enlace-boton:hover {
+    color: #fff;
+    background: transparent;
+    transform: none;
+}

@@ -1,0 +1,187 @@
+/* Estilos de partials/d20-button.blade.php (extraídos de la vista; se cargan solo en esta página) */
+/* Dado d20 flotante (marcado en partials/d20-button.blade.php, lógica en js/d20.js) */
+
+#d20-container {
+    position: fixed;
+    right: calc(30px + var(--safe-r));
+    bottom: calc(30px + var(--safe-b));
+    z-index: 90;
+    width: 100px;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+#d20-canvas-wrapper {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    background: transparent;
+}
+
+/* d20 SVG que ocupa el sitio mientras carga three.js (o si no hay WebGL) */
+.d20-placeholder {
+    position: absolute;
+    inset: 8px;
+    width: calc(100% - 16px);
+    height: calc(100% - 16px);
+    filter: drop-shadow(0 6px 14px rgba(179, 3, 3, 0.45));
+    animation: d20-flota 4s ease-in-out infinite;
+}
+
+/* Mientras llega three.js tras un toque: el d20 "se agita" como si se estuviera lanzando */
+#d20-container.cargando .d20-placeholder {
+    animation: d20-agita 0.5s ease-in-out infinite;
+}
+
+@keyframes d20-agita {
+    25% {
+        transform: rotate(-14deg) scale(1.06);
+    }
+    75% {
+        transform: rotate(14deg) scale(1.06);
+    }
+}
+
+@keyframes d20-flota {
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
+#result-badge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 58px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(180, 0, 0, 0.95);
+    color: #ffd700;
+    font-family: Georgia, serif;
+    font-size: 34px;
+    font-weight: bold;
+    border: 3px solid #ffd700;
+    border-radius: 50%;
+    box-shadow: 0 0 50px rgba(255, 215, 0, 0.4);
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition:
+        transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+        opacity 0.4s;
+}
+
+#d20-shadow {
+    width: 86px;
+    height: 16px;
+    margin-top: 4px;
+    background: radial-gradient(ellipse, rgba(0, 0, 0, 0.25) 0%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(8px);
+    transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* En móvil el dado se sube sobre la barra de pestañas y se hace algo más pequeño */
+@media (max-width: 1024px) {
+    #d20-container {
+        right: calc(14px + var(--safe-r));
+        bottom: calc(var(--bottomnav-h) + var(--safe-b) + 12px);
+        width: 68px;
+        height: 82px;
+    }
+    #d20-canvas-wrapper {
+        width: 68px;
+        height: 68px;
+    }
+    #d20-shadow {
+        width: 56px;
+    }
+}
+
+#d20-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+#d20-container:hover {
+    filter: drop-shadow(0 0 30px rgba(200, 0, 0, 0.3));
+}
+#d20-container:active #d20-canvas-wrapper {
+    transform: scale(0.93);
+    transition: transform 0.12s ease;
+}
+.result-show #result-badge {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+.result-show #d20-shadow {
+    transform: scale(0.75);
+    opacity: 0.3;
+}
+@keyframes badgePop {
+    0% { transform: translate(-50%, -50%) scale(0) rotate(-15deg); opacity: 0; }
+    55% { transform: translate(-50%, -50%) scale(1.15) rotate(3deg); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
+}
+.result-show #result-badge {
+    animation: badgePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+#d20-canvas-wrapper canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    background: transparent !important;
+}
+
+#d20-crit-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0);
+    opacity: 0;
+    pointer-events: none;
+    transition: background 0.35s ease, opacity 0.35s ease;
+}
+#d20-crit-overlay.show {
+    background: rgba(0, 0, 0, 0.55);
+    opacity: 1;
+    pointer-events: auto;
+}
+#d20-crit-text {
+    font-family: var(--f-titulo);
+    font-weight: 900;
+    font-size: clamp(48px, 10vw, 130px);
+    letter-spacing: 4px;
+    color: #ffd700;
+    text-shadow:
+        0 0 20px rgba(255, 215, 0, 0.9),
+        0 0 60px rgba(255, 215, 0, 0.6),
+        0 4px 0 rgba(120, 80, 0, 0.9);
+    transform: scale(0) rotate(-8deg);
+    opacity: 0;
+}
+#d20-crit-overlay.fail #d20-crit-text {
+    color: #ff2b2b;
+    text-shadow:
+        0 0 20px rgba(255, 40, 40, 0.9),
+        0 0 60px rgba(255, 40, 40, 0.6),
+        0 4px 0 rgba(90, 0, 0, 0.9);
+}
+#d20-crit-overlay.show #d20-crit-text {
+    animation: d20CritPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+@keyframes d20CritPop {
+    0% { transform: scale(0) rotate(-8deg); opacity: 0; }
+    55% { transform: scale(1.15) rotate(2deg); opacity: 1; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}

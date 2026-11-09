@@ -7,18 +7,16 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
 
 class ProfileController extends Controller
 {
     /**
-     * Display the user's profile form.
+     * La pantalla de perfil de Breeze quedó sustituida por /perfil (PerfilController);
+     * se redirige para que enlaces antiguos no lleguen a una página vacía.
      */
-    public function edit(Request $request): View
+    public function edit(Request $request): RedirectResponse
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        return redirect()->route('perfil.index');
     }
 
     /**

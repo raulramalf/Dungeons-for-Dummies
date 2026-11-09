@@ -1,0 +1,129 @@
+/* ----- Contenedor ----- */
+.contenedor {
+    max-width: var(--max-w);
+    margin: 0 auto;
+}
+
+
+/* ----- Tarjetas ----- */
+.tarjeta {
+    background: var(--c-superficie);
+    border: 1px solid var(--b-sutil);
+    border-radius: var(--r-lg);
+    padding: 1.6rem;
+    transition: all 0.3s ease;
+}
+
+.tarjeta:hover {
+    border-color: var(--b-medio);
+    background: var(--c-superficie-2);
+}
+
+/* ----- Badges ----- */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.22rem 0.8rem;
+    border-radius: 20px;
+    font-family: var(--f-titulo);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.badge-rojo {
+    background: var(--c-rojo);
+    color: #fff;
+}
+.badge-verde {
+    background: rgba(90, 107, 63, 0.5);
+    color: var(--c-verde-claro);
+    border: 1px solid var(--c-verde);
+}
+.badge-neutro {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--t-secundario);
+    border: 1px solid var(--b-neutro);
+}
+
+/* ----- Títulos de sección ----- */
+.seccion-titulo {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--t-secundario);
+    font-family: var(--f-titulo);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    border-bottom: 1px solid var(--b-neutro);
+    padding-bottom: 0.6rem;
+    margin-bottom: 1.4rem;
+}
+
+.seccion-titulo .icon {
+    color: var(--c-rojo-claro);
+}
+
+/* ----- Separador ornamental ----- */
+.separador-orn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    color: var(--c-rojo);
+}
+.separador-orn::before,
+.separador-orn::after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    max-width: 120px;
+    background: linear-gradient(90deg, transparent, var(--c-rojo), transparent);
+}
+
+
+/* ----- Estado vacío ----- */
+.vacio {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: rgba(255, 255, 255, 0.015);
+    border: 2px dashed var(--b-sutil);
+    border-radius: var(--r-lg);
+}
+.vacio .icon {
+    color: var(--c-rojo);
+    opacity: 0.5;
+    margin-bottom: 1rem;
+}
+.vacio h3 {
+    color: var(--t-secundario);
+    margin-bottom: 0.5rem;
+}
+.vacio p {
+    color: var(--t-tenue);
+    margin-bottom: 1.5rem;
+}
+
+
+/* ----- Barra de acciones de página (recuento + botón principal) ----- */
+.barra-acciones {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.8rem 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.barra-acciones-info {
+    color: var(--t-secundario);
+}
+
+@media (max-width: 600px) {
+    .barra-acciones > .btn {
+        width: 100%;
+    }
+}

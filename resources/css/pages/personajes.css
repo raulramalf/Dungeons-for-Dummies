@@ -1,0 +1,191 @@
+/* ============================================================================
+   PÁGINA: GREMIO DE HÉROES (listado de personajes)
+   Cuadrícula de tarjetas: 1 columna en móvil estrecho, 2 en móvil ancho,
+   y hasta 4+ en escritorio. Sin JS.
+   ============================================================================ */
+
+.pj-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr));
+    gap: 1.2rem;
+}
+
+.pj-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--c-superficie);
+    border: 1px solid var(--b-sutil);
+    border-radius: var(--r-lg);
+    transition:
+        transform var(--dur) var(--ease),
+        border-color var(--dur),
+        box-shadow var(--dur);
+}
+
+.pj-card:hover,
+.pj-card:focus-within {
+    transform: translateY(-4px);
+    border-color: var(--b-fuerte);
+    box-shadow: var(--sombra-md), var(--brillo-rojo);
+}
+
+/* Retrato con degradado inferior para que el nombre se lea siempre */
+.pj-media {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 4.2;
+    overflow: hidden;
+    background: var(--c-superficie-2);
+}
+
+.pj-media::after {
+    content: "";
+    position: absolute;
+    inset: 45% 0 0;
+    background: linear-gradient(to top, var(--c-superficie), transparent);
+    pointer-events: none;
+}
+
+.pj-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s var(--ease);
+}
+
+.pj-card:hover .pj-media img {
+    transform: scale(1.05);
+}
+
+.pj-nivel {
+    position: absolute;
+    top: 0.7rem;
+    left: 0.7rem;
+    z-index: 1;
+    padding: 0.2rem 0.7rem;
+    font-family: var(--f-titulo);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #fff;
+    background: rgba(179, 3, 3, 0.9);
+    border-radius: 999px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.pj-cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.2rem 1rem 1rem;
+    margin-top: -0.6rem;
+    position: relative;
+    z-index: 1;
+}
+
+.pj-nombre {
+    font-size: 1.1rem;
+    line-height: 1.25;
+    overflow-wrap: anywhere;
+}
+
+.pj-nombre a:hover {
+    color: var(--c-rojo-claro);
+}
+
+/* Enlace "estirado": toda la tarjeta abre la ficha; las acciones quedan por encima */
+.pj-nombre a::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.pj-meta {
+    font-size: 0.88rem;
+    color: var(--t-secundario);
+}
+
+.pj-acciones {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.8rem;
+}
+
+.pj-acciones .btn {
+    flex: 1;
+    min-height: 44px;
+}
+
+.pj-acciones form {
+    display: contents;
+}
+
+.btn-icono-peligro:hover {
+    color: #fff;
+    background: var(--c-rojo);
+}
+
+@media (hover: none) {
+    .pj-card:hover {
+        transform: none;
+    }
+}
+
+/* Móvil: 2 columnas compactas; la tarjeta entera es el botón "Ver ficha" */
+@media (max-width: 600px) {
+    .pj-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.8rem;
+    }
+
+    .pj-media {
+        aspect-ratio: 1;
+    }
+
+    .pj-cuerpo {
+        padding: 0.2rem 0.75rem 0.75rem;
+    }
+
+    .pj-nombre {
+        font-size: 0.95rem;
+    }
+
+    .pj-meta {
+        font-size: 0.8rem;
+    }
+
+    .pj-acciones .btn {
+        display: none;
+    }
+
+    .pj-acciones {
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .pj-acciones .btn-icono,
+    .pj-acciones form {
+        flex: 1;
+        display: flex;
+    }
+
+    .pj-acciones .btn-icono {
+        width: auto;
+        height: 42px;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--b-neutro);
+    }
+
+    .pj-acciones form .btn-icono {
+        flex: 1;
+    }
+}

@@ -1,0 +1,6 @@
+/* Estilos de campanyas.blade.php (extraídos de la vista; se cargan solo en esta página) */
+input[name="codigo_invitacion"]::placeholder {
+    text-transform: none;
+    letter-spacing: normal;
+    font-size: 0.85rem;
+}

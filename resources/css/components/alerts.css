@@ -1,0 +1,27 @@
+/* ----- Alertas ----- */
+.alerta {
+    padding: 0.9rem 1.3rem;
+    border-radius: var(--r-md);
+    margin-bottom: 1.4rem;
+    font-size: 0.96rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.alerta-exito {
+    background: rgba(90, 107, 63, 0.4);
+    border: 1px solid var(--c-verde);
+    color: var(--c-verde-claro);
+}
+.alerta-error {
+    background: rgba(179, 3, 3, 0.12);
+    border: 1px solid var(--b-fuerte);
+    color: var(--c-rojo-claro);
+}
+.alerta-info {
+    background: rgba(212, 96, 67, 0.1);
+    border: 1px solid rgba(212, 96, 67, 0.3);
+    color: var(--c-naranja);
+}
+

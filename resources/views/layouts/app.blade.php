@@ -1,36 +1,32 @@
+@php
+    // yieldContent devuelve texto ya escapado por @section('x', '...'); se decodifica
+    // para que {{ }} lo escape una sola vez (si no, "D&D" saldría como "D&amp;amp;D")
+    $tituloPagina = html_entity_decode(trim($__env->yieldContent('titulo')), ENT_QUOTES);
+    $descripcion  = html_entity_decode(trim($__env->yieldContent('descripcion')), ENT_QUOTES) ?: null;
+@endphp
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('titulo', 'Dungeons for Dummies')</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @include('partials.head', ['tituloPagina' => $tituloPagina] + ($descripcion ? ['descripcion' => $descripcion] : []))
 </head>
 <body>
+    <a href="#contenido" class="skip-link">Saltar al contenido</a>
 
-    <div class="overlay" id="overlay" onclick="cerrarMenu()"></div>
-
-    {{-- TOPBAR MÓVIL --}}
-    <header class="topbar">
-        <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menú">
-            <span></span><span></span><span></span>
-        </button>
-        <span class="topbar-titulo">@yield('titulo')</span>
-    </header>
-
-    {{-- SIDEBAR --}}
     @include('layouts.navigation')
 
-    {{-- CONTENIDO --}}
-    <main class="main-content">
-        <div class="page-header">
+    <main class="main-content" id="contenido" tabindex="-1">
+        <div class="page-header @hasSection('cabecera-oculta') page-header--oculta @endif">
             <h1>@yield('titulo')</h1>
+            @hasSection('acciones')
+                <div class="page-acciones">@yield('acciones')</div>
+            @endif
         </div>
+
         @yield('contenido')
     </main>
 
-    
+    <x-toasts />
 
+    @stack('scripts')
 </body>
 </html>

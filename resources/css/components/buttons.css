@@ -1,0 +1,76 @@
+/* ----- Botones ----- */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.7rem 1.6rem;
+    font-family: var(--f-titulo);
+    font-size: 0.92rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    border: none;
+    border-radius: var(--r-md);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-decoration: none;
+    line-height: 1;
+}
+
+.btn-primario {
+    background: var(--c-rojo);
+    color: #fff;
+    box-shadow:
+        0 4px 14px rgba(179, 3, 3, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+.btn-primario:hover {
+    background: var(--c-rojo-osc);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(179, 3, 3, 0.4);
+}
+
+.btn-secundario {
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--t-principal);
+    border: 1px solid var(--b-neutro);
+}
+.btn-secundario:hover {
+    background: rgba(255, 255, 255, 0.12);
+    transform: translateY(-2px);
+}
+
+.btn-naranja {
+    background: var(--c-naranja);
+    color: #fff;
+}
+.btn-naranja:hover {
+    background: var(--c-naranja-osc);
+    transform: translateY(-2px);
+}
+
+.btn-peligro {
+    background: #6b1a1a;
+    color: #fff;
+}
+.btn-peligro:hover {
+    background: #8a2222;
+    transform: translateY(-2px);
+}
+
+.btn-sm {
+    padding: 0.45rem 1rem;
+    font-size: 0.82rem;
+}
+
+
+/* Pantallas táctiles: objetivos de al menos 44 px (guía WCAG 2.5.5 / Apple HIG) */
+@media (pointer: coarse) {
+    .btn {
+        min-height: 44px;
+    }
+    .btn-sm {
+        min-height: 40px;
+        padding-inline: 1.1rem;
+    }
+}

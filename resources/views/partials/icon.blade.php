@@ -7,7 +7,7 @@
     home, sword, swords, scroll, skull, user, feed, logout, eye, edit, trash,
     plus, heart, comment, shield, dice, dragon, coins, chevron-left,
     chevron-right, book, flame, star, helmet, potion, bow, settings, lock,
-    arrow-left, x, check, image, map
+    arrow-left, x, check, image, map, more, login
 --}}
 @php $cls = $class ?? ''; @endphp
 
@@ -107,6 +107,12 @@
         @break
     @case('map')
         <svg class="icon {{ $cls }}" viewBox="0 0 24 24"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14"/><path d="M15 6v14"/></svg>
+        @break
+    @case('more')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/></svg>
+        @break
+    @case('login')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
         @break
     @default
         <svg class="icon {{ $cls }}" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg>

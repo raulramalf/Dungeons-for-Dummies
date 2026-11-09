@@ -33,11 +33,13 @@ class InicioController extends Controller
                 ->whereNotNull('fecha_sesion')
                 ->get()
                 ->map(fn ($s) => [
-                    'id'      => $s->id,
-                    'fecha'   => $s->fecha_sesion->format('Y-m-d'),
-                    'titulo'  => $s->titulo,
-                    'campana' => $s->campana->nombre,
-                    'numero'  => $s->numero_sesion,
+                    'id'         => $s->id,
+                    'fecha'      => $s->fecha_sesion->format('Y-m-d'),
+                    'hora'       => $s->fecha_sesion->format('H:i'),
+                    'titulo'     => $s->titulo,
+                    'campana'    => $s->campana->nombre,
+                    'campana_id' => $s->campana_id,
+                    'numero'     => $s->numero_sesion,
                 ]);
         }
 

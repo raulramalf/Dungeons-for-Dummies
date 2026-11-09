@@ -2,18 +2,18 @@
 
 @section('titulo', 'Campañas')
 
-@section('contenido')
+@push('head')
+    @vite(['resources/css/pages/campanyas.css', 'resources/js/pages/campanyas.js'])
+@endpush
 
-@if (session('success'))
-    <div class="alerta alerta-exito">{{ session('success') }}</div>
-@endif
+@section('contenido')
 
 @if ($errors->any())
     <div class="alerta alerta-error">{{ $errors->first() }}</div>
 @endif
 
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-    <p style="color: var(--t-secundario);">{{ $campanasDM->count() }} campañas como Dungeon Master</p>
+    <p style="color: var(--t-secundario);">{{ $campanasDM->count() }} {{ $campanasDM->count() === 1 ? 'campaña' : 'campañas' }} como Dungeon Master</p>
     <button onclick="abrirModalCrear()" class="btn btn-primario">+ Crear Campaña</button>
 </div>
 
@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <div style="display: flex; gap: 8px; margin-left: 15px;">
-                    <form method="POST" action="/campanyas/{{ $campana->id }}" onsubmit="return confirm('¿Eliminar esta campaña?')" onclick="event.stopPropagation()">
+                    <form method="POST" action="/campanyas/{{ $campana->id }}" data-confirm="¿Eliminar esta campaña?" onclick="event.stopPropagation()">
                         @csrf @method('DELETE')
                         <button type="submit" class="btn btn-peligro btn-sm">🗑</button>
                     </form>
@@ -80,7 +80,7 @@
                     <div style="color: var(--t-secundario); font-size: 0.85rem; margin-top: 4px;">{{ $campana->sesiones_count }} sesiones · Nivel {{ $campana->nivel_inicial }}</div>
                 </div>
                 <div style="display: flex; gap: 8px;" onclick="event.stopPropagation()">
-                    <form method="POST" action="/campanyas/{{ $campana->id }}" onsubmit="return confirm('¿Eliminar esta campaña?')">
+                    <form method="POST" action="/campanyas/{{ $campana->id }}" data-confirm="¿Eliminar esta campaña?">
                         @csrf @method('DELETE')
                         <button type="submit" class="btn btn-peligro btn-sm">🗑</button>
                     </form>
@@ -227,32 +227,6 @@
     </div>
 </div>
 
-<script>
-    function cambiarTabCampana(tab) {
-        document.querySelectorAll('.panel-campana').forEach(p => p.style.display = 'none');
-        document.querySelectorAll('.tab-campana').forEach(t => {
-            t.style.borderBottomColor = 'transparent';
-            t.style.color = 'var(--t-secundario)';
-        });
 
-        document.getElementById('panel-' + tab).style.display = 'flex';
-        const tabBtn = document.getElementById('tab-' + tab);
-        tabBtn.style.borderBottomColor = 'var(--c-rojo)';
-        tabBtn.style.color = 'white';
-    }
-    
-    function abrirModalCrear() {
-        document.getElementById('modal-crear-campana').scrollTop = 0;
-        document.getElementById('modal-crear-campana').style.display = 'flex';
-    }
-</script>
-
-<style>
-    input[name="codigo_invitacion"]::placeholder {
-        text-transform: none;
-        letter-spacing: normal;
-        font-size: 0.85rem;
-    }
-</style>
 
 @endsection

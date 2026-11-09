@@ -1,0 +1,81 @@
+/* ============================================================================
+   DIÁLOGO DE CONFIRMACIÓN (js/confirm.js)
+   ============================================================================ */
+.confirm {
+    margin: auto;
+    width: min(92vw, 420px);
+    padding: 0;
+    color: var(--t-principal);
+    background: var(--c-superficie);
+    border: 1px solid var(--b-medio);
+    border-radius: var(--r-lg);
+    box-shadow: var(--sombra-lg);
+}
+
+.confirm::backdrop {
+    background: rgba(0, 0, 0, 0.68);
+    backdrop-filter: blur(3px);
+}
+
+.confirm[open] {
+    animation: confirm-in 0.25s var(--ease);
+}
+
+@keyframes confirm-in {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.97);
+    }
+}
+
+.confirm-cuerpo {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    padding: 1.6rem 1.5rem 1.4rem;
+}
+
+.confirm-msg {
+    font-size: 1.05rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.confirm-acciones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 480px) {
+    .confirm-acciones .btn {
+        flex: 1;
+    }
+}
+
+/* ============================================================================
+   LIGHTBOX (js/lightbox.js)
+   ============================================================================ */
+.lightbox {
+    margin: auto;
+    max-width: 100vw;
+    max-height: 100dvh;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: zoom-out;
+}
+
+.lightbox::backdrop {
+    background: rgba(0, 0, 0, 0.92);
+}
+
+.lightbox img {
+    display: block;
+    max-width: min(92vw, 900px);
+    max-height: 88dvh;
+    object-fit: contain;
+    border-radius: var(--r-md);
+    border: 2px solid var(--b-medio);
+}

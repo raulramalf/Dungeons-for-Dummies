@@ -68,4 +68,10 @@ class Usuario extends Authenticatable
     {
         return $this->hasMany(Campana::class, 'dungeon_master_id');
     }
+
+    // URL del avatar (o marcador local con la inicial si no hay imagen)
+    public function getAvatarUrlAttribute(): string
+    {
+        return \App\Support\Avatar::url($this->avatar, (string) $this->nombre);
+    }
 }

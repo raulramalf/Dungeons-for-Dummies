@@ -7,19 +7,13 @@
 <div style="max-width: 1000px; margin: 0 auto;">
 
     <!-- MENSAJES DE ÉXITO -->
-    @if (session('success'))
-        <div style="background: rgba(64,72,52,0.4); border: 1px solid #4caf50; border-radius: 8px; padding: 12px 20px; margin-bottom: 20px; color: #4caf50;">
-            {{ session('success') }}
-        </div>
-    @endif
-
     <!-- CABECERA PERFIL -->
     <div style="background: #2a0a18; border-radius: 10px; padding: 30px; display: flex; align-items: center; gap: 25px; margin-bottom: 25px; flex-wrap: wrap;">
         <form method="POST" action="{{ route('perfil.avatar') }}" enctype="multipart/form-data" id="formAvatar" style="position: relative; flex-shrink: 0;">
             @csrf
             <label for="inputAvatar" style="cursor: pointer; display: block; position: relative;">
                 @if(auth()->user()->avatar)
-                <img src="{{ str_starts_with(auth()->user()->avatar, 'http') ? auth()->user()->avatar : Storage::url(auth()->user()->avatar) }}"
+                <img src="{{ auth()->user()->avatar_url }}"
                     style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--color-rojo);">
                 @else
                 <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--color-rojo); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; border: 3px solid var(--color-rojo);">
@@ -65,12 +59,12 @@
             <div style="display: flex; flex-direction: column; gap: 15px;">
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Nombre de usuario</label>
-                    <input type="text" name="nombre" value="{{ auth()->user()->nombre }}" style="width: 100%; background: #120309; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px; color: white; font-family: Georgia, serif; font-size: 0.9rem;">
+                    <input type="text" name="nombre" value="{{ auth()->user()->nombre }}" style="width: 100%; background: #120309; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo); font-size: 0.9rem;">
                     @error('nombre') <span style="color: var(--color-naranja); font-size: 0.8rem;">{{ $message }}</span> @enderror
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Correo electrónico</label>
-                    <input type="email" name="email" value="{{ auth()->user()->email }}" style="width: 100%; background: #120309; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px; color: white; font-family: Georgia, serif; font-size: 0.9rem;">
+                    <input type="email" name="email" value="{{ auth()->user()->email }}" style="width: 100%; background: #120309; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo); font-size: 0.9rem;">
                     @error('email') <span style="color: var(--color-naranja); font-size: 0.8rem;">{{ $message }}</span> @enderror
                 </div>
                 <button type="submit" class="btn btn-primario" style="width: 100%; margin-top: 5px;">Guardar Cambios</button>
@@ -87,17 +81,17 @@
             <div style="display: flex; flex-direction: column; gap: 15px;">
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Contraseña actual</label>
-                    <input type="password" name="current_password" style="width: 100%; background: #120309; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px; color: white; font-family: Georgia, serif; font-size: 0.9rem;">
+                    <input type="password" name="current_password" style="width: 100%; background: #120309; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo); font-size: 0.9rem;">
                     @error('current_password') <span style="color: var(--color-naranja); font-size: 0.8rem;">{{ $message }}</span> @enderror
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Nueva contraseña</label>
-                    <input type="password" name="password" style="width: 100%; background: #120309; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px; color: white; font-family: Georgia, serif; font-size: 0.9rem;">
+                    <input type="password" name="password" style="width: 100%; background: #120309; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo); font-size: 0.9rem;">
                     @error('password') <span style="color: var(--color-naranja); font-size: 0.8rem;">{{ $message }}</span> @enderror
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Confirmar nueva contraseña</label>
-                    <input type="password" name="password_confirmation" style="width: 100%; background: #120309; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px; color: white; font-family: Georgia, serif; font-size: 0.9rem;">
+                    <input type="password" name="password_confirmation" style="width: 100%; background: #120309; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo); font-size: 0.9rem;">
                 </div>
                 <button type="submit" class="btn btn-primario" style="width: 100%; margin-top: 5px;">Cambiar Contraseña</button>
             </div>

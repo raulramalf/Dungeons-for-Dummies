@@ -22,22 +22,31 @@ class PersonajeController extends Controller
         return view("personajes", compact("personajes"));
     }
 
+    /**
+     * Listas de referencia para los formularios de crear/editar personaje.
+     * Se piden solo las columnas que usan las vistas (id/nombre/…), no las
+     * filas completas con sus descripciones largas.
+     */
+    private function catalogos(): array
+    {
+        return [
+            "razas" => Raza::select("id", "nombre")->orderBy("nombre")->get(),
+            "clases" => Clase::select("id", "nombre")->orderBy("nombre")->get(),
+            "trasfondos" => Trasfondo::select("id", "nombre")->orderBy("nombre")->get(),
+            "subclases" => \App\Models\Subclase::select("id", "nombre", "clase_id")
+                ->with("clase:id,nombre")
+                ->orderBy("nombre")
+                ->get(),
+            "dotes" => \App\Models\Dote::select("id", "nombre", "categoria")
+                ->orderBy("categoria")
+                ->orderBy("nombre")
+                ->get(),
+        ];
+    }
+
     public function create()
     {
-        $razas = Raza::all();
-        $clases = Clase::all();
-        $trasfondos = Trasfondo::all();
-        $subclases = \App\Models\Subclase::with("clase")
-            ->orderBy("nombre")
-            ->get();
-        $dotes = \App\Models\Dote::orderBy("categoria")
-            ->orderBy("nombre")
-            ->get();
-
-        return view(
-            "personajes_crear",
-            compact("razas", "clases", "trasfondos", "subclases", "dotes"),
-        );
+        return view("personajes_crear", $this->catalogos());
     }
 
     public function store(Request $request)
@@ -226,33 +235,18 @@ class PersonajeController extends Controller
             "dotes",
         ]);
 
-        $razas = Raza::all();
-        $clases = Clase::all();
-        $trasfondos = Trasfondo::all();
-        $subclases = \App\Models\Subclase::with("clase")
-            ->orderBy("nombre")
-            ->get();
-        $dotes = \App\Models\Dote::orderBy("categoria")
-            ->orderBy("nombre")
-            ->get();
-
         // Catálogo completo de conjuros, sin filtrar por clase
-        // (hay rasgos, dotes y trasfondos que dan acceso a conjuros de otras clases)
-        $conjurosCatalogo = \App\Models\Conjuro::orderBy("nivel")
+        // (hay rasgos, dotes y trasfondos que dan acceso a conjuros de otras clases).
+        // Solo las columnas que pinta la lista: el resto (descripción, componentes…)
+        // son textos largos que no hace falta traer de 391 conjuros en cada visita.
+        $conjurosCatalogo = \App\Models\Conjuro::select("id", "nombre", "escuela", "nivel")
+            ->orderBy("nivel")
             ->orderBy("nombre")
             ->get();
 
         return view(
             "personajes_editar",
-            compact(
-                "personaje",
-                "razas",
-                "clases",
-                "trasfondos",
-                "subclases",
-                "dotes",
-                "conjurosCatalogo",
-            ),
+            $this->catalogos() + compact("personaje", "conjurosCatalogo"),
         );
     }
 

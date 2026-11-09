@@ -1,0 +1,23 @@
+{
+    "name": "Dungeons for Dummies",
+    "short_name": "Dungeons",
+    "description": "Gestiona tus personajes de D&D 5.5e, organiza campañas y comparte tus hazañas en la taberna.",
+    "lang": "es",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "background_color": "#1a0509",
+    "theme_color": "#120309",
+    "categories": ["games", "entertainment"],
+    "icons": [
+        { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+        { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+        { "src": "/icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    ],
+    "shortcuts": [
+        { "name": "Mis personajes", "url": "/personajes", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
+        { "name": "Campañas", "url": "/campanyas", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
+        { "name": "Reto diario", "url": "/minijuego", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] }
+    ]
+}

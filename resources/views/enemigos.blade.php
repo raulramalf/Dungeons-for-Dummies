@@ -2,13 +2,11 @@
 
 @section('titulo', 'Enemigos')
 
-@section('contenido')
+@push('head')
+    @vite('resources/js/pages/enemigos.js')
+@endpush
 
-@if (session('success'))
-    <div style="background: rgba(64,72,52,0.4); border: 1px solid #4caf50; border-radius: 8px; padding: 12px 20px; margin-bottom: 20px; color: #4caf50;">
-        {{ session('success') }}
-    </div>
-@endif
+@section('contenido')
 
 @if ($errors->any())
     <div style="background: rgba(107,26,26,0.5); border: 1px solid #B30303; border-radius: 8px; padding: 12px 20px; margin-bottom: 20px; color: #ff9999;">
@@ -25,7 +23,7 @@
 
 <!-- BUSCADOR Y FILTROS -->
 <div style="margin-bottom: 25px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
-    <input type="text" id="buscador" onkeyup="buscarEnemigo()" placeholder="Buscar enemigo..." style="background: #2a0a18; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px; color: white; font-family: Georgia, serif; font-size: 0.9rem; flex: 1; min-width: 200px; max-width: 400px;">
+    <input type="text" id="buscador" onkeyup="buscarEnemigo()" placeholder="Buscar enemigo..." style="background: #2a0a18; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo); font-size: 0.9rem; flex: 1; min-width: 200px; max-width: 400px;">
     <button onclick="ordenarPorCR()" id="btn-orden" class="btn btn-secundario">↑↓ Ordenar por CR</button>
     <button onclick="ordenarPorNombre()" id="btn-nombre" class="btn btn-secundario">↑↓ Ordenar por Nombre</button>
     <button onclick="filtrarBoss()" id="btn-boss" class="btn btn-secundario">⚠️ Solo Boss</button>
@@ -86,7 +84,7 @@
                     </div>
                 </div>
                 <div style="display: flex; justify-content: flex-end;">
-                    <form method="POST" action="/enemigos/{{ $enemigo->id }}" onsubmit="event.stopPropagation(); return confirm('¿Eliminar este enemigo?')" onclick="event.stopPropagation()">
+                    <form method="POST" action="/enemigos/{{ $enemigo->id }}" data-confirm="¿Eliminar este enemigo?" onclick="event.stopPropagation()">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-peligro btn-sm">🗑 Eliminar</button>
@@ -133,15 +131,15 @@
                             ⚠️ Es un Boss
                         </label>
                     </div>
-                    <input type="text" name="nombre" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
+                    <input type="text" name="nombre" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo);">
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Tipo *</label>
-                    <input type="text" name="tipo" placeholder="Humanoide, Bestia..." required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
+                    <input type="text" name="tipo" placeholder="Humanoide, Bestia..." required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo);">
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Tamaño *</label>
-                    <select name="tamaño" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
+                    <select name="tamaño" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo);">
                         <option value="Diminuto">Diminuto</option>
                         <option value="Pequeño">Pequeño</option>
                         <option value="Mediano" selected>Mediano</option>
@@ -152,15 +150,15 @@
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Alineamiento</label>
-                    <input type="text" name="alineamiento" placeholder="Caótico Malvado..." style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
+                    <input type="text" name="alineamiento" placeholder="Caótico Malvado..." style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo);">
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">CR (Clase de Desafío) *</label>
-                    <input type="number" name="clase_de_desafio" step="0.125" min="0" value="1" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
+                    <input type="number" name="clase_de_desafio" step="0.125" min="0" value="1" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo);">
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Puntos de Experiencia *</label>
-                    <input type="number" name="puntos_de_experiencia" value="0" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
+                    <input type="number" name="puntos_de_experiencia" value="0" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo);">
                 </div>
             </div>
 
@@ -169,19 +167,19 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px;">
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">CA *</label>
-                    <input type="number" name="clase_de_armadura" value="10" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
+                    <input type="number" name="clase_de_armadura" value="10" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo);">
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Tipo Armadura</label>
-                    <input type="text" name="tipo_armadura" placeholder="Armadura natural..." style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
+                    <input type="text" name="tipo_armadura" placeholder="Armadura natural..." style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo);">
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Puntos de Golpe *</label>
-                    <input type="text" name="puntos_de_golpe" placeholder="66 (12d8+12)" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
+                    <input type="text" name="puntos_de_golpe" placeholder="66 (12d8+12)" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo);">
                 </div>
                 <div style="grid-column: 1/-1;">
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Velocidad *</label>
-                    <input type="text" name="velocidad" value="9 m." required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
+                    <input type="text" name="velocidad" value="9 m." required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo);">
                 </div>
             </div>
 
@@ -191,7 +189,7 @@
                 @foreach(['fuerza' => 'FUE', 'destreza' => 'DES', 'constitucion' => 'CON', 'inteligencia' => 'INT', 'sabiduria' => 'SAB', 'carisma' => 'CAR'] as $campo => $label)
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.75rem; display: block; margin-bottom: 6px; text-align: center;">{{ $label }}</label>
-                    <input type="number" name="{{ $campo }}" value="10" min="1" max="30" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 5px; color: white; font-family: Georgia, serif; text-align: center;">
+                    <input type="number" name="{{ $campo }}" value="10" min="1" max="30" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 5px; color: white; font-family: var(--f-cuerpo); text-align: center;">
                 </div>
                 @endforeach
             </div>
@@ -201,31 +199,31 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
                 <div style="grid-column: 1/-1;">
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Descripción</label>
-                    <textarea name="descripcion" rows="3" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif; resize: vertical;"></textarea>
+                    <textarea name="descripcion" rows="3" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo); resize: vertical;"></textarea>
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Resistencias</label>
-                    <textarea name="resistencias" rows="2" placeholder="Fuego, Frío..." style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif; resize: vertical;"></textarea>
+                    <textarea name="resistencias" rows="2" placeholder="Fuego, Frío..." style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo); resize: vertical;"></textarea>
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Inmunidades al daño</label>
-                    <textarea name="inmunidades_daño" rows="2" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif; resize: vertical;"></textarea>
+                    <textarea name="inmunidades_daño" rows="2" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo); resize: vertical;"></textarea>
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Sentidos</label>
-                    <textarea name="sentidos" rows="2" placeholder="Visión en la oscuridad 18 m..." style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif; resize: vertical;"></textarea>
+                    <textarea name="sentidos" rows="2" placeholder="Visión en la oscuridad 18 m..." style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo); resize: vertical;"></textarea>
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Idiomas</label>
-                    <input type="text" name="idiomas" placeholder="Común, Infernal..." style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
+                    <input type="text" name="idiomas" placeholder="Común, Infernal..." style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo);">
                 </div>
                 <div style="grid-column: 1/-1;">
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Acciones</label>
-                    <textarea name="acciones" rows="3" placeholder="Ataque con espada: +5 al ataque, 1d8+3 de daño cortante..." style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif; resize: vertical;"></textarea>
+                    <textarea name="acciones" rows="3" placeholder="Ataque con espada: +5 al ataque, 1d8+3 de daño cortante..." style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo); resize: vertical;"></textarea>
                 </div>
                 <div style="grid-column: 1/-1;">
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Rasgos Especiales</label>
-                    <textarea name="rasgos_especiales" rows="3" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif; resize: vertical;"></textarea>
+                    <textarea name="rasgos_especiales" rows="3" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo); resize: vertical;"></textarea>
                 </div>
             </div>
 
@@ -273,15 +271,15 @@
                             ⚠️ Es un Boss
                         </label>
                     </div>
-                    <input type="text" name="nombre" id="ver-nombre" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
+                    <input type="text" name="nombre" id="ver-nombre" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo);">
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Tipo *</label>
-                    <input type="text" name="tipo" id="ver-tipo" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
+                    <input type="text" name="tipo" id="ver-tipo" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo);">
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Tamaño *</label>
-                    <select name="tamaño" id="ver-tamaño" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
+                    <select name="tamaño" id="ver-tamaño" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo);">
                         <option value="Diminuto">Diminuto</option>
                         <option value="Pequeño">Pequeño</option>
                         <option value="Mediano">Mediano</option>
@@ -292,15 +290,15 @@
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Alineamiento</label>
-                    <input type="text" name="alineamiento" id="ver-alineamiento" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
+                    <input type="text" name="alineamiento" id="ver-alineamiento" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo);">
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">CR *</label>
-                    <input type="number" name="clase_de_desafio" id="ver-cr" step="0.125" min="0" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
+                    <input type="number" name="clase_de_desafio" id="ver-cr" step="0.125" min="0" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo);">
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Puntos de Experiencia *</label>
-                    <input type="number" name="puntos_de_experiencia" id="ver-xp" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
+                    <input type="number" name="puntos_de_experiencia" id="ver-xp" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo);">
                 </div>
             </div>
 
@@ -308,19 +306,19 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 15px;">
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">CA *</label>
-                    <input type="number" name="clase_de_armadura" id="ver-ca" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
+                    <input type="number" name="clase_de_armadura" id="ver-ca" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo);">
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Tipo Armadura</label>
-                    <input type="text" name="tipo_armadura" id="ver-tipo-armadura" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
+                    <input type="text" name="tipo_armadura" id="ver-tipo-armadura" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo);">
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Puntos de Golpe *</label>
-                    <input type="text" name="puntos_de_golpe" id="ver-pg" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
+                    <input type="text" name="puntos_de_golpe" id="ver-pg" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo);">
                 </div>
                 <div style="grid-column: 1/-1;">
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Velocidad *</label>
-                    <input type="text" name="velocidad" id="ver-velocidad" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
+                    <input type="text" name="velocidad" id="ver-velocidad" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo);">
                 </div>
             </div>
 
@@ -329,7 +327,7 @@
                 @foreach(['fuerza' => 'FUE', 'destreza' => 'DES', 'constitucion' => 'CON', 'inteligencia' => 'INT', 'sabiduria' => 'SAB', 'carisma' => 'CAR'] as $campo => $label)
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.75rem; display: block; margin-bottom: 6px; text-align: center;">{{ $label }}</label>
-                    <input type="number" name="{{ $campo }}" id="ver-{{ $campo }}" min="1" max="30" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 5px; color: white; font-family: Georgia, serif; text-align: center;">
+                    <input type="number" name="{{ $campo }}" id="ver-{{ $campo }}" min="1" max="30" required style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 5px; color: white; font-family: var(--f-cuerpo); text-align: center;">
                 </div>
                 @endforeach
             </div>
@@ -338,31 +336,31 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
                 <div style="grid-column: 1/-1;">
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Descripción</label>
-                    <textarea name="descripcion" id="ver-descripcion" rows="3" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif; resize: vertical;"></textarea>
+                    <textarea name="descripcion" id="ver-descripcion" rows="3" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo); resize: vertical;"></textarea>
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Resistencias</label>
-                    <textarea name="resistencias" id="ver-resistencias" rows="2" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif; resize: vertical;"></textarea>
+                    <textarea name="resistencias" id="ver-resistencias" rows="2" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo); resize: vertical;"></textarea>
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Inmunidades al daño</label>
-                    <textarea name="inmunidades_daño" id="ver-inmunidades" rows="2" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif; resize: vertical;"></textarea>
+                    <textarea name="inmunidades_daño" id="ver-inmunidades" rows="2" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo); resize: vertical;"></textarea>
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Sentidos</label>
-                    <textarea name="sentidos" id="ver-sentidos" rows="2" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif; resize: vertical;"></textarea>
+                    <textarea name="sentidos" id="ver-sentidos" rows="2" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo); resize: vertical;"></textarea>
                 </div>
                 <div>
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Idiomas</label>
-                    <input type="text" name="idiomas" id="ver-idiomas" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif;">
+                    <input type="text" name="idiomas" id="ver-idiomas" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo);">
                 </div>
                 <div style="grid-column: 1/-1;">
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Acciones</label>
-                    <textarea name="acciones" id="ver-acciones" rows="3" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif; resize: vertical;"></textarea>
+                    <textarea name="acciones" id="ver-acciones" rows="3" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo); resize: vertical;"></textarea>
                 </div>
                 <div style="grid-column: 1/-1;">
                     <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Rasgos Especiales</label>
-                    <textarea name="rasgos_especiales" id="ver-rasgos" rows="3" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: Georgia, serif; resize: vertical;"></textarea>
+                    <textarea name="rasgos_especiales" id="ver-rasgos" rows="3" style="width: 100%; background: #20050E; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 10px 15px; color: white; font-family: var(--f-cuerpo); resize: vertical;"></textarea>
                 </div>
             </div>
 
@@ -394,134 +392,5 @@
     <img id="lightbox-enemigo-img" src="" style="max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 8px; border: 2px solid rgba(179,3,3,0.3);">
 </div>
 
-<script>
-    function buscarEnemigo() {
-        const texto = document.getElementById('buscador').value.toLowerCase();
-        document.querySelectorAll('.tarjeta-enemigo').forEach(tarjeta => {
-            const nombre = tarjeta.dataset.nombre.toLowerCase();
-            const coincide = nombre.includes(texto);
-            const filtroOk = !filtroBossActivo || tarjeta.dataset.boss === '1';
-            tarjeta.style.display = (coincide && filtroOk) ? 'block' : 'none';
-        });
-    }
-
-    let filtroBossActivo = false;
-
-    function filtrarBoss() {
-        filtroBossActivo = !filtroBossActivo;
-        const btn = document.getElementById('btn-boss');
-        btn.style.background = filtroBossActivo ? 'rgba(179,3,3,0.25)' : '';
-        btn.style.borderColor = filtroBossActivo ? 'var(--color-rojo)' : '';
-        buscarEnemigo();
-    }
-
-    function verEnemigo(id) {
-        fetch(`/enemigos/${id}`)
-            .then(r => r.json())
-            .then(e => {
-                document.getElementById('ver-titulo').textContent = e.nombre;
-                document.getElementById('form-editar-enemigo').action = `/enemigos/${id}/update`;
-                document.getElementById('ver-nombre').value = e.nombre;
-                document.getElementById('ver-tipo').value = e.tipo;
-                document.getElementById('ver-tamaño').value = e.tamaño;
-                document.getElementById('ver-alineamiento').value = e.alineamiento || '';
-                document.getElementById('ver-cr').value = e.clase_de_desafio;
-                document.getElementById('ver-xp').value = e.puntos_de_experiencia;
-                document.getElementById('ver-ca').value = e.clase_de_armadura;
-                document.getElementById('ver-tipo-armadura').value = e.tipo_armadura || '';
-                document.getElementById('ver-pg').value = e.puntos_de_golpe;
-                document.getElementById('ver-velocidad').value = e.velocidad;
-                document.getElementById('ver-fuerza').value = e.fuerza;
-                document.getElementById('ver-destreza').value = e.destreza;
-                document.getElementById('ver-constitucion').value = e.constitucion;
-                document.getElementById('ver-inteligencia').value = e.inteligencia;
-                document.getElementById('ver-sabiduria').value = e.sabiduria;
-                document.getElementById('ver-carisma').value = e.carisma;
-                document.getElementById('ver-descripcion').value = e.descripcion || '';
-                document.getElementById('ver-resistencias').value = e.resistencias || '';
-                document.getElementById('ver-inmunidades').value = e.inmunidades_daño || '';
-                document.getElementById('ver-sentidos').value = e.sentidos || '';
-                document.getElementById('ver-idiomas').value = e.idiomas || '';
-                document.getElementById('ver-acciones').value = e.acciones || '';
-                document.getElementById('ver-rasgos').value = e.rasgos_especiales || '';
-                document.getElementById('ver-boss').checked = e.es_boss == 1;
-                const preview = document.getElementById('ver-imagen-preview') || document.getElementById('ver-imagen-preview');
-                if (e.imagen) {
-                    console.log('Imagen:', e.imagen);
-                    console.log('URL:', '/storage/' + e.imagen);
-                    preview.src = '/storage/' + e.imagen;
-                    preview.style.display = 'block';
-                } else {
-                    preview.style.display = 'none';
-                }
-                setTimeout(() => {
-                    document.getElementById('modal-ver-enemigo').scrollTop = 0;
-                }, 10);
-                document.getElementById('modal-ver-enemigo').style.display = 'flex';
-            });
-    }
-
-    let ordenAscendente = true;
-    let ordenNombreAsc = true;
-
-    function ordenarPorCR() {
-        const lista = document.getElementById('lista-enemigos');
-        const tarjetas = Array.from(lista.querySelectorAll('.tarjeta-enemigo'));
-
-        tarjetas.sort((a, b) => {
-            const crA = parseFloat(a.dataset.cr);
-            const crB = parseFloat(b.dataset.cr);
-            return ordenAscendente ? crA - crB : crB - crA;
-        });
-
-        ordenAscendente = !ordenAscendente;
-        const btn = document.getElementById('btn-orden');
-        btn.textContent = ordenAscendente ? '↑↓ Ordenar por CR' : '↓↑ Ordenar por CR';
-        btn.style.color = ordenAscendente ? 'var(--color-gris)' : 'white';
-        btn.style.borderColor = ordenAscendente ? 'var(--color-gris)' : 'var(--color-rojo)';
-
-        // Resetear botón de nombre
-        ordenNombreAsc = true;
-        const btnNombre = document.getElementById('btn-nombre');
-        btnNombre.textContent = '↑↓ Ordenar por Nombre';
-        btnNombre.style.color = 'var(--color-gris)';
-        btnNombre.style.borderColor = 'var(--color-gris)';
-
-        tarjetas.forEach(t => lista.appendChild(t));
-    }
-
-    function ordenarPorNombre() {
-        const lista = document.getElementById('lista-enemigos');
-        const tarjetas = Array.from(lista.querySelectorAll('.tarjeta-enemigo'));
-
-        tarjetas.sort((a, b) => {
-            const nombreA = a.dataset.nombre.toLowerCase();
-            const nombreB = b.dataset.nombre.toLowerCase();
-            return ordenNombreAsc ? nombreA.localeCompare(nombreB) : nombreB.localeCompare(nombreA);
-        });
-
-        ordenNombreAsc = !ordenNombreAsc;
-        const btn = document.getElementById('btn-nombre');
-        btn.textContent = ordenNombreAsc ? '↑↓ Ordenar por Nombre' : '↓↑ Ordenar por Nombre';
-        btn.style.color = ordenNombreAsc ? 'var(--color-gris)' : 'white';
-        btn.style.borderColor = ordenNombreAsc ? 'var(--color-gris)' : 'var(--color-rojo)';
-
-        // Resetear botón de CR
-        ordenAscendente = true;
-        const btnCR = document.getElementById('btn-orden');
-        btnCR.textContent = '↑↓ Ordenar por CR';
-        btnCR.style.color = 'var(--color-gris)';
-        btnCR.style.borderColor = 'var(--color-gris)';
-
-        tarjetas.forEach(t => lista.appendChild(t));
-    }
-
-    function abrirModalNuevo() {
-        setTimeout(() => {
-            document.getElementById('modal-enemigo').scrollTop = 0;
-        }, 10);
-        document.getElementById('modal-enemigo').style.display = 'flex';
-    }
-</script>
 
 @endsection

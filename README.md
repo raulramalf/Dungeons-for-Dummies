@@ -1,58 +1,92 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Dungeons for Dummies
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Compañero web para jugar a **D&D 5.5e en español**: fichas de personaje (con exportación a PDF),
+campañas con calendario de sesiones, bestiario del DM, una taberna social y un reto diario.
 
-## About Laravel
+Laravel 13 · PHP 8.5 · MySQL/MariaDB · Vite · CSS propio con tokens (de Tailwind solo se usa su capa base/reset) · JS sin framework.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Puesta en marcha
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
-
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Requisitos: PHP 8.5, Composer, Node 22+ y **MySQL o MariaDB** (las migraciones usan
+`ALTER TABLE … MODIFY`, por lo que SQLite no sirve).
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+composer install
+cp .env.example .env          # ajusta DB_DATABASE / DB_USERNAME / DB_PASSWORD
+php artisan key:generate
+php artisan migrate
+php artisan db:seed           # clases, razas y conjuros se importan de DND_API_URL (necesita red)
+npm install
+npm run build                 # producción · o `npm run dev` para desarrollo con HMR
+php artisan serve
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Los seeders de contenido 5.5e (subclases, trasfondos, dotes, conjuros) leen JSON locales de
+`database/seeders/data/` y no necesitan red.
 
-## Contributing
+## Estructura del frontend
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```
+resources/
+├── css/
+│   ├── app.css               punto de entrada: solo @import (Vite lo une y le pone hash)
+│   ├── base/                 tokens (colores, tipografía, medidas), reset, fuentes autoalojadas
+│   ├── layout/shell.css      barra lateral, barra superior y pestañas móviles, hoja "Más", toasts
+│   ├── components/           botones, tarjetas, formularios, alertas, diálogos, fondo multimedia…
+│   └── pages/                estilos de UNA página (se cargan solo en ella)
+├── js/
+│   ├── app.js                solo lo global: UI (hoja/toasts), confirmaciones, lightbox, fondo
+│   ├── pages/                lógica de UNA página (Alpine, calendario, feed, editor…)
+│   └── d20.js                dado 3D (three.js), carga diferida desde pages/inicio.js
+└── views/
+    ├── layouts/              app (con navegación) y guest (login/registro)
+    ├── partials/             head común, iconos SVG, piezas del feed, dado
+    └── components/           x-logo-mark, x-bg-media, x-toasts, x-input-error…
+```
 
-## Code of Conduct
+`vite.config.js` registra automáticamente como entrada todo `css/pages/*.css` y `js/pages/*.js`.
+**Añadir una página nueva:**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+1. Crea `resources/css/pages/mi-pagina.css` y/o `resources/js/pages/mi-pagina.js`.
+2. En la vista: `@push('head') @vite(['resources/css/pages/mi-pagina.css', 'resources/js/pages/mi-pagina.js']) @endpush`.
+3. Usa los tokens de `base/tokens.css` (`var(--c-rojo)`, `var(--r-md)`, `var(--dur)`…) en vez de colores sueltos.
 
-## Security Vulnerabilities
+### Convenciones
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+| Necesidad | Cómo |
+|---|---|
+| Mensaje tras una acción | `->with('success', '…')` desde el controlador. Se muestra solo como *toast* (no copies un bloque de alerta en la vista). Desde JS: `toast('Texto', 'exito' \| 'error')`. |
+| Confirmar un borrado | `<form data-confirm="¿Eliminar X?">` o `<button data-confirm="…">`. Desde JS: `if (!(await confirmar('¿Seguro?'))) return;`. **No uses `window.confirm()`.** |
+| Ampliar una imagen | `<img data-lightbox>` |
+| Fondo de vídeo | `<x-bg-media nombre="castillo-fondo" />` (`public/videos/{nombre}.mp4` + `.webp`). El MP4 solo se descarga en escritorio, sin «reducir movimiento» ni ahorro de datos. |
+| Avatar | `$usuario->avatar_url` / `$personaje->avatar_url` (o `App\Support\Avatar::url()`). Sin avatar genera un marcador SVG local: no hay peticiones a servicios externos. |
+| Cabecera propia en una página | `@section('cabecera-oculta', '1')` mantiene el `<h1>` solo para lectores de pantalla. |
+| Texto de usuario en JS | Siempre `textContent`, o escapar antes de usar `innerHTML`. |
 
-## License
+### Móvil
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Hasta 1024 px la navegación pasa a una barra superior compacta + **barra de pestañas inferior** (Inicio,
+Personajes, Campañas, Taberna, Más). Respeta las zonas seguras (`env(safe-area-inset-*)`), usa objetivos
+táctiles de 44 px y la app es instalable (manifiesto PWA + iconos en `public/icons/`).
+
+## Rendimiento
+
+- Vídeos de fondo recomprimidos (H.264 720p, sin audio): de 35 MB a ~3 MB. Para regenerarlos:
+  `ffmpeg -i origen.mp4 -an -vf "scale=1280:-2,fps=24" -c:v libx264 -preset slow -crf 35 -profile:v main -movflags +faststart destino.mp4`
+- Fuentes autoalojadas solo en `latin` y `latin-ext` (sin Google Fonts, sin bloqueo de renderizado).
+- `three.js` (dado 3D) se descarga de forma diferida y solo en Inicio; Alpine solo en el Reto Diario.
+- La Taberna pagina de 10 en 10 con carga automática y resuelve «me gusta» y contadores en la propia
+  consulta (de decenas de consultas por carga a 9, constantes).
+- `public/.htaccess` activa compresión y caché larga para `/build` (los ficheros llevan hash).
+- Si cambias contenido de referencia (razas, clases…) con un seeder y algo parece desfasado: `php artisan cache:clear`.
+
+## Notas
+
+- **Tests**: `phpunit.xml` apunta a MySQL (`dungeons_test`; créala antes con `CREATE DATABASE dungeons_test`).
+  `tests/Unit/AvatarTest.php` y `tests/Feature/FeedTest.php` cubren avatares, paginación de la Taberna,
+  que las consultas no crezcan con los comentarios (guarda anti N+1) y el saneado de etiquetas.
+  Los demás (`tests/Feature/Auth/*`, `ProfileTest`) son los de plantilla de Laravel Breeze: usan
+  `App\Models\User` y el campo `name`, que no existen aquí, y fallan desde antes. Conviene reescribirlos
+  contra `Usuario` (hay una `UsuarioFactory` lista).
+- Las plantillas de ficha PDF (`views/personajes/ficha_pdf_*.blade.php`) mantienen su CSS en línea a
+  propósito: las renderiza DomPDF en servidor, que no ejecuta Vite.

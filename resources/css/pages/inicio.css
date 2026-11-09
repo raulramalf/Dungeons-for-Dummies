@@ -1,0 +1,405 @@
+/* ============================================================================
+   PÁGINA: INICIO
+   ============================================================================ */
+
+.bloque {
+    margin-bottom: 3rem;
+}
+
+/* ----- HERO ----- */
+.hero {
+    padding: clamp(2.5rem, 8vw, 5.5rem) clamp(0.5rem, 3vw, 3rem);
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.hero-eyebrow {
+    display: inline-block;
+    margin-bottom: 1.1rem;
+    padding: 0.35rem 1rem;
+    font-family: var(--f-titulo);
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--c-oro-claro);
+    background: rgba(201, 162, 39, 0.1);
+    border: 1px solid rgba(201, 162, 39, 0.35);
+    border-radius: 20px;
+    backdrop-filter: blur(4px);
+}
+
+.hero-titulo {
+    font-family: var(--f-titulo);
+    font-size: clamp(2.4rem, 8vw, 4.4rem);
+    font-weight: 800;
+    line-height: 1.08;
+    letter-spacing: clamp(1px, 0.6vw, 5px);
+    color: #fff;
+    text-shadow:
+        0 4px 24px rgba(0, 0, 0, 0.9),
+        0 0 40px rgba(179, 3, 3, 0.35);
+    margin-bottom: 1rem;
+}
+
+.hero-sub {
+    max-width: 620px;
+    margin: 0 auto 2.2rem;
+    font-size: clamp(1rem, 2.6vw, 1.2rem);
+    line-height: 1.75;
+    color: #d8ccc4;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+}
+
+.hero-acciones {
+    display: flex;
+    gap: 0.9rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.hero-acciones .btn {
+    min-height: 48px;
+    padding-inline: 1.8rem;
+}
+
+/* ----- FUNCIONES (solo visitantes) ----- */
+.funciones {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+}
+
+.funcion {
+    padding: 1.5rem;
+    background: rgba(37, 9, 15, 0.82);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--b-sutil);
+    border-radius: var(--r-lg);
+    transition:
+        border-color var(--dur),
+        transform var(--dur) var(--ease);
+}
+
+.funcion:hover {
+    border-color: var(--b-medio);
+    transform: translateY(-3px);
+}
+
+.funcion .icon {
+    color: var(--c-naranja);
+    margin-bottom: 0.8rem;
+}
+
+.funcion h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+
+.funcion p {
+    color: var(--t-secundario);
+    font-size: 0.96rem;
+    line-height: 1.6;
+}
+
+/* ----- PRÓXIMA SESIÓN ----- */
+.proxima-sesion {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    padding: 1.15rem 1.3rem;
+    background: linear-gradient(90deg, rgba(179, 3, 3, 0.2), rgba(37, 9, 15, 0.85));
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--b-medio);
+    border-left: 3px solid var(--c-rojo);
+    border-radius: var(--r-md);
+    transition:
+        border-color var(--dur),
+        transform var(--dur) var(--ease);
+}
+
+.proxima-sesion:hover {
+    border-color: var(--b-fuerte);
+    transform: translateY(-2px);
+}
+
+.proxima-sesion-icono {
+    color: var(--c-rojo-claro);
+    flex-shrink: 0;
+}
+
+.proxima-sesion-cuerpo {
+    flex: 1;
+    min-width: 0;
+}
+
+.proxima-sesion-eyebrow {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--t-tenue);
+}
+
+.proxima-sesion-cuerpo h3 {
+    font-size: 1.08rem;
+    margin-bottom: 0.3rem;
+    overflow-wrap: anywhere;
+}
+
+.proxima-sesion-cuerpo p {
+    color: var(--t-secundario);
+    font-size: 0.92rem;
+}
+
+/* La fecha llega en minúsculas ("jueves 12 de noviembre"): solo se pone en
+   mayúscula la primera letra (capitalize pondría también "De" y "Noviembre"). */
+.proxima-sesion-cuerpo p::first-letter,
+.cal-detalle-titulo::first-letter {
+    text-transform: uppercase;
+}
+
+.proxima-sesion-flecha {
+    color: var(--t-tenue);
+    flex-shrink: 0;
+}
+
+/* ----- CALENDARIO ----- */
+.calendario-wrap {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: clamp(0.8rem, 3vw, 1.8rem);
+    background: rgba(37, 9, 15, 0.86);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--b-sutil);
+    border-radius: var(--r-lg);
+}
+
+.calendario-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.calendario-header h3 {
+    font-size: clamp(1.05rem, 4vw, 1.5rem);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.cal-nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    color: var(--t-principal);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--b-neutro);
+    border-radius: var(--r-md);
+    cursor: pointer;
+    transition: background var(--dur);
+}
+
+.cal-nav:hover {
+    background: rgba(179, 3, 3, 0.2);
+}
+
+.calendario-dias-semana,
+.calendario-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 4px;
+}
+
+.calendario-dias-semana {
+    margin-bottom: 6px;
+}
+
+.calendario-dias-semana span {
+    text-align: center;
+    color: var(--t-tenue);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.cal-celda {
+    position: relative;
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 2px;
+    padding-top: clamp(4px, 1.4vw, 10px);
+    overflow: hidden;
+    font: inherit;
+    color: inherit;
+    background: rgba(0, 0, 0, 0.18);
+    border: 1px solid transparent;
+    border-radius: var(--r-md);
+}
+
+.cal-vacia {
+    background: transparent;
+}
+
+.cal-numero {
+    font-size: clamp(0.9rem, 3.4vw, 1.15rem);
+    color: var(--t-secundario);
+    line-height: 1.2;
+}
+
+.cal-hoy {
+    border-color: var(--c-rojo);
+}
+
+.cal-hoy .cal-numero {
+    color: var(--c-rojo-claro);
+    font-weight: 700;
+}
+
+.cal-con-sesion {
+    cursor: pointer;
+    background: rgba(179, 3, 3, 0.16);
+    transition: background var(--dur);
+}
+
+.cal-con-sesion:hover,
+.cal-activa {
+    background: rgba(179, 3, 3, 0.32);
+}
+
+.cal-activa {
+    border-color: var(--b-fuerte);
+}
+
+.cal-campana-label {
+    display: none;
+    max-width: 100%;
+    padding: 0 4px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--c-rojo-claro);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cal-punto {
+    width: 6px;
+    height: 6px;
+    margin-top: 2px;
+    border-radius: 50%;
+    background: var(--c-rojo-claro);
+}
+
+.cal-mas {
+    position: absolute;
+    top: 3px;
+    right: 4px;
+    font-size: 0.62rem;
+    color: var(--t-tenue);
+}
+
+.cal-hoy-btn {
+    display: block;
+    margin: 0.9rem auto 0;
+    padding: 0.4rem 1rem;
+    font: inherit;
+    font-size: 0.85rem;
+    color: var(--t-secundario);
+    background: none;
+    border: 1px solid var(--b-neutro);
+    border-radius: 999px;
+    cursor: pointer;
+    transition:
+        color var(--dur),
+        border-color var(--dur);
+}
+
+.cal-hoy-btn:hover {
+    color: var(--t-principal);
+    border-color: var(--b-medio);
+}
+
+/* Detalle del día */
+.cal-sesiones-dia {
+    max-width: 920px;
+    margin: 1.2rem auto 0;
+}
+
+.cal-detalle-titulo {
+    margin-bottom: 0.6rem;
+    font-family: var(--f-cuerpo);
+    font-size: 0.88rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    color: var(--t-secundario);
+}
+
+.cal-sesion-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.2rem 0.7rem;
+    margin-bottom: 0.5rem;
+    padding: 0.8rem 1rem;
+    background: rgba(37, 9, 15, 0.9);
+    border-left: 3px solid var(--c-rojo);
+    border-radius: 0 var(--r-md) var(--r-md) 0;
+    font-size: 0.94rem;
+    color: var(--t-secundario);
+    transition: background var(--dur);
+}
+
+.cal-sesion-item:hover {
+    background: var(--c-superficie-2);
+}
+
+.cal-sesion-item strong {
+    color: var(--c-naranja);
+}
+
+.cal-sesion-txt {
+    flex: 1 1 12rem;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.cal-sesion-hora {
+    color: var(--t-tenue);
+    font-variant-numeric: tabular-nums;
+}
+
+/* Pantallas amplias: se muestra el nombre de la campaña en vez del punto */
+@media (min-width: 700px) {
+    .cal-campana-label {
+        display: block;
+    }
+    .cal-punto {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .hero-eyebrow {
+        letter-spacing: 1.5px;
+    }
+    .proxima-sesion {
+        align-items: flex-start;
+    }
+    .proxima-sesion-flecha {
+        display: none;
+    }
+    .hero-acciones .btn {
+        flex: 1 1 100%;
+    }
+}

@@ -107,12 +107,9 @@ class Personaje extends Model
             ->withTimestamps();
     }
 
-    // Método para obtener la URL del avatar
-    public function getAvatarUrlAttribute()
+    // URL del avatar (o marcador local con la inicial si no hay imagen)
+    public function getAvatarUrlAttribute(): string
     {
-        return $this->avatar ??
-            "https://ui-avatars.com/api/?name=" .
-                urlencode($this->nombre) .
-                "&background=B30303&color=fff&size=200";
+        return \App\Support\Avatar::url($this->avatar, (string) $this->nombre);
     }
 }

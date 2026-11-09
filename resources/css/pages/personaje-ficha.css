@@ -1,0 +1,467 @@
+/* Estilos de personaje_individual.blade.php (extraídos de la vista; se cargan solo en esta página) */
+/* =============================================
+   WRAPPER
+============================================= */
+.ficha-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: linear-gradient(150deg, rgba(18,8,4,0.97), rgba(36,16,8,0.99));
+    border-radius: 14px;
+    border: 1px solid rgba(179,3,3,0.22);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.75);
+    overflow: hidden;
+}
+
+/* =============================================
+   CABECERA
+============================================= */
+.ficha-header {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: center;
+    background: rgba(0,0,0,0.5);
+    border-bottom: 2px solid #B30303;
+    padding: 1.8rem 2.2rem;
+}
+
+.ficha-avatar {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #B30303;
+    background: #1a0a0a;
+    flex-shrink: 0;
+    box-shadow: 0 0 32px rgba(179,3,3,0.35);
+}
+
+.ficha-titulo { flex: 1; min-width: 200px; }
+
+.ficha-titulo h1 {
+    font-family: var(--f-titulo);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    color: #fff;
+    margin: 0 0 0.2rem;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+}
+
+.ficha-subtitulo {
+    color: #D46043;
+    font-size: 1.1rem;
+    margin-bottom: 0.6rem;
+    font-style: italic;
+}
+
+.ficha-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+    margin-bottom: 0.8rem;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.badge-nivel     { background: #B30303; color: #fff; }
+.badge-exp       { background: rgba(255,255,255,0.06); color: #768596; border: 1px solid rgba(118,133,150,0.2); }
+.badge-align     { background: rgba(255,255,255,0.05); color: #768596; border: 1px solid rgba(118,133,150,0.15); }
+.badge-divinidad { background: rgba(212,96,67,0.12); color: #D46043; border: 1px solid rgba(212,96,67,0.25); }
+
+.ficha-acciones {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.exportar-pdf-form {
+    display: inline-flex;
+    gap: 0.4rem;
+    align-items: center;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1.2rem;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.25s;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.btn-volver  { background: rgba(255,255,255,0.05); color: #768596; border: 1px solid rgba(118,133,150,0.25); }
+.btn-volver:hover  { background: rgba(255,255,255,0.1); color: #fff; }
+.btn-editar  { background: #D46043; color: #fff; }
+.btn-editar:hover  { background: #b84a30; transform: translateY(-1px); }
+.btn-eliminar { background: #6b1a1a; color: #fff; }
+.btn-eliminar:hover { background: #8a2222; transform: translateY(-1px); }
+
+/* =============================================
+   CUERPO
+============================================= */
+.ficha-body {
+    padding: 2rem 2.5rem;
+}
+
+.seccion {
+    margin-bottom: 2.5rem;
+}
+
+.seccion-titulo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #768596;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    border-bottom: 1px solid rgba(118,133,150,0.12);
+    padding-bottom: 0.6rem;
+    margin-bottom: 1.4rem;
+}
+
+/* =============================================
+   GALERÍA DE IMÁGENES
+============================================= */
+.galeria {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+
+.galeria img {
+    width: 130px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid rgba(179,3,3,0.25);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.galeria img:hover {
+    border-color: #B30303;
+    transform: scale(1.04);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+}
+
+/* =============================================
+   ESTADÍSTICAS
+============================================= */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 1rem;
+}
+
+.stat-card {
+    background: rgba(0,0,0,0.35);
+    border-radius: 10px;
+    padding: 1.2rem 0.8rem;
+    text-align: center;
+    border: 1px solid rgba(118,133,150,0.1);
+    transition: all 0.25s;
+}
+
+.stat-card:hover {
+    border-color: rgba(179,3,3,0.4);
+    transform: translateY(-2px);
+}
+
+.stat-label {
+    color: #768596;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: block;
+}
+
+.stat-valor {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #fff;
+    display: block;
+    line-height: 1.2;
+}
+
+.stat-mod {
+    color: #D46043;
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+
+/* =============================================
+   COMPETENCIAS
+============================================= */
+.competencias-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.5rem;
+}
+
+.competencia-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.88rem;
+}
+
+.competencia-item.activa {
+    background: rgba(64,72,52,0.35);
+    color: #9ab090;
+}
+
+.competencia-item.inactiva {
+    color: rgba(118,133,150,0.5);
+}
+
+.comp-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.comp-dot.activa  { background: #9ab090; }
+.comp-dot.inactiva { background: rgba(118,133,150,0.25); border: 1px solid rgba(118,133,150,0.3); }
+
+/* =============================================
+   COMBATE / INFO CARDS
+============================================= */
+.info-combat {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+    gap: 1rem;
+}
+
+.combat-card {
+    background: rgba(0,0,0,0.3);
+    padding: 1rem 1.2rem;
+    border-radius: 8px;
+    border-left: 3px solid #B30303;
+}
+
+.combat-label {
+    color: #768596;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
+}
+
+.combat-valor {
+    color: #fff;
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-top: 0.15rem;
+}
+
+/* Muerte */
+.muerte-grid {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.muerte-grupo label {
+    color: #768596;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.muerte-dots {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.muerte-dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid rgba(118,133,150,0.3);
+}
+
+.muerte-dot.exito  { background: rgba(64,72,52,0.8); border-color: #404834; }
+.muerte-dot.fallo  { background: rgba(107,26,26,0.8); border-color: #6b1a1a; }
+
+/* =============================================
+   ATAQUES
+============================================= */
+.tabla-ataques {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.tabla-ataques th {
+    color: #768596;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0.6rem 0.8rem;
+    border-bottom: 1px solid rgba(118,133,150,0.15);
+    text-align: left;
+    font-weight: 600;
+}
+
+.tabla-ataques td {
+    padding: 0.7rem 0.8rem;
+    color: #d0d5da;
+    border-bottom: 1px solid rgba(118,133,150,0.07);
+}
+
+.tabla-ataques tr:hover td {
+    background: rgba(179,3,3,0.04);
+}
+
+/* =============================================
+   HISTORIA / RASGOS
+============================================= */
+.historia-box {
+    background: rgba(0,0,0,0.25);
+    border-left: 4px solid #B30303;
+    border-radius: 0 8px 8px 0;
+    padding: 1.3rem 1.5rem;
+    color: #b8c0c8;
+    line-height: 1.75;
+    font-style: italic;
+    white-space: pre-line;
+}
+
+.rasgos-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.rasgo-card {
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    border: 1px solid rgba(118,133,150,0.1);
+}
+
+.rasgo-label {
+    color: #D46043;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 0.5rem;
+    font-family: var(--f-titulo);
+}
+
+.rasgo-texto {
+    color: #a8b0b8;
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+/* =============================================
+   APARIENCIA
+============================================= */
+.apariencia-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.8rem;
+}
+
+.apariencia-item {
+    background: rgba(0,0,0,0.2);
+    padding: 0.7rem 1rem;
+    border-radius: 6px;
+}
+
+.apariencia-label {
+    color: #768596;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    display: block;
+    margin-bottom: 0.2rem;
+}
+
+.apariencia-valor {
+    color: #d0d5da;
+    font-size: 0.92rem;
+}
+
+/* =============================================
+   EQUIPO
+============================================= */
+.equipo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 1rem;
+}
+
+.equipo-item {
+    background: rgba(0,0,0,0.3);
+    padding: 1rem 1.2rem;
+    border-radius: 8px;
+    border-left: 3px solid #D46043;
+    transition: all 0.25s;
+}
+
+.equipo-item:hover { background: rgba(0,0,0,0.45); }
+
+.equipo-nombre { color: #fff; font-weight: 600; font-size: 1rem; }
+.equipo-det    { color: #768596; font-size: 0.83rem; margin-top: 0.2rem; }
+.badge-equipado { color: #9ab090; font-size: 0.75rem; font-weight: 600; margin-left: 0.4rem; }
+
+/* =============================================
+   MONEDAS
+============================================= */
+.monedas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 1rem;
+}
+
+.moneda-card {
+    background: rgba(0,0,0,0.25);
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.moneda-simbolo { font-size: 1.5rem; display: block; margin-bottom: 0.2rem; }
+.moneda-cantidad { color: #fff; font-size: 1.35rem; font-weight: 700; }
+.moneda-nombre  { color: #768596; font-size: 0.72rem; display: block; margin-top: 0.1rem; }
+
+/* =============================================
+   RESPONSIVE
+============================================= */
+@media (max-width: 768px) {
+    .ficha-header { flex-direction: column; text-align: center; padding: 1.5rem; }
+    .ficha-body { padding: 1.5rem; }
+    .stats-grid { grid-template-columns: repeat(3, 1fr); }
+    .info-combat { grid-template-columns: 1fr 1fr; }
+    .rasgos-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .info-combat { grid-template-columns: 1fr; }
+    .equipo-grid { grid-template-columns: 1fr; }
+    .monedas-grid { grid-template-columns: repeat(3, 1fr); }
+}

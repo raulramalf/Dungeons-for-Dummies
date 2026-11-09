@@ -49,15 +49,29 @@ class Comentario extends Model
         return $this->hasMany(Comentario::class, 'parent_id')->with('respuestas');
     }
 
-    // Método para contar likes
+    /**
+     * Total de likes. Usa `likes_count` si la consulta lo trajo con withCount()
+     * (evita un COUNT(*) por fila); si no, cae a la consulta clásica.
+     */
     public function getLikesCountAttribute()
     {
-        return $this->likes()->count();
+        return $this->attributes['likes_count'] ?? $this->likes()->count();
     }
 
-    // Método para verificar si un usuario ha dado like
-    public function isLikedBy($usuarioId)
+    /**
+     * ¿Le ha dado like este usuario? Usa `liked_by_me` (withExists) o la
+     * relación `likes` si ya está cargada; solo consulta como último recurso.
+     */
+    public function isLikedBy($usuarioId): bool
     {
+        if (array_key_exists('liked_by_me', $this->attributes)) {
+            return (bool) $this->attributes['liked_by_me'];
+        }
+
+        if ($this->relationLoaded('likes')) {
+            return $this->likes->contains('user_id', $usuarioId);
+        }
+
         return $this->likes()->where('user_id', $usuarioId)->exists();
     }
 }

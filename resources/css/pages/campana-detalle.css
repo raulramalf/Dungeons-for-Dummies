@@ -1,0 +1,132 @@
+/* ============================================================================
+   PÁGINA: DETALLE DE CAMPAÑA
+   Tarjetas que js/pages/campana-detalle.js genera dentro del modal de ficha
+   (antes llevaban estilos inline repetidos en cada plantilla de cadena).
+   ============================================================================ */
+
+img[data-lightbox] {
+    cursor: zoom-in;
+}
+
+.pjm-badge {
+    padding: 3px 10px;
+    font-size: 0.78rem;
+    color: var(--t-secundario);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(118, 133, 150, 0.2);
+    border-radius: 20px;
+}
+
+.pjm-badge--nivel {
+    color: #fff;
+    background: var(--c-rojo);
+    border-color: transparent;
+}
+
+.pjm-stat {
+    padding: 12px 8px;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(118, 133, 150, 0.1);
+    border-radius: 10px;
+}
+
+.pjm-stat-et {
+    display: block;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--t-secundario);
+}
+
+.pjm-stat-val {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: #fff;
+}
+
+.pjm-stat-mod {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--c-naranja);
+}
+
+.pjm-dato {
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border-left: 3px solid var(--c-rojo);
+    border-radius: 8px;
+}
+
+.pjm-dato-et {
+    display: block;
+    font-size: 0.68rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--t-secundario);
+}
+
+.pjm-dato-val {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.pjm-rasgo {
+    padding: 12px 15px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(118, 133, 150, 0.1);
+    border-radius: 8px;
+}
+
+.pjm-rasgo-et {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--c-naranja);
+}
+
+.pjm-rasgo-txt {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #a8b0b8;
+    overflow-wrap: anywhere;
+}
+
+.pjm-equipo {
+    padding: 10px 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border-left: 3px solid var(--c-naranja);
+    border-radius: 8px;
+}
+
+.pjm-equipo-nombre {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fff;
+    overflow-wrap: anywhere;
+}
+
+.pjm-equipado {
+    font-size: 0.75rem;
+    color: var(--c-verde-claro);
+}
+
+.pjm-equipo-tipo {
+    font-size: 0.82rem;
+    color: var(--t-secundario);
+}
+
+/* La rejilla de 6 características no cabe en un móvil: pasa a 3 columnas */
+@media (max-width: 600px) {
+    #modal-p-stats {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+    #modal-p-personalidad {
+        grid-template-columns: 1fr !important;
+    }
+}

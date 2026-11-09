@@ -2,11 +2,14 @@
 
 @section('titulo', $campana->nombre)
 
+@push('head')
+    @vite(['resources/css/pages/campana-detalle.css', 'resources/js/pages/campana-detalle.js'])
+@endpush
+
 @section('contenido')
 
-@if (session('success'))
-    <div class="alerta alerta-exito">{{ session('success') }}</div>
-@endif
+{{-- Dato que necesita campana-detalle.js (antes se interpolaba dentro del <script>) --}}
+<div id="campana-datos" data-campana-id="{{ $campana->id }}" hidden></div>
 
 <!-- CABECERA (igual para DM y jugador) -->
 <div class="tarjeta" style="margin-bottom: 1.5rem;">
@@ -32,7 +35,7 @@
     <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
         @if($esDM)
             <button onclick="abrirModalEditar()" class="btn btn-secundario btn-sm">@include('partials.icon', ['name' => 'edit', 'class' => 'icon-sm']) Editar campaña</button>
-            <form method="POST" action="/campanyas/{{ $campana->id }}" onsubmit="return confirm('¿Eliminar esta campaña?')" style="display:inline">
+            <form method="POST" action="/campanyas/{{ $campana->id }}" data-confirm="¿Eliminar esta campaña?" style="display:inline">
                 @csrf @method('DELETE')
                 <button type="submit" class="btn btn-peligro btn-sm">@include('partials.icon', ['name' => 'trash', 'class' => 'icon-sm']) Eliminar</button>
             </form>
@@ -64,7 +67,7 @@
                     <div style="color: var(--t-tenue); font-size: 0.85rem; margin-top: 4px;">{{ Str::limit($sesion->resumen, 80) }}</div>
                     @endif
                 </div>
-                <form method="POST" action="/campanyas/{{ $campana->id }}/sesiones/{{ $sesion->id }}" onsubmit="return confirm('¿Eliminar esta sesión?')">
+                <form method="POST" action="/campanyas/{{ $campana->id }}/sesiones/{{ $sesion->id }}" data-confirm="¿Eliminar esta sesión?">
                     @csrf @method('DELETE')
                     <button type="submit" class="btn btn-peligro btn-sm">🗑</button>
                 </form>
@@ -85,8 +88,7 @@
                 <div style="display: flex; align-items: center; gap: 12px; flex: 1;">
                     @if($enemigo->imagen)
                     <img src="{{ Storage::url($enemigo->imagen) }}"
-                        style="width: 48px; height: 48px; object-fit: cover; border-radius: 6px; border: 1px solid rgba(179,3,3,0.3); cursor: zoom-in; flex-shrink: 0;"
-                        onclick="event.stopPropagation(); document.getElementById('lightbox-campana-img').src=this.src; document.getElementById('lightbox-campana').style.display='flex';">
+                        style="width: 48px; height: 48px; object-fit: cover; border-radius: 6px; border: 1px solid rgba(179,3,3,0.3); cursor: zoom-in; flex-shrink: 0;" data-lightbox>
                     @else
                     <div style="width: 48px; height: 48px; border-radius: 6px; background: rgba(179,3,3,0.1); border: 1px solid rgba(179,3,3,0.2); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.2rem;">💀</div>
                     @endif
@@ -105,7 +107,7 @@
                         @endif
                     </div>
                 </div>
-                <form method="POST" action="/campanyas/{{ $campana->id }}/enemigos/{{ $enemigo->id }}" onsubmit="return confirm('¿Quitar este enemigo?')">
+                <form method="POST" action="/campanyas/{{ $campana->id }}/enemigos/{{ $enemigo->id }}" data-confirm="¿Quitar este enemigo?">
                     @csrf @method('DELETE')
                     <button type="submit" class="btn btn-peligro btn-sm">✕</button>
                 </form>
@@ -140,9 +142,8 @@
         <div class="tarjeta" style="border-top: 3px solid var(--c-rojo);">
             <div style="display: flex; align-items: center; gap: 12px;">
                 @if($campana->dungeonMaster->avatar)
-            <img src="{{ str_starts_with($campana->dungeonMaster->avatar, 'http') ? $campana->dungeonMaster->avatar : Storage::url($campana->dungeonMaster->avatar) }}"
-                style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--c-rojo); flex-shrink: 0; cursor: zoom-in;"
-                onclick="event.stopPropagation(); document.getElementById('lightbox-campana-img').src=this.src; document.getElementById('lightbox-campana').style.display='flex';">
+            <img src="{{ $campana->dungeonMaster->avatar_url }}"
+                style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--c-rojo); flex-shrink: 0; cursor: zoom-in;" data-lightbox>
             @else
             <div style="width: 42px; height: 42px; border-radius: 50%; background: var(--c-rojo); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; flex-shrink: 0;">
                 {{ strtoupper(substr($campana->dungeonMaster->nombre, 0, 1)) }}
@@ -160,9 +161,8 @@
         <div class="tarjeta" style="border-top: 3px solid var(--c-verde);">
             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px;">
                 @if($usuario->avatar)
-                <img src="{{ str_starts_with($usuario->avatar, 'http') ? $usuario->avatar : Storage::url($usuario->avatar) }}"
-                    style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--c-verde); flex-shrink: 0; cursor: zoom-in;"
-                    onclick="event.stopPropagation(); document.getElementById('lightbox-campana-img').src=this.src; document.getElementById('lightbox-campana').style.display='flex';">
+                <img src="{{ $usuario->avatar_url }}"
+                    style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid var(--c-verde); flex-shrink: 0; cursor: zoom-in;" data-lightbox>
                 @else
                 <div style="width: 42px; height: 42px; border-radius: 50%; background: var(--c-verde); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.1rem; flex-shrink: 0;">
                     {{ strtoupper(substr($usuario->nombre, 0, 1)) }}
@@ -172,7 +172,7 @@
                     <div style="font-weight: bold; font-size: 0.95rem;">{{ $usuario->nombre }}</div>
                     <div style="color: var(--t-secundario); font-size: 0.78rem; font-family: var(--f-titulo); letter-spacing: 1px;">JUGADOR</div>
                 </div>
-                <form method="POST" action="/campanyas/{{ $campana->id }}/usuarios/{{ $usuario->id }}" onsubmit="return confirm('¿Expulsar a {{ $usuario->nombre }}?')">
+                <form method="POST" action="/campanyas/{{ $campana->id }}/usuarios/{{ $usuario->id }}" data-confirm="¿Expulsar a {{ $usuario->nombre }}?">
                     @csrf @method('DELETE')
                     <button type="submit" class="btn btn-peligro btn-sm">✕</button>
                 </form>
@@ -225,7 +225,7 @@
                 <div style="color: #b8c0c8; font-size: 0.9rem; line-height: 1.7; white-space: pre-wrap;">{{ $nota->contenido }}</div>
                 <div style="color: var(--t-tenue); font-size: 0.78rem; margin-top: 8px;">{{ $nota->created_at->format('d/m/Y H:i') }}</div>
             </div>
-            <form method="POST" action="/campanyas/{{ $campana->id }}/notas/{{ $nota->id }}" onsubmit="return confirm('¿Eliminar esta nota?')" style="margin-left: 10px;" onclick="event.stopPropagation()">
+            <form method="POST" action="/campanyas/{{ $campana->id }}/notas/{{ $nota->id }}" data-confirm="¿Eliminar esta nota?" style="margin-left: 10px;" onclick="event.stopPropagation()">
                 @csrf @method('DELETE')
                 <button type="submit" class="btn btn-peligro btn-sm">🗑</button>
             </form>
@@ -303,9 +303,8 @@
         {{-- DM --}}
         <div style="text-align: center; min-width: 70px;">
             @if($campana->dungeonMaster->avatar)
-            <img src="{{ str_starts_with($campana->dungeonMaster->avatar, 'http') ? $campana->dungeonMaster->avatar : Storage::url($campana->dungeonMaster->avatar) }}"
-                style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; margin: 0 auto 6px; border: 2px solid rgba(179,3,3,0.5); box-shadow: 0 0 14px rgba(179,3,3,0.25); cursor: zoom-in; display: block;"
-                onclick="document.getElementById('lightbox-campana-img').src=this.src; document.getElementById('lightbox-campana').style.display='flex';">
+            <img src="{{ $campana->dungeonMaster->avatar_url }}"
+                style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; margin: 0 auto 6px; border: 2px solid rgba(179,3,3,0.5); box-shadow: 0 0 14px rgba(179,3,3,0.25); cursor: zoom-in; display: block;" data-lightbox>
             @else
             <div style="width: 64px; height: 64px; border-radius: 50%; background: var(--c-rojo); display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.4rem; margin: 0 auto 6px; border: 2px solid rgba(179,3,3,0.5); box-shadow: 0 0 14px rgba(179,3,3,0.25);">
                 {{ strtoupper(substr($campana->dungeonMaster->nombre, 0, 1)) }}
@@ -325,7 +324,7 @@
         @php $pComp = isset($personajesPorUsuario[$companero->id]) ? $personajesPorUsuario[$companero->id]->first() : null; @endphp
         <div style="text-align: center; min-width: 70px; cursor: {{ $pComp ? 'pointer' : 'default' }};" @if($pComp) onclick="verPersonaje({{ $pComp->id }})" @endif>
             <div style="position: relative; width: 64px; margin: 0 auto 6px;">
-                <img src="{{ $pComp ? $pComp->avatar_url : 'https://ui-avatars.com/api/?name='.urlencode($companero->nombre).'&background=5a6b3f&color=fff&size=64' }}"
+                <img src="{{ $pComp ? $pComp->avatar_url : $companero->avatar_url }}"
                     style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid var(--c-verde); box-shadow: 0 0 10px rgba(90,107,63,0.2);">
             </div>
             <div style="font-size: 0.82rem; font-weight: bold; color: var(--t-principal);">{{ $companero->nombre }}</div>
@@ -389,8 +388,7 @@
     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 12px;">
         @foreach($enemigosVisibles as $enemigo)
         <div class="tarjeta" style="padding: 0; overflow: hidden; cursor: {{ $enemigo->imagen ? 'zoom-in' : 'default' }};"
-            @if($enemigo->imagen)
-            onclick="document.getElementById('lightbox-campana-img').src='{{ Storage::url($enemigo->imagen) }}'; document.getElementById('lightbox-campana').style.display='flex';"
+            @if($enemigo->imagen) data-lightbox
             @endif>
             @if($enemigo->imagen)
             <img src="{{ Storage::url($enemigo->imagen) }}" style="width: 100%; height: 115px; object-fit: cover; display: block;">
@@ -614,43 +612,6 @@
     </div>
 </div>
 
-<script>
-    function abrirModalEditar() {
-        document.getElementById('modal-editar-campana').scrollTop = 0;
-        document.getElementById('modal-editar-campana').style.display = 'flex';
-    }
-    function abrirModalSesion() {
-        document.getElementById('modal-sesion').scrollTop = 0;
-        document.getElementById('modal-sesion').style.display = 'flex';
-    }
-    function editarSesion(id, titulo, numero, fecha, resumen, duracion) {
-        document.getElementById('form-editar-sesion').action = `/campanyas/{{ $campana->id }}/sesiones/${id}`;
-        document.getElementById('edit-titulo').value = titulo;
-        document.getElementById('edit-numero').value = numero;
-        document.getElementById('edit-fecha').value = fecha ? fecha.substring(0, 10) : '';
-        document.getElementById('edit-resumen').value = resumen;
-        document.getElementById('edit-duracion').value = duracion || '';
-        document.getElementById('modal-editar-sesion').scrollTop = 0;
-        document.getElementById('modal-editar-sesion').style.display = 'flex';
-    }
-    function abrirModalNota() {
-        document.getElementById('modal-nota').scrollTop = 0;
-        document.getElementById('modal-nota').style.display = 'flex';
-    }
-    function editarNotaDesdeCard(el) {
-        const id = el.dataset.notaId;
-        const titulo = el.dataset.notaTitulo;
-        const contenido = el.dataset.notaContenido;
-        const visible = el.dataset.notaVisible === 'true';
-        document.getElementById('form-editar-nota').action = `/campanyas/{{ $campana->id }}/notas/${id}`;
-        document.getElementById('edit-nota-titulo').value = titulo;
-        document.getElementById('edit-nota-contenido').value = contenido;
-        document.getElementById('edit-nota-visible').checked = visible;
-        document.getElementById('modal-editar-nota').scrollTop = 0;
-        document.getElementById('modal-editar-nota').style.display = 'flex';
-    }
-</script>
-
 @endif
 {{-- FIN MODALES DM --}}
 
@@ -692,98 +653,6 @@
             </div>
         </div>
     </div>
-</div>
-
-<script>
-function verPersonaje(id) {
-    document.getElementById('modal-personaje').scrollTop = 0;
-    document.getElementById('modal-personaje').style.display = 'flex';
-    document.getElementById('modal-p-nombre').textContent = 'Cargando...';
-
-    fetch(`/personajes/${id}/json?campana_id={{ $campana->id }}`)
-        .then(r => r.json())
-        .then(p => {
-            document.getElementById('modal-p-avatar').src = p.avatar_url;
-            document.getElementById('modal-p-avatar').style.cursor = 'zoom-in';
-            document.getElementById('modal-p-avatar').onclick = (e) => {
-                e.stopPropagation();
-                document.getElementById('lightbox-personaje-img').src = p.avatar_url;
-                document.getElementById('lightbox-personaje').style.display = 'flex';
-            };
-            document.getElementById('modal-p-nombre').textContent = p.nombre;
-            document.getElementById('modal-p-subtitulo').textContent = [p.raza, p.clase, p.subclase].filter(Boolean).join(' · ');
-            document.getElementById('modal-p-badges').innerHTML = `
-                <span style="background: var(--c-rojo); color: white; padding: 3px 10px; border-radius: 20px; font-size: 0.78rem;">Nivel ${p.nivel}</span>
-                ${p.alineamiento ? `<span style="background: rgba(255,255,255,0.05); color: var(--t-secundario); border: 1px solid rgba(118,133,150,0.2); padding: 3px 10px; border-radius: 20px; font-size: 0.78rem;">${p.alineamiento}</span>` : ''}
-                ${p.trasfondo ? `<span style="background: rgba(255,255,255,0.05); color: var(--t-secundario); border: 1px solid rgba(118,133,150,0.2); padding: 3px 10px; border-radius: 20px; font-size: 0.78rem;">${p.trasfondo}</span>` : ''}
-            `;
-            const statLabels = ['FUE','DES','CON','INT','SAB','CAR'];
-            const statVals = [p.fuerza, p.destreza, p.constitucion, p.inteligencia, p.sabiduria, p.carisma];
-            document.getElementById('modal-p-stats').innerHTML = statLabels.map((s, i) => {
-                const mod = Math.floor((statVals[i] - 10) / 2);
-                return `<div style="background: rgba(0,0,0,0.35); border-radius: 10px; padding: 12px 8px; text-align: center; border: 1px solid rgba(118,133,150,0.1);">
-                    <span style="color: var(--t-secundario); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; display: block;">${s}</span>
-                    <span style="font-size: 2rem; font-weight: 700; color: white; display: block; line-height: 1.2;">${statVals[i]}</span>
-                    <span style="color: var(--c-naranja); font-size: 0.9rem; font-weight: 600;">${mod >= 0 ? '+' : ''}${mod}</span>
-                </div>`;
-            }).join('');
-            const combate = [
-                { label: '❤️ HP', valor: `${p.pg_actuales ?? '?'}/${p.pg_maximos ?? '?'}` },
-                { label: '🛡️ CA', valor: p.clase_de_armadura ?? '—' },
-                { label: '⚡ Velocidad', valor: `${p.velocidad ?? 30} ft` },
-                { label: '🎯 PB', valor: `+${p.bonus_competencia ?? 2}` },
-                { label: '⚔️ Iniciativa', valor: p.iniciativa !== null ? (p.iniciativa >= 0 ? '+' : '') + p.iniciativa : '—' },
-            ];
-            document.getElementById('modal-p-combate').innerHTML = combate.map(c => `
-                <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border-left: 3px solid var(--c-rojo);">
-                    <span style="color: var(--t-secundario); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.5px; display: block;">${c.label}</span>
-                    <span style="color: white; font-size: 1.3rem; font-weight: 700;">${c.valor}</span>
-                </div>
-            `).join('');
-            if (p.historia) {
-                document.getElementById('modal-p-historia-sec').style.display = 'block';
-                document.getElementById('modal-p-historia').textContent = p.historia;
-            } else {
-                document.getElementById('modal-p-historia-sec').style.display = 'none';
-            }
-            const rasgos = [
-                { label: 'Rasgos', valor: p.rasgos_personalidad },
-                { label: 'Ideales', valor: p.ideales },
-                { label: 'Vínculos', valor: p.vinculos },
-                { label: 'Defectos', valor: p.defectos },
-            ].filter(r => r.valor);
-            if (rasgos.length > 0) {
-                document.getElementById('modal-p-personalidad-sec').style.display = 'block';
-                document.getElementById('modal-p-personalidad').innerHTML = rasgos.map(r => `
-                    <div style="background: rgba(0,0,0,0.2); border-radius: 8px; padding: 12px 15px; border: 1px solid rgba(118,133,150,0.1);">
-                        <span style="color: var(--c-naranja); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 5px;">${r.label}</span>
-                        <span style="color: #a8b0b8; font-size: 0.9rem; line-height: 1.6;">${r.valor}</span>
-                    </div>
-                `).join('');
-            } else {
-                document.getElementById('modal-p-personalidad-sec').style.display = 'none';
-            }
-            if (p.equipo && p.equipo.length > 0) {
-                document.getElementById('modal-p-equipo-sec').style.display = 'block';
-                document.getElementById('modal-p-equipo').innerHTML = p.equipo.map(e => `
-                    <div style="background: rgba(0,0,0,0.3); padding: 10px 12px; border-radius: 8px; border-left: 3px solid var(--c-naranja);">
-                        <span style="color: white; font-weight: 600; font-size: 0.95rem;">${e.nombre}${e.equipado ? ' <span style="color: #9ab090; font-size: 0.75rem;">✓</span>' : ''}</span>
-                        <div style="color: var(--t-secundario); font-size: 0.82rem;">${e.tipo}${e.cantidad > 1 ? ' ×' + e.cantidad : ''}</div>
-                    </div>
-                `).join('');
-            } else {
-                document.getElementById('modal-p-equipo-sec').style.display = 'none';
-            }
-        });
-}
-</script>
-
-<div id="lightbox-personaje" onclick="this.style.display='none'" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:2000; align-items:center; justify-content:center; cursor:zoom-out;">
-    <img id="lightbox-personaje-img" src="" style="max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 8px; border: 2px solid rgba(179,3,3,0.3);">
-</div>
-
-<div id="lightbox-campana" onclick="this.style.display='none'" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:2000; align-items:center; justify-content:center; cursor:zoom-out;">
-    <img id="lightbox-campana-img" src="" style="max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 8px; border: 2px solid rgba(179,3,3,0.3);">
 </div>
 
 @endsection
