@@ -1,143 +1,127 @@
 /* ============================================================================
-   PÁGINA: enemigos — lógica extraída de la vista (antes un <script> en línea).
-   Se carga como módulo (diferido): no bloquea el pintado y el navegador lo cachea.
-   Las funciones usadas desde atributos onclick/onchange del HTML se exponen en window.
+   PÁGINA: BESTIARIO
+   · Búsqueda, ordenación (CR / nombre) y filtro "solo boss" sobre las tarjetas.
+   · Abrir un enemigo: pide /enemigos/{id} (JSON) y rellena el modal de edición.
+   · Vista previa de la imagen elegida.
+   Todo con delegación de eventos y sin handlers inline.
    ============================================================================ */
+import { abrirModal } from "../modal.js";
+import { toast } from "../ui.js";
 
-function buscarEnemigo() {
-    const texto = document.getElementById('buscador').value.toLowerCase();
-    document.querySelectorAll('.tarjeta-enemigo').forEach(tarjeta => {
-        const nombre = tarjeta.dataset.nombre.toLowerCase();
-        const coincide = nombre.includes(texto);
-        const filtroOk = !filtroBossActivo || tarjeta.dataset.boss === '1';
-        tarjeta.style.display = (coincide && filtroOk) ? 'block' : 'none';
-    });
-}
+const $ = (id) => document.getElementById(id);
 
-let filtroBossActivo = false;
+/* ----- Búsqueda, orden y filtro ----- */
+const lista = $("lista-enemigos");
 
-function filtrarBoss() {
-    filtroBossActivo = !filtroBossActivo;
-    const btn = document.getElementById('btn-boss');
-    btn.style.background = filtroBossActivo ? 'rgba(179,3,3,0.25)' : '';
-    btn.style.borderColor = filtroBossActivo ? 'var(--color-rojo)' : '';
-    buscarEnemigo();
-}
+if (lista) {
+    const estado = { texto: "", soloBoss: false, orden: null, asc: true };
+    const sinResultados = $("en-sin-resultados");
+    const norm = (t) => t.toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
 
-function verEnemigo(id) {
-    fetch(`/enemigos/${id}`)
-        .then(r => r.json())
-        .then(e => {
-            document.getElementById('ver-titulo').textContent = e.nombre;
-            document.getElementById('form-editar-enemigo').action = `/enemigos/${id}/update`;
-            document.getElementById('ver-nombre').value = e.nombre;
-            document.getElementById('ver-tipo').value = e.tipo;
-            document.getElementById('ver-tamaño').value = e.tamaño;
-            document.getElementById('ver-alineamiento').value = e.alineamiento || '';
-            document.getElementById('ver-cr').value = e.clase_de_desafio;
-            document.getElementById('ver-xp').value = e.puntos_de_experiencia;
-            document.getElementById('ver-ca').value = e.clase_de_armadura;
-            document.getElementById('ver-tipo-armadura').value = e.tipo_armadura || '';
-            document.getElementById('ver-pg').value = e.puntos_de_golpe;
-            document.getElementById('ver-velocidad').value = e.velocidad;
-            document.getElementById('ver-fuerza').value = e.fuerza;
-            document.getElementById('ver-destreza').value = e.destreza;
-            document.getElementById('ver-constitucion').value = e.constitucion;
-            document.getElementById('ver-inteligencia').value = e.inteligencia;
-            document.getElementById('ver-sabiduria').value = e.sabiduria;
-            document.getElementById('ver-carisma').value = e.carisma;
-            document.getElementById('ver-descripcion').value = e.descripcion || '';
-            document.getElementById('ver-resistencias').value = e.resistencias || '';
-            document.getElementById('ver-inmunidades').value = e.inmunidades_daño || '';
-            document.getElementById('ver-sentidos').value = e.sentidos || '';
-            document.getElementById('ver-idiomas').value = e.idiomas || '';
-            document.getElementById('ver-acciones').value = e.acciones || '';
-            document.getElementById('ver-rasgos').value = e.rasgos_especiales || '';
-            document.getElementById('ver-boss').checked = e.es_boss == 1;
-            const preview = document.getElementById('ver-imagen-preview') || document.getElementById('ver-imagen-preview');
-            if (e.imagen) {
-                console.log('Imagen:', e.imagen);
-                console.log('URL:', '/storage/' + e.imagen);
-                preview.src = '/storage/' + e.imagen;
-                preview.style.display = 'block';
-            } else {
-                preview.style.display = 'none';
-            }
-            setTimeout(() => {
-                document.getElementById('modal-ver-enemigo').scrollTop = 0;
-            }, 10);
-            document.getElementById('modal-ver-enemigo').style.display = 'flex';
+    function aplicar() {
+        const tarjetas = [...lista.querySelectorAll(".en-card")];
+        const texto = norm(estado.texto.trim());
+        let visibles = 0;
+
+        for (const t of tarjetas) {
+            const coincide = norm(t.dataset.nombre).includes(texto) && (!estado.soloBoss || t.dataset.boss === "1");
+            t.hidden = !coincide;
+            if (coincide) visibles++;
+        }
+        sinResultados.hidden = visibles > 0;
+
+        if (estado.orden) {
+            const dir = estado.asc ? 1 : -1;
+            tarjetas
+                .sort((a, b) =>
+                    estado.orden === "cr"
+                        ? (parseFloat(a.dataset.cr) - parseFloat(b.dataset.cr)) * dir
+                        : a.dataset.nombre.localeCompare(b.dataset.nombre, "es") * dir,
+                )
+                .forEach((t) => lista.append(t));
+        }
+
+        document.querySelectorAll("[data-orden]").forEach((b) => {
+            const activo = b.dataset.orden === estado.orden;
+            b.setAttribute("aria-pressed", String(activo));
+            b.querySelector("[data-flecha]").textContent = activo ? (estado.asc ? "↑" : "↓") : "↕";
         });
-}
+        document.querySelector("[data-solo-boss]")?.setAttribute("aria-pressed", String(estado.soloBoss));
+    }
 
-let ordenAscendente = true;
-let ordenNombreAsc = true;
-
-function ordenarPorCR() {
-    const lista = document.getElementById('lista-enemigos');
-    const tarjetas = Array.from(lista.querySelectorAll('.tarjeta-enemigo'));
-
-    tarjetas.sort((a, b) => {
-        const crA = parseFloat(a.dataset.cr);
-        const crB = parseFloat(b.dataset.cr);
-        return ordenAscendente ? crA - crB : crB - crA;
+    $("buscador").addEventListener("input", (e) => {
+        estado.texto = e.target.value;
+        aplicar();
     });
 
-    ordenAscendente = !ordenAscendente;
-    const btn = document.getElementById('btn-orden');
-    btn.textContent = ordenAscendente ? '↑↓ Ordenar por CR' : '↓↑ Ordenar por CR';
-    btn.style.color = ordenAscendente ? 'var(--color-gris)' : 'white';
-    btn.style.borderColor = ordenAscendente ? 'var(--color-gris)' : 'var(--color-rojo)';
-
-    // Resetear botón de nombre
-    ordenNombreAsc = true;
-    const btnNombre = document.getElementById('btn-nombre');
-    btnNombre.textContent = '↑↓ Ordenar por Nombre';
-    btnNombre.style.color = 'var(--color-gris)';
-    btnNombre.style.borderColor = 'var(--color-gris)';
-
-    tarjetas.forEach(t => lista.appendChild(t));
-}
-
-function ordenarPorNombre() {
-    const lista = document.getElementById('lista-enemigos');
-    const tarjetas = Array.from(lista.querySelectorAll('.tarjeta-enemigo'));
-
-    tarjetas.sort((a, b) => {
-        const nombreA = a.dataset.nombre.toLowerCase();
-        const nombreB = b.dataset.nombre.toLowerCase();
-        return ordenNombreAsc ? nombreA.localeCompare(nombreB) : nombreB.localeCompare(nombreA);
+    document.addEventListener("click", (e) => {
+        const orden = e.target.closest("[data-orden]");
+        if (orden) {
+            // Mismo botón: alterna sentido. Otro botón: empieza ascendente.
+            estado.asc = estado.orden === orden.dataset.orden ? !estado.asc : true;
+            estado.orden = orden.dataset.orden;
+            return aplicar();
+        }
+        if (e.target.closest("[data-solo-boss]")) {
+            estado.soloBoss = !estado.soloBoss;
+            aplicar();
+        }
     });
-
-    ordenNombreAsc = !ordenNombreAsc;
-    const btn = document.getElementById('btn-nombre');
-    btn.textContent = ordenNombreAsc ? '↑↓ Ordenar por Nombre' : '↓↑ Ordenar por Nombre';
-    btn.style.color = ordenNombreAsc ? 'var(--color-gris)' : 'white';
-    btn.style.borderColor = ordenNombreAsc ? 'var(--color-gris)' : 'var(--color-rojo)';
-
-    // Resetear botón de CR
-    ordenAscendente = true;
-    const btnCR = document.getElementById('btn-orden');
-    btnCR.textContent = '↑↓ Ordenar por CR';
-    btnCR.style.color = 'var(--color-gris)';
-    btnCR.style.borderColor = 'var(--color-gris)';
-
-    tarjetas.forEach(t => lista.appendChild(t));
 }
 
-function abrirModalNuevo() {
-    setTimeout(() => {
-        document.getElementById('modal-enemigo').scrollTop = 0;
-    }, 10);
-    document.getElementById('modal-enemigo').style.display = 'flex';
+/* ----- Abrir un enemigo (modal de edición) ----- */
+// id del campo del formulario (sin el prefijo "ver-") → clave del JSON
+const CAMPOS = {
+    nombre: "nombre", tipo: "tipo", "tamaño": "tamaño", alineamiento: "alineamiento",
+    cr: "clase_de_desafio", xp: "puntos_de_experiencia", ca: "clase_de_armadura",
+    "tipo-armadura": "tipo_armadura", pg: "puntos_de_golpe", velocidad: "velocidad",
+    fuerza: "fuerza", destreza: "destreza", constitucion: "constitucion",
+    inteligencia: "inteligencia", sabiduria: "sabiduria", carisma: "carisma",
+    descripcion: "descripcion", resistencias: "resistencias", inmunidades: "inmunidades_daño",
+    sentidos: "sentidos", idiomas: "idiomas", acciones: "acciones", rasgos: "rasgos_especiales",
+};
+
+async function abrirEnemigo(id) {
+    let e;
+    try {
+        const res = await fetch(`/enemigos/${encodeURIComponent(id)}`, { headers: { Accept: "application/json" } });
+        if (!res.ok) throw new Error();
+        e = await res.json();
+    } catch {
+        return toast("No se pudo cargar el enemigo. Inténtalo de nuevo.", "error");
+    }
+
+    $("ver-titulo").textContent = e.nombre;
+    $("form-editar-enemigo").action = `/enemigos/${id}/update`;
+    for (const [sufijo, clave] of Object.entries(CAMPOS)) {
+        $(`ver-${sufijo}`).value = e[clave] ?? "";
+    }
+    $("ver-boss").checked = Number(e.es_boss) === 1;
+
+    const preview = $("ver-imagen-preview");
+    preview.hidden = !e.imagen;
+    if (e.imagen) preview.src = `/storage/${e.imagen}`;
+    document.querySelector("#modal-ver-enemigo [data-archivo-nombre]").textContent = "Seleccionar imagen…";
+    $("ver-imagen").value = "";
+
+    abrirModal("modal-ver-enemigo");
 }
 
-// Accesibles desde los atributos on*="…" del marcado
-Object.assign(window, {
-    abrirModalNuevo,
-    buscarEnemigo,
-    filtrarBoss,
-    ordenarPorCR,
-    ordenarPorNombre,
-    verEnemigo,
+document.addEventListener("click", (e) => {
+    const abrir = e.target.closest("[data-enemigo]");
+    if (abrir) abrirEnemigo(abrir.dataset.enemigo);
+});
+
+/* ----- Vista previa de la imagen seleccionada ----- */
+document.addEventListener("change", (e) => {
+    const input = e.target.closest("input[data-archivo-preview]");
+    if (!input) return;
+    const archivo = input.files[0];
+    input.closest(".campo").querySelector("[data-archivo-nombre]").textContent = archivo?.name || "Seleccionar imagen…";
+
+    const preview = $(input.dataset.archivoPreview);
+    if (archivo && preview) {
+        preview.src = URL.createObjectURL(archivo);
+        preview.hidden = false;
+    }
 });

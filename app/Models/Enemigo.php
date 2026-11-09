@@ -19,9 +19,43 @@ class Enemigo extends Model
         'acciones_legendarias', 'imagen', 'visible_jugadores', 'es_boss',
     ];
 
+    /** Clase de desafío legible: 0.125 → "1/8", 0.25 → "1/4", 0.5 → "1/2", 10.00 → "10". */
+    public function getCrTextoAttribute(): string
+    {
+        $cr = (float) $this->clase_de_desafio;
+
+        return match (true) {
+            $cr === 0.125 => '1/8',
+            $cr === 0.25 => '1/4',
+            $cr === 0.5 => '1/2',
+            default => rtrim(rtrim(number_format($cr, 2, '.', ''), '0'), '.') ?: '0',
+        };
+    }
+
+    /** Franja de peligro para colorear el CR: bajo, medio, alto o extremo. */
+    public function getCrNivelAttribute(): string
+    {
+        $cr = (float) $this->clase_de_desafio;
+
+        return match (true) {
+            $cr <= 3 => 'bajo',
+            $cr <= 7 => 'medio',
+            $cr <= 12 => 'alto',
+            default => 'extremo',
+        };
+    }
+
+    /** Modificador de DES con signo ("+2", "-1"), usado como iniciativa. */
+    public function getIniciativaAttribute(): string
+    {
+        $mod = (int) floor(($this->destreza - 10) / 2);
+
+        return ($mod >= 0 ? '+' : '') . $mod;
+    }
+
     public function usuario()
     {
-        return $this->belongsTo(User::class, 'usuario_id');
+        return $this->belongsTo(Usuario::class, 'usuario_id');
     }
 
     public function campanas()

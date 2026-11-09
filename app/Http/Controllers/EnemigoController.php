@@ -147,7 +147,8 @@ class EnemigoController extends Controller
             'idiomas'               => $request->idiomas,
             'acciones'              => $request->acciones,
             'rasgos_especiales'     => $request->rasgos_especiales,
-            'visible_jugadores'     => $request->has('visible_jugadores'),
+            // 'visible_jugadores' no se toca: el formulario no tiene ese campo y antes se
+            // ponía a false en cada edición, ocultando el enemigo a los jugadores.
             'es_boss'               => $request->has('es_boss'),
             'imagen'                => $imagenPath,
         ]);

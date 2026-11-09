@@ -157,9 +157,6 @@ if (raiz) {
         ta.style.height = `${ta.scrollHeight}px`;
     });
 
-    /* ----- Filtro por etiqueta ----- */
-    raiz.querySelector("[data-autosubmit]")?.addEventListener("change", (e) => e.target.form.submit());
-
     /* ----- Salas: la activa queda visible en la tira desplazable (móvil) ----- */
     raiz.querySelector('.sala-tab[aria-current="page"]')?.scrollIntoView({
         inline: "center",

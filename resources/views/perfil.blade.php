@@ -1,111 +1,96 @@
 @extends('layouts.app')
 
 @section('titulo', 'Perfil')
+@section('descripcion', 'Tu perfil: foto, datos de la cuenta y contraseña.')
+
+@push('head')
+    @vite('resources/css/pages/perfil.css')
+@endpush
 
 @section('contenido')
+@php($usuario = auth()->user())
 
-<div style="max-width: 1000px; margin: 0 auto;">
+<div class="perfil">
 
-    <!-- MENSAJES DE ÉXITO -->
-    <!-- CABECERA PERFIL -->
-    <div style="background: #2a0a18; border-radius: 10px; padding: 30px; display: flex; align-items: center; gap: 25px; margin-bottom: 25px; flex-wrap: wrap;">
-        <form method="POST" action="{{ route('perfil.avatar') }}" enctype="multipart/form-data" id="formAvatar" style="position: relative; flex-shrink: 0;">
+    {{-- CABECERA --}}
+    <section class="tarjeta perfil-cabecera" aria-label="Resumen de tu cuenta">
+        <form method="POST" action="{{ route('perfil.avatar') }}" enctype="multipart/form-data" class="perfil-avatar-form">
             @csrf
-            <label for="inputAvatar" style="cursor: pointer; display: block; position: relative;">
-                @if(auth()->user()->avatar)
-                <img src="{{ auth()->user()->avatar_url }}"
-                    style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--color-rojo);">
-                @else
-                <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--color-rojo); display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: bold; border: 3px solid var(--color-rojo);">
-                    {{ strtoupper(substr(auth()->user()->nombre, 0, 1)) }}
-                </div>
-                @endif
-                <div style="position: absolute; bottom: -2px; right: -2px; width: 26px; height: 26px; background: var(--color-naranja); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #2a0a18;">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="width: 13px; height: 13px; stroke: white; fill: none; stroke-width: 2.5;">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 20h9"/><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>
-                    </svg>
-                </div>
+            <label class="perfil-avatar" for="inputAvatar" title="Cambiar foto de perfil">
+                <img class="avatar-lg" src="{{ $usuario->avatar_url }}" alt="Tu foto de perfil" width="88" height="88">
+                <span class="perfil-avatar-editar" aria-hidden="true">@include('partials.icon', ['name' => 'edit', 'class' => 'icon-sm'])</span>
+                <span class="sr-only">Cambiar foto de perfil</span>
             </label>
-            <input type="file" name="avatar" id="inputAvatar" accept="image/*" style="display: none;" onchange="document.getElementById('formAvatar').submit()">
+            <input type="file" name="avatar" id="inputAvatar" class="sr-only" accept="image/png,image/jpeg,image/webp" data-autosubmit>
         </form>
-        <div>
-            <div style="font-size: 1.3rem; font-weight: bold;">{{ strtoupper(auth()->user()->nombre) }}</div>
-            <div style="color: var(--color-gris); font-size: 0.85rem;">
-                {{ ucfirst(auth()->user()->rol) }} · Miembro desde {{ auth()->user()->created_at->format('Y') }}
-            </div>
-            <div style="display: flex; gap: 20px; margin-top: 12px;">
-                <div style="text-align: center;">
-                    <div style="font-size: 1.2rem; font-weight: bold; color: var(--color-rojo);">{{ $personajesCount }}</div>
-                    <div style="color: var(--color-gris); font-size: 0.75rem;">Personajes</div>
-                </div>
-                <div style="text-align: center;">
-                    <div style="font-size: 1.2rem; font-weight: bold; color: var(--color-rojo);">{{ $campanasCount }}</div>
-                    <div style="color: var(--color-gris); font-size: 0.75rem;">Campañas</div>
-                </div>
-                <div style="text-align: center;">
-                    <div style="font-size: 1.2rem; font-weight: bold; color: var(--color-rojo);">{{ $sesionesCount }}</div>
-                    <div style="color: var(--color-gris); font-size: 0.75rem;">Sesiones</div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <!-- FORMULARIO -->
-    <div style="background: #2a0a18; border-radius: 10px; padding: 25px; margin-bottom: 15px;">
-        <h2 style="color: var(--color-gris); font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">Mi Perfil</h2>
+        <div class="perfil-datos">
+            <h2 class="perfil-nombre">{{ $usuario->nombre }}</h2>
+            <p class="perfil-rol">{{ ucfirst(str_replace('_', ' ', $usuario->rol)) }} · Miembro desde {{ $usuario->created_at->format('Y') }}</p>
+
+            <dl class="perfil-stats">
+                <div><dt>Personajes</dt><dd>{{ $personajesCount }}</dd></div>
+                <div><dt>Campañas</dt><dd>{{ $campanasCount }}</dd></div>
+                <div><dt>Sesiones</dt><dd>{{ $sesionesCount }}</dd></div>
+            </dl>
+        </div>
+    </section>
+
+    {{-- DATOS --}}
+    <section class="tarjeta" aria-labelledby="titulo-datos">
+        <h2 class="seccion-titulo" id="titulo-datos">Mi perfil</h2>
         <form method="POST" action="/perfil/actualizar">
             @csrf
             @method('PATCH')
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-                <div>
-                    <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Nombre de usuario</label>
-                    <input type="text" name="nombre" value="{{ auth()->user()->nombre }}" style="width: 100%; background: #120309; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo); font-size: 0.9rem;">
-                    @error('nombre') <span style="color: var(--color-naranja); font-size: 0.8rem;">{{ $message }}</span> @enderror
-                </div>
-                <div>
-                    <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Correo electrónico</label>
-                    <input type="email" name="email" value="{{ auth()->user()->email }}" style="width: 100%; background: #120309; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo); font-size: 0.9rem;">
-                    @error('email') <span style="color: var(--color-naranja); font-size: 0.8rem;">{{ $message }}</span> @enderror
-                </div>
-                <button type="submit" class="btn btn-primario" style="width: 100%; margin-top: 5px;">Guardar Cambios</button>
-            </div>
-        </form>
-    </div>
 
-    <!-- CAMBIAR CONTRASEÑA -->
-    <div style="background: #2a0a18; border-radius: 10px; padding: 25px; margin-bottom: 15px;">
-        <h2 style="color: var(--color-gris); font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;">Cambiar Contraseña</h2>
+            <div class="campo">
+                <label for="nombre">Nombre de usuario</label>
+                <input id="nombre" type="text" name="nombre" class="control" value="{{ old('nombre', $usuario->nombre) }}" required maxlength="255" autocomplete="nickname">
+                @error('nombre') <span class="campo-error">{{ $message }}</span> @enderror
+            </div>
+
+            <div class="campo">
+                <label for="email">Correo electrónico</label>
+                <input id="email" type="email" name="email" class="control" value="{{ old('email', $usuario->email) }}" required maxlength="255"
+                       autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false">
+                @error('email') <span class="campo-error">{{ $message }}</span> @enderror
+            </div>
+
+            <button type="submit" class="btn btn-primario perfil-boton">Guardar cambios</button>
+        </form>
+    </section>
+
+    {{-- CONTRASEÑA --}}
+    <section class="tarjeta" aria-labelledby="titulo-password">
+        <h2 class="seccion-titulo" id="titulo-password">Cambiar contraseña</h2>
         <form method="POST" action="/perfil/password">
             @csrf
             @method('PATCH')
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-                <div>
-                    <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Contraseña actual</label>
-                    <input type="password" name="current_password" style="width: 100%; background: #120309; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo); font-size: 0.9rem;">
-                    @error('current_password') <span style="color: var(--color-naranja); font-size: 0.8rem;">{{ $message }}</span> @enderror
-                </div>
-                <div>
-                    <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Nueva contraseña</label>
-                    <input type="password" name="password" style="width: 100%; background: #120309; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo); font-size: 0.9rem;">
-                    @error('password') <span style="color: var(--color-naranja); font-size: 0.8rem;">{{ $message }}</span> @enderror
-                </div>
-                <div>
-                    <label style="color: var(--color-gris); font-size: 0.8rem; display: block; margin-bottom: 6px;">Confirmar nueva contraseña</label>
-                    <input type="password" name="password_confirmation" style="width: 100%; background: #120309; border: 1px solid rgba(179,3,3,0.3); border-radius: 8px; padding: 12px 15px; color: white; font-family: var(--f-cuerpo); font-size: 0.9rem;">
-                </div>
-                <button type="submit" class="btn btn-primario" style="width: 100%; margin-top: 5px;">Cambiar Contraseña</button>
+
+            <div class="campo">
+                <label for="current_password">Contraseña actual</label>
+                <input id="current_password" type="password" name="current_password" class="control" required autocomplete="current-password">
+                @error('current_password') <span class="campo-error">{{ $message }}</span> @enderror
             </div>
-        </form>
-    </div>
 
-    <!-- OPCIONES -->
-    <div style="display: flex; flex-direction: column; gap: 10px;">
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
-            <button type="submit" class="btn btn-peligro" style="width: 100%;">Cerrar sesión</button>
-        </form>
-    </div>
+            <div class="campo">
+                <label for="password">Nueva contraseña</label>
+                <input id="password" type="password" name="password" class="control" required autocomplete="new-password">
+                @error('password') <span class="campo-error">{{ $message }}</span> @enderror
+            </div>
 
+            <div class="campo">
+                <label for="password_confirmation">Confirmar nueva contraseña</label>
+                <input id="password_confirmation" type="password" name="password_confirmation" class="control" required autocomplete="new-password">
+            </div>
+
+            <button type="submit" class="btn btn-primario perfil-boton">Cambiar contraseña</button>
+        </form>
+    </section>
+
+    <form method="POST" action="{{ route('logout') }}">
+        @csrf
+        <button type="submit" class="btn btn-peligro perfil-boton">Cerrar sesión</button>
+    </form>
 </div>
-
 @endsection

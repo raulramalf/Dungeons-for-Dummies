@@ -90,3 +90,9 @@ window.matchMedia("(min-width: 1025px)").addEventListener("change", (m) => {
     if (m.matches)
         document.querySelectorAll("dialog.sheet[open]").forEach((d) => d.close());
 });
+
+/* ----- Auto-envío: <select|input data-autosubmit> envía su formulario al cambiar ----- */
+document.addEventListener("change", (e) => {
+    const campo = e.target.closest?.("[data-autosubmit]");
+    if (campo?.form) campo.form.submit();
+});

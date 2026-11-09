@@ -1,0 +1,350 @@
+/* ============================================================================
+   PÁGINA: BESTIARIO
+   ============================================================================ */
+
+/* ----- Búsqueda y filtros ----- */
+.en-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 1.4rem;
+}
+
+.en-filtros .control {
+    flex: 1 1 220px;
+    max-width: 420px;
+}
+
+.en-filtros-botones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.en-filtros-botones .btn[aria-pressed="true"] {
+    color: #fff;
+    background: rgba(179, 3, 3, 0.3);
+    border-color: var(--b-fuerte);
+}
+
+.en-sin-resultados {
+    padding: 2rem 0;
+    text-align: center;
+    color: var(--t-tenue);
+}
+
+/* ----- Cuadrícula de tarjetas ----- */
+.en-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+    gap: 1.2rem;
+}
+
+.en-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--c-superficie);
+    border: 1px solid var(--b-sutil);
+    border-radius: var(--r-lg);
+    transition:
+        transform var(--dur) var(--ease),
+        border-color var(--dur),
+        box-shadow var(--dur);
+}
+
+.en-card[hidden] {
+    display: none;
+}
+
+.en-card:hover,
+.en-card:focus-within {
+    transform: translateY(-3px);
+    border-color: var(--b-fuerte);
+    box-shadow: var(--sombra-md);
+}
+
+/* Botón transparente que cubre toda la tarjeta: abre el enemigo (teclado y táctil) */
+.en-abrir {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: none;
+    border: none;
+    border-radius: inherit;
+    cursor: pointer;
+}
+
+.en-media {
+    position: relative;
+    display: grid;
+    place-items: center;
+    height: 190px;
+    background: linear-gradient(160deg, #3a0d1c, #1a0509);
+}
+
+.en-media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.en-media::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(18, 3, 9, 0.95) 0%, rgba(18, 3, 9, 0.3) 45%, transparent 75%);
+}
+
+/* Rótulos decorativos: el clic debe llegar al botón que cubre la tarjeta */
+.en-boss,
+.en-cr,
+.en-titulo,
+.en-media::after {
+    pointer-events: none;
+}
+
+.en-media-icono {
+    width: 3.4rem;
+    height: 3.4rem;
+    opacity: 0.25;
+}
+
+.en-boss,
+.en-cr {
+    position: absolute;
+    top: 0.65rem;
+    z-index: 1;
+    padding: 0.2rem 0.65rem;
+    font-family: var(--f-titulo);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: var(--r-sm);
+}
+
+.en-boss {
+    left: 0.65rem;
+    color: #fff;
+    background: var(--c-rojo);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.en-cr {
+    right: 0.65rem;
+    background: rgba(0, 0, 0, 0.65);
+    border: 1px solid currentColor;
+}
+
+.en-cr--bajo {
+    color: #6fcf73;
+}
+.en-cr--medio {
+    color: #9fb3c8;
+}
+.en-cr--alto {
+    color: var(--c-naranja);
+}
+.en-cr--extremo {
+    color: var(--c-rojo-claro);
+}
+
+.en-titulo {
+    position: absolute;
+    right: 0.9rem;
+    bottom: 0.7rem;
+    left: 0.9rem;
+    z-index: 1;
+}
+
+.en-titulo h3 {
+    font-size: 1.1rem;
+    color: #fff;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+    overflow-wrap: anywhere;
+}
+
+.en-titulo p {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.78);
+}
+
+.en-cuerpo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.8rem;
+}
+
+.en-stats {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 0.4rem;
+    text-align: center;
+}
+
+.en-stats > div {
+    display: flex;
+    flex-direction: column-reverse;
+    padding: 0.4rem 0.2rem;
+    background: var(--c-fondo-alt);
+    border-radius: var(--r-md);
+}
+
+.en-stats dd {
+    font-weight: 700;
+    font-size: 0.95rem;
+    overflow-wrap: anywhere;
+}
+
+.en-stats dd small {
+    display: block;
+    font-size: 0.62rem;
+    font-weight: 400;
+    color: var(--t-tenue);
+}
+
+.en-stats dt {
+    font-size: 0.66rem;
+    color: var(--t-secundario);
+}
+
+/* Por encima del botón que cubre la tarjeta */
+.en-acciones {
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+}
+
+/* ----- Formulario (modales) ----- */
+.form-subtitulo {
+    margin: 0.4rem 0 0.9rem;
+    padding-bottom: 0.4rem;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--t-secundario);
+    border-bottom: 1px solid var(--b-neutro);
+}
+
+.campos-grid .campo--completo {
+    grid-column: 1 / -1;
+}
+
+.campo-cab {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.45rem;
+}
+
+.campo-cab > label:first-child {
+    margin-bottom: 0;
+}
+
+.check-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    min-height: 36px;
+    cursor: pointer;
+    font-family: var(--f-cuerpo);
+    font-size: 0.88rem;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--t-secundario);
+}
+
+.stats-form {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 0.6rem;
+    margin-bottom: 1.2rem;
+}
+
+.stats-form .campo {
+    margin-bottom: 0;
+}
+
+.stats-form label {
+    text-align: center;
+}
+
+.stats-form .control {
+    padding-inline: 0.4rem;
+    text-align: center;
+}
+
+.campo-etiqueta {
+    display: block;
+    margin-bottom: 0.45rem;
+    font-family: var(--f-titulo);
+    font-size: 0.76rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--t-secundario);
+}
+
+.en-preview {
+    display: block;
+    width: 100%;
+    max-height: 160px;
+    margin-bottom: 0.6rem;
+    object-fit: cover;
+    border: 1px solid var(--b-medio);
+    border-radius: var(--r-md);
+    cursor: zoom-in;
+}
+
+.en-preview[hidden] {
+    display: none;
+}
+
+.subir-archivo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    min-height: 48px;
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    font-size: 0.92rem;
+    color: var(--t-secundario);
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px dashed var(--b-medio);
+    border-radius: var(--r-md);
+    transition:
+        border-color var(--dur),
+        color var(--dur);
+}
+
+.subir-archivo:hover,
+.sr-only:focus-visible + .subir-archivo,
+.campo:focus-within .subir-archivo {
+    color: var(--t-principal);
+    border-color: var(--c-rojo);
+}
+
+@media (max-width: 600px) {
+    .stats-form {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .en-media {
+        height: 170px;
+    }
+}
+
+@media (hover: none) {
+    .en-card:hover {
+        transform: none;
+    }
+}
