@@ -58,7 +58,11 @@ Vercel **no ejecuta migraciones**: lánzalas tú contra esa base desde local
 - Sesión en cookie cifrada y caché en memoria (no hay Redis/ficheros compartidos); la cola es síncrona.
 - El tiempo máximo por petición lo fija tu plan de Vercel.
 
-Si el despliegue falla, el log de *Build* y el de *Functions* de Vercel indican qué falta.
+**Si ves un 500:** casi siempre falta `APP_KEY` (o la base de datos no es alcanzable). Para ver el error real sin
+mirar logs, define `DIAGNOSTICO=1` en Vercel, redespliega y abre la web: `api/index.php` comprueba lo imprescindible
+(`vendor/`, `public/build/manifest.json`, `APP_KEY`, `/tmp` escribible) y, si está todo, arranca Laravel con
+`APP_DEBUG=true`. **Quita la variable al terminar** (muestra detalles internos). El log de *Build* y el de
+*Functions* de Vercel también indican qué falta.
 
 ## Estructura del frontend
 
