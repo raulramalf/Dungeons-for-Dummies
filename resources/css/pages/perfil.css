@@ -55,7 +55,7 @@
     place-items: center;
     width: 30px;
     height: 30px;
-    color: #fff;
+    color: var(--t-sobre-oscuro);
     background: var(--c-naranja);
     border: 2px solid var(--c-superficie);
     border-radius: 50%;

@@ -19,7 +19,7 @@
 
 .btn-primario {
     background: var(--c-rojo);
-    color: #fff;
+    color: var(--t-sobre-oscuro);
     box-shadow:
         0 4px 14px rgba(179, 3, 3, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -31,18 +31,18 @@
 }
 
 .btn-secundario {
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(74, 48, 20, 0.05);
     color: var(--t-principal);
     border: 1px solid var(--b-neutro);
 }
 .btn-secundario:hover {
-    background: rgba(255, 255, 255, 0.12);
+    background: rgba(74, 48, 20, 0.11);
     transform: translateY(-2px);
 }
 
 .btn-naranja {
     background: var(--c-naranja);
-    color: #fff;
+    color: var(--t-sobre-oscuro);
 }
 .btn-naranja:hover {
     background: var(--c-naranja-osc);
@@ -51,7 +51,7 @@
 
 .btn-peligro {
     background: #6b1a1a;
-    color: #fff;
+    color: var(--t-sobre-oscuro);
 }
 .btn-peligro:hover {
     background: #8a2222;

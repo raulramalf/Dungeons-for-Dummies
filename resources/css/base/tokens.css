@@ -4,44 +4,49 @@
    Los nombres existentes se mantienen (las vistas dependen de ellos); los
    nuevos tokens se añaden al final de cada grupo.
    ============================================================================ */
+/* PALETA «GRIMORIO ANTIGUO»: pergamino envejecido, tinta sepia, lacre granate y latón.
+   Se mantienen los NOMBRES de los tokens (las vistas dependen de ellos); cambian los valores. */
 :root {
-    color-scheme: dark;
+    color-scheme: light;
 
-    /* Paleta base */
-    --c-fondo: #1a0509; /* fondo principal, granate casi negro */
-    --c-fondo-alt: #120309; /* sidebar / paneles oscuros */
-    --c-superficie: #25090f; /* tarjetas */
-    --c-superficie-2: #2e0c13; /* tarjetas hover / elevadas */
-    --c-superficie-3: #38111a; /* controles sobre superficie */
+    /* Superficies */
+    --c-fondo: #2a170b; /* la mesa y la tapa de cuero */
+    --c-fondo-alt: #1d0f06; /* cuero oscuro */
+    --c-superficie: #e3d2a6; /* tarjetas sobre el pergamino */
+    --c-superficie-2: #dac693; /* tarjetas hover */
+    --c-superficie-3: #cfba84; /* controles */
 
-    --c-rojo: #b30303; /* acento principal */
-    --c-rojo-osc: #8a0202; /* hover botones */
-    --c-rojo-claro: #e05a5a; /* texto de acento (AA sobre fondo oscuro) */
+    --c-rojo: #8c1f16; /* lacre granate */
+    --c-rojo-osc: #6a140e;
+    --c-rojo-claro: #8c1f16; /* acento de texto sobre pergamino */
 
-    --c-naranja: #d46043; /* secundario / editar */
-    --c-naranja-osc: #b84a30;
+    --c-naranja: #9a4b1a; /* sepia anaranjado */
+    --c-naranja-osc: #7c3a12;
 
-    --c-verde: #5a6b3f; /* éxito / niveles */
-    --c-verde-claro: #9ab090;
+    --c-verde: #55632f;
+    --c-verde-claro: #4a5a2a;
 
-    --c-oro: #c9a227; /* detalles decorativos */
-    --c-oro-claro: #e3c25a;
+    --c-oro: #8a6a1f; /* latón / tinta dorada oscura */
+    --c-oro-claro: #7a5a14;
+    --c-oro-brillo: #e3c25a; /* oro vivo: solo sobre cuero, lacre y marcapáginas */
 
-    --c-arcano: #2a3a5c; /* acento semántico: magia / conjuros */
-    --c-arcano-osc: #1e2b46;
-    --c-arcano-claro: #6b85b8;
+    --c-arcano: #2f4a6e;
+    --c-arcano-osc: #213650;
+    --c-arcano-claro: #2f4a6e;
 
-    /* Texto */
-    --t-principal: #f2e9e4; /* texto principal, blanco hueso */
-    --t-secundario: #b3a59d; /* texto secundario */
-    --t-tenue: #8a7e77; /* texto atenuado (≥ 4.5:1 sobre --c-fondo) */
+    /* Tinta */
+    --t-fuerte: #1c0f06;
+    --t-principal: #2b1a0d;
+    --t-secundario: #54402a;
+    --t-tenue: #6f583d;
+    --t-sobre-oscuro: #f6ead0; /* texto crema sobre lacre/cuero */
 
-    /* Bordes */
-    --b-sutil: rgba(179, 3, 3, 0.15);
-    --b-medio: rgba(179, 3, 3, 0.35);
-    --b-fuerte: rgba(179, 3, 3, 0.6);
-    --b-neutro: rgba(168, 154, 146, 0.15);
-    --b-arcano: rgba(107, 133, 184, 0.35);
+    /* Bordes (marrón de tinta) */
+    --b-sutil: rgba(90, 55, 20, 0.22);
+    --b-medio: rgba(90, 55, 20, 0.42);
+    --b-fuerte: rgba(90, 55, 20, 0.7);
+    --b-neutro: rgba(90, 55, 20, 0.25);
+    --b-arcano: rgba(47, 74, 110, 0.45);
 
     /* Tipografía */
     --f-titulo: "Cinzel Variable", "Cinzel", Georgia, serif;
@@ -51,10 +56,10 @@
         Roboto, sans-serif;
 
     /* Sombras */
-    --sombra-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
-    --sombra-md: 0 8px 24px rgba(0, 0, 0, 0.5);
-    --sombra-lg: 0 20px 50px rgba(0, 0, 0, 0.65);
-    --brillo-rojo: 0 0 28px rgba(179, 3, 3, 0.3);
+    --sombra-sm: 0 2px 8px rgba(40, 20, 5, 0.3);
+    --sombra-md: 0 8px 24px rgba(40, 20, 5, 0.35);
+    --sombra-lg: 0 20px 50px rgba(30, 14, 4, 0.5);
+    --brillo-rojo: 0 0 22px rgba(140, 31, 22, 0.22);
 
     /* Radios */
     --r-sm: 4px;
@@ -63,11 +68,11 @@
     --r-xl: 22px;
 
     /* Superficies translúcidas (barras y hojas flotantes) */
-    --glass: rgba(18, 3, 9, 0.94);
+    --glass: rgba(29, 15, 6, 0.96);
     --glass-borde: rgba(255, 255, 255, 0.08);
 
     /* Foco accesible */
-    --foco: 0 0 0 3px rgba(224, 90, 90, 0.45);
+    --foco: 0 0 0 3px rgba(138, 106, 31, 0.5);
 
     /* Movimiento */
     --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -83,7 +88,7 @@
        usan --color-*, que solo estaba definido en el layout de invitados, así
        que en la app esas reglas quedaban sin efecto. Se definen aquí con los
        valores originales; al migrar una vista, usar los tokens --c-* de arriba. */
-    --color-fondo: #20050e;
+    --color-fondo: #2a170b;
     --color-rojo: var(--c-rojo);
     --color-gris: #768596;
     --color-verde: #404834;

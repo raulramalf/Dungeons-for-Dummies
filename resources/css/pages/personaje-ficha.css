@@ -5,7 +5,7 @@
 .ficha-wrapper {
     max-width: 1100px;
     margin: 0 auto;
-    background: linear-gradient(150deg, rgba(18,8,4,0.97), rgba(36,16,8,0.99));
+    background: linear-gradient(150deg, rgba(74, 48, 20, 0.34), rgba(74, 48, 20, 0.35));
     border-radius: 14px;
     border: 1px solid rgba(179,3,3,0.22);
     box-shadow: 0 20px 60px rgba(0,0,0,0.75);
@@ -20,7 +20,7 @@
     flex-wrap: wrap;
     gap: 2rem;
     align-items: center;
-    background: rgba(0,0,0,0.5);
+    background: rgba(74, 48, 20, 0.16);
     border-bottom: 2px solid #B30303;
     padding: 1.8rem 2.2rem;
 }
@@ -41,14 +41,14 @@
 .ficha-titulo h1 {
     font-family: var(--f-titulo);
     font-size: clamp(1.8rem, 4vw, 2.8rem);
-    color: #fff;
+    color: var(--t-fuerte);
     margin: 0 0 0.2rem;
     letter-spacing: 2px;
     text-shadow: 0 2px 10px rgba(0,0,0,0.6);
 }
 
 .ficha-subtitulo {
-    color: #D46043;
+    color: var(--t-secundario);
     font-size: 1.1rem;
     margin-bottom: 0.6rem;
     font-style: italic;
@@ -70,9 +70,9 @@
     font-weight: 600;
 }
 
-.badge-nivel     { background: #B30303; color: #fff; }
-.badge-exp       { background: rgba(255,255,255,0.06); color: #768596; border: 1px solid rgba(118,133,150,0.2); }
-.badge-align     { background: rgba(255,255,255,0.05); color: #768596; border: 1px solid rgba(118,133,150,0.15); }
+.badge-nivel     { background: #B30303; color: var(--t-sobre-oscuro); }
+.badge-exp       { background: rgba(74, 48, 20, 0.05); color: var(--t-secundario); border: 1px solid rgba(118,133,150,0.2); }
+.badge-align     { background: rgba(74, 48, 20, 0.05); color: var(--t-secundario); border: 1px solid rgba(118,133,150,0.15); }
 .badge-divinidad { background: rgba(212,96,67,0.12); color: #D46043; border: 1px solid rgba(212,96,67,0.25); }
 
 .ficha-acciones {
@@ -103,11 +103,11 @@
     font-family: inherit;
 }
 
-.btn-volver  { background: rgba(255,255,255,0.05); color: #768596; border: 1px solid rgba(118,133,150,0.25); }
-.btn-volver:hover  { background: rgba(255,255,255,0.1); color: #fff; }
-.btn-editar  { background: #D46043; color: #fff; }
+.btn-volver  { background: rgba(74, 48, 20, 0.05); color: var(--t-secundario); border: 1px solid rgba(118,133,150,0.25); }
+.btn-volver:hover  { background: rgba(74, 48, 20, 0.09); color: var(--t-sobre-oscuro); }
+.btn-editar  { background: #D46043; color: var(--t-sobre-oscuro); }
 .btn-editar:hover  { background: #b84a30; transform: translateY(-1px); }
-.btn-eliminar { background: #6b1a1a; color: #fff; }
+.btn-eliminar { background: #6b1a1a; color: var(--t-sobre-oscuro); }
 .btn-eliminar:hover { background: #8a2222; transform: translateY(-1px); }
 
 /* =============================================
@@ -125,7 +125,7 @@
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    color: #768596;
+    color: var(--t-secundario);
     font-size: 0.78rem;
     text-transform: uppercase;
     letter-spacing: 2.5px;
@@ -169,7 +169,7 @@
 }
 
 .stat-card {
-    background: rgba(0,0,0,0.35);
+    background: rgba(74, 48, 20, 0.11);
     border-radius: 10px;
     padding: 1.2rem 0.8rem;
     text-align: center;
@@ -183,7 +183,7 @@
 }
 
 .stat-label {
-    color: #768596;
+    color: var(--t-secundario);
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -193,13 +193,13 @@
 .stat-valor {
     font-size: 2.2rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--t-fuerte);
     display: block;
     line-height: 1.2;
 }
 
 .stat-mod {
-    color: #D46043;
+    color: var(--t-secundario);
     font-size: 0.92rem;
     font-weight: 600;
 }
@@ -224,7 +224,7 @@
 
 .competencia-item.activa {
     background: rgba(64,72,52,0.35);
-    color: #9ab090;
+    color: var(--t-fuerte);
 }
 
 .competencia-item.inactiva {
@@ -251,14 +251,14 @@
 }
 
 .combat-card {
-    background: rgba(0,0,0,0.3);
+    background: rgba(74, 48, 20, 0.10);
     padding: 1rem 1.2rem;
     border-radius: 8px;
     border-left: 3px solid #B30303;
 }
 
 .combat-label {
-    color: #768596;
+    color: var(--t-secundario);
     font-size: 0.68rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -266,7 +266,7 @@
 }
 
 .combat-valor {
-    color: #fff;
+    color: var(--t-fuerte);
     font-size: 1.35rem;
     font-weight: 700;
     margin-top: 0.15rem;
@@ -280,7 +280,7 @@
 }
 
 .muerte-grupo label {
-    color: #768596;
+    color: var(--t-secundario);
     font-size: 0.78rem;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -313,7 +313,7 @@
 }
 
 .tabla-ataques th {
-    color: #768596;
+    color: var(--t-secundario);
     font-size: 0.72rem;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -325,7 +325,7 @@
 
 .tabla-ataques td {
     padding: 0.7rem 0.8rem;
-    color: #d0d5da;
+    color: var(--t-sobre-oscuro);
     border-bottom: 1px solid rgba(118,133,150,0.07);
 }
 
@@ -337,11 +337,11 @@
    HISTORIA / RASGOS
 ============================================= */
 .historia-box {
-    background: rgba(0,0,0,0.25);
+    background: rgba(74, 48, 20, 0.08);
     border-left: 4px solid #B30303;
     border-radius: 0 8px 8px 0;
     padding: 1.3rem 1.5rem;
-    color: #b8c0c8;
+    color: var(--t-fuerte);
     line-height: 1.75;
     font-style: italic;
     white-space: pre-line;
@@ -354,14 +354,14 @@
 }
 
 .rasgo-card {
-    background: rgba(0,0,0,0.2);
+    background: rgba(74, 48, 20, 0.06);
     border-radius: 8px;
     padding: 1rem 1.2rem;
     border: 1px solid rgba(118,133,150,0.1);
 }
 
 .rasgo-label {
-    color: #D46043;
+    color: var(--t-secundario);
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -371,7 +371,7 @@
 }
 
 .rasgo-texto {
-    color: #a8b0b8;
+    color: var(--t-fuerte);
     font-size: 0.92rem;
     line-height: 1.6;
 }
@@ -386,13 +386,13 @@
 }
 
 .apariencia-item {
-    background: rgba(0,0,0,0.2);
+    background: rgba(74, 48, 20, 0.06);
     padding: 0.7rem 1rem;
     border-radius: 6px;
 }
 
 .apariencia-label {
-    color: #768596;
+    color: var(--t-secundario);
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.8px;
@@ -401,7 +401,7 @@
 }
 
 .apariencia-valor {
-    color: #d0d5da;
+    color: var(--t-fuerte);
     font-size: 0.92rem;
 }
 
@@ -415,18 +415,18 @@
 }
 
 .equipo-item {
-    background: rgba(0,0,0,0.3);
+    background: rgba(74, 48, 20, 0.10);
     padding: 1rem 1.2rem;
     border-radius: 8px;
     border-left: 3px solid #D46043;
     transition: all 0.25s;
 }
 
-.equipo-item:hover { background: rgba(0,0,0,0.45); }
+.equipo-item:hover { background: rgba(74, 48, 20, 0.14); }
 
-.equipo-nombre { color: #fff; font-weight: 600; font-size: 1rem; }
-.equipo-det    { color: #768596; font-size: 0.83rem; margin-top: 0.2rem; }
-.badge-equipado { color: #9ab090; font-size: 0.75rem; font-weight: 600; margin-left: 0.4rem; }
+.equipo-nombre { color: var(--t-fuerte); font-weight: 600; font-size: 1rem; }
+.equipo-det    { color: var(--t-secundario); font-size: 0.83rem; margin-top: 0.2rem; }
+.badge-equipado { color: var(--t-sobre-oscuro); font-size: 0.75rem; font-weight: 600; margin-left: 0.4rem; }
 
 /* =============================================
    MONEDAS
@@ -438,15 +438,15 @@
 }
 
 .moneda-card {
-    background: rgba(0,0,0,0.25);
+    background: rgba(74, 48, 20, 0.08);
     padding: 1rem;
     border-radius: 8px;
     text-align: center;
 }
 
 .moneda-simbolo { font-size: 1.5rem; display: block; margin-bottom: 0.2rem; }
-.moneda-cantidad { color: #fff; font-size: 1.35rem; font-weight: 700; }
-.moneda-nombre  { color: #768596; font-size: 0.72rem; display: block; margin-top: 0.1rem; }
+.moneda-cantidad { color: var(--t-sobre-oscuro); font-size: 1.35rem; font-weight: 700; }
+.moneda-nombre  { color: var(--t-secundario); font-size: 0.72rem; display: block; margin-top: 0.1rem; }
 
 /* =============================================
    RESPONSIVE
@@ -472,6 +472,6 @@ img[data-lightbox] { cursor: zoom-in; }
 .en-linea { display: inline; }
 .sigla { font-size: 0.8em; opacity: 0.55; }
 .mt-bloque { margin-top: 1.2rem; }
-.texto-suave { font-size: 0.95rem; color: #a8b0b8; }
+.texto-suave { font-size: 0.95rem; color: var(--t-fuerte); }
 .texto-vacio { color: var(--t-secundario); }
 .equipo-desc { margin-top: 0.3rem; font-size: 0.8rem; }

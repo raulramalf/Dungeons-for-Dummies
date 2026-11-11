@@ -2,14 +2,14 @@
 .form-container {
     max-width: 800px;
     margin: 0 auto;
-    background: rgba(255,255,255,0.02);
+    background: rgba(74, 48, 20, 0.02);
     border: 1px solid rgba(179, 3, 3, 0.2);
     border-radius: 10px;
     padding: 2rem;
 }
 
 .form-container h2 {
-    color: #fff;
+    color: var(--t-fuerte);
     margin-bottom: 2rem;
     text-align: center;
     letter-spacing: 2px;
@@ -36,9 +36,9 @@
 .form-control {
     width: 100%;
     padding: 0.8rem 1rem;
-    background: rgba(0,0,0,0.2);
+    background: rgba(74, 48, 20, 0.06);
     border: 1px solid var(--color-gris);
-    color: #fff;
+    color: var(--t-fuerte);
     border-radius: 6px;
     font-family: inherit;
     font-size: 1rem;
@@ -69,7 +69,7 @@
 
 .btn-submit {
     background: var(--color-rojo);
-    color: #fff;
+    color: var(--t-sobre-oscuro);
     padding: 0.8rem 2.5rem;
     border: none;
     border-radius: 6px;
@@ -88,7 +88,7 @@
 }
 
 .btn-cancel {
-    background: rgba(255,255,255,0.05);
+    background: rgba(74, 48, 20, 0.05);
     color: var(--color-gris);
     padding: 0.8rem 2rem;
     border: 1px solid var(--color-gris);
@@ -101,8 +101,8 @@
 }
 
 .btn-cancel:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
+    background: rgba(74, 48, 20, 0.09);
+    color: var(--t-sobre-oscuro);
 }
 
 .form-actions {

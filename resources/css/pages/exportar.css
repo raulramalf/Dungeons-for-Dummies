@@ -100,7 +100,7 @@
 .preview-oficial .pv-col-der .pv-line { background: #e3d2ad; }
 
 /* -- Mística -- */
-.preview-mistica { background: #0f2622; border: 3px solid #4d7a68; }
+.preview-mistica { background: var(--c-superficie-3); border: 3px solid #4d7a68; }
 .preview-mistica .pv-mi-banner {
     height: 14%; border-radius: 4px; background: #f2f0e4; border: 2px solid #b7c9a8; margin-bottom: 8%;
 }
@@ -112,17 +112,17 @@
 .preview-mistica .pv-col-der-mi span { height: 30%; border: 2px solid #4d7a68; border-radius: 3px; background: #f2f0e4; }
 
 /* -- Clásica -- */
-.preview-clasica { background: #14161c; border: 3px solid #6b4a23; }
+.preview-clasica { background: var(--c-superficie-3); border: 3px solid #6b4a23; }
 .preview-clasica .pv-cl-titulo {
     text-align: center; font-family: var(--f-titulo); font-weight: 700;
-    color: #c9974a; font-size: 0.6rem; margin-bottom: 8%; letter-spacing: 0.08em;
+    color: var(--t-secundario); font-size: 0.6rem; margin-bottom: 8%; letter-spacing: 0.08em;
 }
 .preview-clasica .pv-col-izq-cl { width: 30%; display: flex; flex-direction: column; gap: 8%; }
-.preview-clasica .pv-col-izq-cl span { height: 20%; border: 1.5px solid #6b4a23; border-radius: 3px; background: #1e222c; }
+.preview-clasica .pv-col-izq-cl span { height: 20%; border: 1.5px solid #6b4a23; border-radius: 3px; background: var(--c-superficie-3); }
 .preview-clasica .pv-col-cen-cl { width: 35%; }
-.preview-clasica .pv-col-cen-cl span { display: block; height: 40%; border: 1.5px solid #6b4a23; border-radius: 3px; background: #1e222c; }
+.preview-clasica .pv-col-cen-cl span { display: block; height: 40%; border: 1.5px solid #6b4a23; border-radius: 3px; background: var(--c-superficie-3); }
 .preview-clasica .pv-col-der-cl { width: 35%; display: flex; flex-direction: column; gap: 10%; }
-.preview-clasica .pv-col-der-cl span { height: 28%; border: 1.5px solid #6b4a23; border-radius: 3px; background: #1e222c; }
+.preview-clasica .pv-col-der-cl span { height: 28%; border: 1.5px solid #6b4a23; border-radius: 3px; background: var(--c-superficie-3); }
 
 @media (max-width: 560px) {
     .plantilla-opcion { max-width: 100%; }

@@ -162,7 +162,7 @@
     font-size: 0.66rem;
     letter-spacing: 1px;
     text-transform: uppercase;
-    color: #fff;
+    color: var(--t-sobre-oscuro);
     background: var(--c-rojo);
     border-radius: var(--r-sm);
 }
@@ -220,7 +220,7 @@
 .cd-nota-texto {
     font-size: 0.92rem;
     line-height: 1.7;
-    color: #b8c0c8;
+    color: var(--t-fuerte);
     white-space: pre-wrap;
     overflow-wrap: anywhere;
 }
@@ -293,7 +293,7 @@
     font: inherit;
     text-align: left;
     color: inherit;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(74, 48, 20, 0.06);
     border: 1px solid transparent;
     border-radius: var(--r-md);
     cursor: pointer;
@@ -474,7 +474,7 @@ img[data-lightbox] {
 .pjm-cab {
     align-items: flex-start;
     gap: 1.1rem;
-    background: rgba(0, 0, 0, 0.35);
+    background: rgba(74, 48, 20, 0.11);
     border-bottom: 2px solid var(--c-rojo);
 }
 
@@ -543,10 +543,10 @@ img[data-lightbox] {
     padding: 0.9rem 1.2rem;
     font-style: italic;
     line-height: 1.75;
-    color: #b8c0c8;
+    color: var(--t-fuerte);
     white-space: pre-wrap;
     overflow-wrap: anywhere;
-    background: rgba(0, 0, 0, 0.25);
+    background: rgba(74, 48, 20, 0.08);
     border-left: 4px solid var(--c-rojo);
     border-radius: 0 var(--r-md) var(--r-md) 0;
 }
@@ -556,13 +556,13 @@ img[data-lightbox] {
     font-size: 0.78rem;
     font-style: normal;
     color: var(--t-secundario);
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(74, 48, 20, 0.05);
     border: 1px solid rgba(118, 133, 150, 0.2);
     border-radius: 20px;
 }
 
 .pjm-badge--nivel {
-    color: #fff;
+    color: var(--t-sobre-oscuro);
     background: var(--c-rojo);
     border-color: transparent;
 }
@@ -570,7 +570,7 @@ img[data-lightbox] {
 .pjm-stat {
     padding: 0.7rem 0.4rem;
     text-align: center;
-    background: rgba(0, 0, 0, 0.35);
+    background: rgba(74, 48, 20, 0.11);
     border: 1px solid rgba(118, 133, 150, 0.1);
     border-radius: 10px;
 }
@@ -588,7 +588,7 @@ img[data-lightbox] {
     font-size: 1.8rem;
     font-weight: 700;
     line-height: 1.2;
-    color: #fff;
+    color: var(--t-fuerte);
 }
 
 .pjm-stat-mod {
@@ -599,7 +599,7 @@ img[data-lightbox] {
 
 .pjm-dato {
     padding: 0.7rem;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(74, 48, 20, 0.10);
     border-left: 3px solid var(--c-rojo);
     border-radius: 8px;
 }
@@ -615,12 +615,12 @@ img[data-lightbox] {
 .pjm-dato-val {
     font-size: 1.25rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--t-fuerte);
 }
 
 .pjm-rasgo {
     padding: 0.7rem 0.9rem;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(74, 48, 20, 0.06);
     border: 1px solid rgba(118, 133, 150, 0.1);
     border-radius: 8px;
 }
@@ -637,13 +637,13 @@ img[data-lightbox] {
 .pjm-rasgo-txt {
     font-size: 0.9rem;
     line-height: 1.6;
-    color: #a8b0b8;
+    color: var(--t-fuerte);
     overflow-wrap: anywhere;
 }
 
 .pjm-equipo {
     padding: 0.6rem 0.8rem;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(74, 48, 20, 0.10);
     border-left: 3px solid var(--c-naranja);
     border-radius: 8px;
 }
@@ -651,7 +651,7 @@ img[data-lightbox] {
 .pjm-equipo-nombre {
     font-size: 0.95rem;
     font-weight: 600;
-    color: #fff;
+    color: var(--t-fuerte);
     overflow-wrap: anywhere;
 }
 

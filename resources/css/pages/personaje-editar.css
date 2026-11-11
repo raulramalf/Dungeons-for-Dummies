@@ -5,7 +5,7 @@
 .edit-wrapper {
     max-width: 1100px;
     margin: 0 auto;
-    background: linear-gradient(150deg, rgba(18,8,4,0.97), rgba(36,16,8,0.99));
+    background: linear-gradient(150deg, rgba(74, 48, 20, 0.34), rgba(74, 48, 20, 0.35));
     border-radius: 14px;
     border: 1px solid rgba(179,3,3,0.22);
     box-shadow: 0 20px 60px rgba(0,0,0,0.75);
@@ -20,7 +20,7 @@
     flex-wrap: wrap;
     gap: 2rem;
     align-items: center;
-    background: rgba(0,0,0,0.5);
+    background: rgba(74, 48, 20, 0.16);
     border-bottom: 2px solid #B30303;
     padding: 1.8rem 2.2rem;
 }
@@ -41,13 +41,13 @@
 .edit-header-info h1 {
     font-family: var(--f-titulo);
     font-size: clamp(1.6rem, 3.5vw, 2.4rem);
-    color: #fff;
+    color: var(--t-fuerte);
     margin: 0 0 0.3rem;
     letter-spacing: 2px;
 }
 
 .edit-header-info .subtitulo {
-    color: #D46043;
+    color: var(--t-secundario);
     font-size: 1rem;
     font-style: italic;
 }
@@ -64,7 +64,7 @@
     display: flex;
     align-items: center;
     gap: 0.6rem;
-    color: #768596;
+    color: var(--t-secundario);
     font-size: 0.78rem;
     text-transform: uppercase;
     letter-spacing: 2.5px;
@@ -92,7 +92,7 @@
 
 .form-group label {
     display: block;
-    color: #768596;
+    color: var(--t-secundario);
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -105,10 +105,10 @@
 .form-control {
     width: 100%;
     padding: 0.75rem 1rem;
-    background: rgba(0,0,0,0.28);
+    background: rgba(74, 48, 20, 0.09);
     border: 1px solid rgba(118,133,150,0.3);
     border-radius: 6px;
-    color: #fff;
+    color: var(--t-fuerte);
     font-family: inherit;
     font-size: 0.97rem;
     transition: border-color 0.25s;
@@ -124,13 +124,13 @@
 .form-control.is-error { border-color: #cc0000; }
 
 .error-msg {
-    color: #cc4444;
+    color: var(--t-secundario);
     font-size: 0.8rem;
     margin-top: 0.3rem;
     display: block;
 }
 
-select.form-control option { background: #1a0808; color: #fff; }
+select.form-control option { background: var(--c-superficie-3); color: var(--t-fuerte); }
 
 .avatar-preview {
     width: 80px;
@@ -149,7 +149,7 @@ select.form-control option { background: #1a0808; color: #fff; }
     border-radius: 8px;
     padding: 1.4rem;
     text-align: center;
-    background: rgba(0,0,0,0.15);
+    background: rgba(74, 48, 20, 0.05);
     transition: border-color 0.25s;
     cursor: pointer;
 }
@@ -161,12 +161,12 @@ select.form-control option { background: #1a0808; color: #fff; }
 }
 
 .upload-label {
-    color: #768596;
+    color: var(--t-secundario);
     font-size: 0.9rem;
     cursor: pointer;
 }
 
-.upload-label span { color: #D46043; text-decoration: underline; }
+.upload-label span { color: var(--t-secundario); text-decoration: underline; }
 
 .imgs-grid {
     display: flex;
@@ -198,7 +198,7 @@ select.form-control option { background: #1a0808; color: #fff; }
     background: #B30303;
     border: none;
     border-radius: 50%;
-    color: #fff;
+    color: var(--t-sobre-oscuro);
     font-size: 0.75rem;
     cursor: pointer;
     display: flex;
@@ -212,7 +212,7 @@ select.form-control option { background: #1a0808; color: #fff; }
 .img-existente .btn-del-img:hover { background: #8a0202; }
 
 .contador-imgs {
-    color: #768596;
+    color: var(--t-secundario);
     font-size: 0.8rem;
     margin-top: 0.4rem;
 }
@@ -227,7 +227,7 @@ select.form-control option { background: #1a0808; color: #fff; }
 }
 
 .stat-edit {
-    background: rgba(0,0,0,0.35);
+    background: rgba(74, 48, 20, 0.11);
     border-radius: 10px;
     padding: 1rem 0.8rem;
     text-align: center;
@@ -238,7 +238,7 @@ select.form-control option { background: #1a0808; color: #fff; }
 .stat-edit:focus-within { border-color: rgba(179,3,3,0.4); }
 
 .stat-label {
-    color: #768596;
+    color: var(--t-secundario);
     font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -249,10 +249,10 @@ select.form-control option { background: #1a0808; color: #fff; }
 .stat-input {
     width: 75%;
     padding: 0.4rem;
-    background: rgba(0,0,0,0.3);
+    background: rgba(74, 48, 20, 0.10);
     border: 1px solid rgba(118,133,150,0.25);
     border-radius: 5px;
-    color: #fff;
+    color: var(--t-fuerte);
     text-align: center;
     font-size: 1.3rem;
     font-weight: 700;
@@ -263,7 +263,7 @@ select.form-control option { background: #1a0808; color: #fff; }
 .stat-input:focus { border-color: #B30303; outline: none; }
 
 .stat-mod {
-    color: #D46043;
+    color: var(--t-secundario);
     font-size: 0.88rem;
     font-weight: 600;
     margin-top: 0.3rem;
@@ -280,14 +280,14 @@ select.form-control option { background: #1a0808; color: #fff; }
 }
 
 .combat-field {
-    background: rgba(0,0,0,0.3);
+    background: rgba(74, 48, 20, 0.10);
     padding: 1rem 1.2rem;
     border-radius: 8px;
     border-left: 3px solid #B30303;
 }
 
 .combat-field label {
-    color: #768596;
+    color: var(--t-secundario);
     font-size: 0.68rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -299,10 +299,10 @@ select.form-control option { background: #1a0808; color: #fff; }
 .combat-field input {
     width: 100%;
     padding: 0.4rem 0.6rem;
-    background: rgba(0,0,0,0.3);
+    background: rgba(74, 48, 20, 0.10);
     border: 1px solid rgba(118,133,150,0.25);
     border-radius: 5px;
-    color: #fff;
+    color: var(--t-fuerte);
     font-size: 1.1rem;
     font-weight: 600;
 }
@@ -330,10 +330,10 @@ select.form-control option { background: #1a0808; color: #fff; }
 
 .ataque-row input {
     padding: 0.6rem 0.8rem;
-    background: rgba(0,0,0,0.3);
+    background: rgba(74, 48, 20, 0.10);
     border: 1px solid rgba(118,133,150,0.25);
     border-radius: 5px;
-    color: #fff;
+    color: var(--t-fuerte);
     font-size: 0.9rem;
     font-family: inherit;
 }
@@ -361,7 +361,7 @@ select.form-control option { background: #1a0808; color: #fff; }
 .btn-add-ataque {
     background: rgba(64,72,52,0.5);
     border: 1px solid #404834;
-    color: #9ab090;
+    color: var(--t-sobre-oscuro);
     padding: 0.5rem 1.2rem;
     border-radius: 5px;
     cursor: pointer;
@@ -383,15 +383,15 @@ select.form-control option { background: #1a0808; color: #fff; }
 }
 
 .equipo-item {
-    background: rgba(0,0,0,0.3);
+    background: rgba(74, 48, 20, 0.10);
     padding: 1rem 1.2rem;
     border-radius: 8px;
     border-left: 3px solid #D46043;
     position: relative;
 }
 
-.equipo-nombre { color: #fff; font-weight: 600; }
-.equipo-det    { color: #768596; font-size: 0.82rem; margin-top: 0.2rem; }
+.equipo-nombre { color: var(--t-fuerte); font-weight: 600; }
+.equipo-det    { color: var(--t-secundario); font-size: 0.82rem; margin-top: 0.2rem; }
 
 .btn-del-equipo {
     position: absolute;
@@ -409,14 +409,14 @@ select.form-control option { background: #1a0808; color: #fff; }
 .btn-del-equipo:hover { color: #B30303; }
 
 .form-equipo {
-    background: rgba(0,0,0,0.15);
+    background: rgba(74, 48, 20, 0.05);
     border: 1px solid rgba(118,133,150,0.1);
     border-radius: 10px;
     padding: 1.4rem;
 }
 
 .form-equipo h4 {
-    color: #768596;
+    color: var(--t-secundario);
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -434,10 +434,10 @@ select.form-control option { background: #1a0808; color: #fff; }
 .equipo-inputs select {
     width: 100%;
     padding: 0.6rem 0.8rem;
-    background: rgba(0,0,0,0.3);
+    background: rgba(74, 48, 20, 0.10);
     border: 1px solid rgba(118,133,150,0.25);
     border-radius: 5px;
-    color: #fff;
+    color: var(--t-fuerte);
     font-family: inherit;
     font-size: 0.9rem;
 }
@@ -450,7 +450,7 @@ select.form-control option { background: #1a0808; color: #fff; }
 
 .btn-add-equipo {
     background: #404834;
-    color: #9ab090;
+    color: var(--t-sobre-oscuro);
     border: none;
     padding: 0.6rem 1.5rem;
     border-radius: 5px;
@@ -483,7 +483,7 @@ select.form-control option { background: #1a0808; color: #fff; }
 
 .moneda-field label {
     display: block;
-    color: #768596;
+    color: var(--t-secundario);
     font-size: 0.7rem;
     text-transform: uppercase;
     margin-bottom: 0.3rem;
@@ -492,10 +492,10 @@ select.form-control option { background: #1a0808; color: #fff; }
 .moneda-field input {
     width: 80%;
     padding: 0.4rem;
-    background: rgba(0,0,0,0.3);
+    background: rgba(74, 48, 20, 0.10);
     border: 1px solid rgba(118,133,150,0.25);
     border-radius: 5px;
-    color: #fff;
+    color: var(--t-sobre-oscuro);
     text-align: center;
     font-size: 1.1rem;
     font-weight: 600;
@@ -505,7 +505,7 @@ select.form-control option { background: #1a0808; color: #fff; }
 
 .btn-monedas {
     background: #B30303;
-    color: #fff;
+    color: var(--t-sobre-oscuro);
     border: none;
     padding: 0.65rem 2rem;
     border-radius: 6px;
@@ -537,23 +537,23 @@ select.form-control option { background: #1a0808; color: #fff; }
     align-items: center;
     gap: 0.4rem;
     padding: 0.75rem 1.8rem;
-    background: rgba(255,255,255,0.05);
+    background: rgba(74, 48, 20, 0.05);
     border: 1px solid rgba(118,133,150,0.25);
     border-radius: 6px;
-    color: #768596;
+    color: var(--t-secundario);
     text-decoration: none;
     font-size: 0.95rem;
     transition: all 0.25s;
 }
 
-.btn-cancel:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.btn-cancel:hover { background: rgba(74, 48, 20, 0.09); color: var(--t-sobre-oscuro); }
 
 .btn-save {
     padding: 0.75rem 2.5rem;
     background: #B30303;
     border: none;
     border-radius: 6px;
-    color: #fff;
+    color: var(--t-sobre-oscuro);
     font-size: 0.97rem;
     font-weight: 700;
     cursor: pointer;
@@ -638,7 +638,7 @@ details.seccion > summary.seccion-titulo:hover { color: var(--t-principal); }
 .ed-muerte { display: flex; flex-wrap: wrap; align-items: center; gap: 2rem; margin-top: 1.2rem; }
 .ed-muerte-et { display: block; margin-bottom: 0.5rem; font-size: 0.75rem; letter-spacing: 1px; text-transform: uppercase; color: var(--t-secundario); }
 .ed-muerte-auto { margin-top: auto; }
-.ed-contador { width: 70px; padding: 0.4rem; text-align: center; font-size: 1rem; color: #fff; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(118, 133, 150, 0.25); border-radius: 5px; }
+.ed-contador { width: 70px; padding: 0.4rem; text-align: center; font-size: 1rem; color: var(--t-fuerte); background: rgba(74, 48, 20, 0.10); border: 1px solid rgba(118, 133, 150, 0.25); border-radius: 5px; }
 .ed-ataque-rapido { margin-bottom: 0.8rem; }
 .ed-sep { margin-bottom: 1rem; }
 .ed-vacio { margin-bottom: 1rem; color: var(--t-secundario); }

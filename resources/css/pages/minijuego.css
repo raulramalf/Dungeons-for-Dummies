@@ -39,7 +39,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(18,3,9,.15) 0%, rgba(18,3,9,.85) 100%);
+    background: linear-gradient(180deg, rgba(74, 48, 20, 0.05) 0%, rgba(74, 48, 20, 0.30) 100%);
 }
 
 .rd-hero > * { position: relative; z-index: 1; }
@@ -237,7 +237,7 @@
 .rd-centrado { text-align: center; }
 
 /* ---- Remodelación del Reto Diario ---- */
-.rd-panel { display:flex; justify-content:space-between; align-items:center; gap:12px; max-width:720px; margin:16px auto 0; padding:10px 16px; background:var(--glass, rgba(0,0,0,.35)); border:1px solid var(--b-medio); border-radius:var(--r-md); }
+.rd-panel { display:flex; justify-content:space-between; align-items:center; gap:12px; max-width:720px; margin:16px auto 0; padding:10px 16px; background:var(--glass, rgba(74, 48, 20, 0.11)); border:1px solid var(--b-medio); border-radius:var(--r-md); }
 .rd-corazones { display:flex; gap:6px; }
 .rd-corazon { color:var(--c-rojo); display:inline-flex; transition:transform var(--dur) var(--ease), opacity var(--dur); }
 .rd-corazon .icon { width:24px; height:24px; fill:currentColor; }
@@ -261,8 +261,8 @@
 
 .rd-opcion { display:flex; align-items:center; gap:12px; text-align:left; }
 .rd-letra { flex:none; width:30px; height:30px; display:grid; place-items:center; border-radius:50%; border:1px solid var(--b-medio); font-family:var(--f-titulo); font-size:.85rem; color:var(--c-oro); }
-.rd-opcion.correcta .rd-letra { background:var(--c-verde); color:#fff; border-color:transparent; }
-.rd-opcion.incorrecta .rd-letra { background:var(--c-rojo); color:#fff; border-color:transparent; }
+.rd-opcion.correcta .rd-letra { background:var(--c-verde); color:var(--t-sobre-oscuro); border-color:transparent; }
+.rd-opcion.incorrecta .rd-letra { background:var(--c-rojo); color:var(--t-sobre-oscuro); border-color:transparent; }
 .rd-opcion:disabled { opacity:1; }
 .rd-opcion:disabled:not(.correcta):not(.incorrecta) { opacity:.55; }
 
@@ -274,7 +274,7 @@
 .rd-expl-texto .icon { color:var(--c-oro); flex:none; margin-top:2px; }
 
 .rd-vida-barra { position:relative; }
-.rd-vida-segmentos { position:absolute; inset:0; z-index:1; pointer-events:none; background:repeating-linear-gradient(90deg, transparent 0 calc(25% - 2px), rgba(0,0,0,.65) calc(25% - 2px) 25%); }
+.rd-vida-segmentos { position:absolute; inset:0; z-index:1; pointer-events:none; background:repeating-linear-gradient(90deg, transparent 0 calc(25% - 2px), rgba(74, 48, 20, 0.21) calc(25% - 2px) 25%); }
 
 .rd-golpeado .rd-enemigo > .rd-arte, .rd-golpeado .rd-enemigo > img { animation:rd-golpe .45s; }
 @keyframes rd-golpe { 0%{transform:translateX(0);filter:none} 20%{transform:translateX(-10px);filter:brightness(2) saturate(2)} 50%{transform:translateX(8px)} 100%{transform:translateX(0);filter:none} }

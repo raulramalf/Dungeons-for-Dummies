@@ -71,7 +71,7 @@
     font-weight: 700;
     letter-spacing: 1px;
     text-transform: uppercase;
-    color: #fff;
+    color: var(--t-sobre-oscuro);
     background: rgba(179, 3, 3, 0.9);
     border-radius: 999px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
@@ -129,7 +129,7 @@
 }
 
 .btn-icono-peligro:hover {
-    color: #fff;
+    color: var(--t-sobre-oscuro);
     background: var(--c-rojo);
 }
 
@@ -181,7 +181,7 @@
         width: auto;
         height: 42px;
         justify-content: center;
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(74, 48, 20, 0.05);
         border: 1px solid var(--b-neutro);
     }
 

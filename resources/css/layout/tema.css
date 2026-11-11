@@ -1,180 +1,144 @@
 /* ============================================================================
-   TEMA «GRIMORIO» — pergamino oscuro, marcos dorados, lacre y tinta.
-   Capa final: mantiene la paleta granate/oro y rehace superficies, marcos,
-   cabeceras, botones y navegación con aire de manual de rol.
+   TEMA «GRIMORIO ANTIGUO» — pergamino envejecido, tinta sepia, lacre y latón.
+   Superficies, marcos, cabeceras, botones y formularios. La estructura del
+   libro (tapa, páginas, marcapáginas, pasar hoja) está en libro.css.
    ============================================================================ */
 :root {
-    --grano: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .95  0 0 0 0 .78  0 0 0 0 .5  0 0 0 .10 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-    --rombo: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'><path d='M7 0l7 7-7 7-7-7z' fill='%23c9a227'/><path d='M7 3.5L10.5 7 7 10.5 3.5 7z' fill='%231a0509'/></svg>");
-    --oro-linea: rgba(201, 162, 39, 0.38);
-    --oro-suave: rgba(201, 162, 39, 0.16);
-    --pergamino: linear-gradient(165deg, #2f1114 0%, #240b0f 55%, #1d080c 100%);
+    /* grano de papel: motas marrones sobre claro */
+    --grano: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .36  0 0 0 0 .22  0 0 0 0 .08  0 0 0 .22 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    /* manchas de humedad y edad */
+    --manchas:
+        radial-gradient(220px 160px at 12% 18%, rgba(140, 95, 35, 0.16), transparent 70%),
+        radial-gradient(260px 200px at 88% 72%, rgba(120, 78, 28, 0.15), transparent 70%),
+        radial-gradient(180px 120px at 60% 4%, rgba(150, 105, 40, 0.12), transparent 70%);
+    --rombo: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'><path d='M7 0l7 7-7 7-7-7z' fill='%238a6a1f'/><path d='M7 3.5L10.5 7 7 10.5 3.5 7z' fill='%23e3d2a6'/></svg>");
+    --oro-linea: rgba(110, 78, 22, 0.5);
+    --oro-suave: rgba(110, 78, 22, 0.22);
+    --pergamino: linear-gradient(165deg, #e8d8ae 0%, #dfcb9a 55%, #d6c08a 100%);
+    --tinta: #2b1a0d;
+    --lacre: radial-gradient(circle at 35% 30%, #b8261b, #8c1f16 58%, #5e120c);
 }
 
-/* ---------- Fondo: cuero oscuro con grano de papel ---------- */
+/* ---------- Mesa: madera oscura bajo el libro ---------- */
 body {
     background:
+        radial-gradient(1200px 700px at 50% 40%, rgba(110, 60, 20, 0.35), transparent 70%),
         var(--grano),
-        radial-gradient(1000px 520px at 82% -8%, rgba(179, 3, 3, 0.2), transparent 62%),
-        radial-gradient(900px 500px at -8% 108%, rgba(201, 162, 39, 0.08), transparent 55%),
-        #170509;
+        linear-gradient(180deg, #24120a, #170b05);
     background-attachment: fixed;
+    color: var(--tinta);
 }
 
-/* ---------- Barra lateral: lomo de libro con costura dorada ---------- */
-.sidebar {
-    background: var(--grano), linear-gradient(180deg, #1c070b, #11030620 120%), #12040a;
-    border-right: 2px solid rgba(201, 162, 39, 0.5);
-    box-shadow: 10px 0 40px rgba(0, 0, 0, 0.5), inset -6px 0 14px rgba(0, 0, 0, 0.45);
-}
-.sidebar::after {
-    content: ""; position: absolute; inset: 8px 8px 8px 8px; pointer-events: none;
-    border: 1px dashed rgba(201, 162, 39, 0.22); border-radius: 6px;
-}
-.sidebar-logo { border-bottom: 1px solid var(--oro-linea); }
-.nav-link {
-    border-radius: var(--r-sm); font-size: 0.84rem; letter-spacing: 1.6px; text-transform: uppercase;
-    color: #cdbdb2;
-}
-.nav-link:hover { background: rgba(201, 162, 39, 0.08); color: var(--c-oro-claro); }
-.nav-link:hover .icon { color: var(--c-oro-claro); }
-.nav-link[aria-current="page"] {
-    background: linear-gradient(90deg, rgba(179, 3, 3, 0.45), rgba(179, 3, 3, 0.06));
-    box-shadow: inset 0 0 0 1px var(--oro-linea);
-    color: #fff;
-}
-.nav-link[aria-current="page"] .icon { color: var(--c-oro-claro); }
-.nav-link[aria-current="page"]::before {
-    left: auto; right: 10px; top: 50%; bottom: auto; width: 12px; height: 12px; border-radius: 0;
-    transform: translateY(-50%); background: var(--rombo) center / contain no-repeat; box-shadow: none;
-}
-.sidebar-usuario { background: rgba(0, 0, 0, 0.28); border: 1px solid var(--oro-linea); border-radius: var(--r-sm); }
-
-/* ---------- Cabecera de página: sello + título gótico + filigrana ---------- */
+/* ---------- Cabecera de página: sello de lacre + título en tinta ---------- */
 .page-header { border-bottom: 0; padding-bottom: 26px; margin-bottom: 28px; }
 .page-header::after {
     left: 0; right: 0; width: auto; height: 14px; bottom: 0;
     background:
         var(--rombo) center / 14px 14px no-repeat,
-        linear-gradient(90deg, var(--c-oro), var(--oro-linea) 40%, transparent 49%) left center / 100% 1px no-repeat,
-        linear-gradient(270deg, var(--c-oro), var(--oro-linea) 40%, transparent 49%) right center / 100% 1px no-repeat;
-    opacity: 0.85;
+        linear-gradient(90deg, #8a6a1f, var(--oro-linea) 40%, transparent 49%) left center / 100% 1px no-repeat,
+        linear-gradient(270deg, #8a6a1f, var(--oro-linea) 40%, transparent 49%) right center / 100% 1px no-repeat;
 }
-.page-icono {
-    width: 58px; height: 58px; border-radius: 50%; color: #f3d98a;
-    background: radial-gradient(circle at 35% 30%, #d41414, #8a0202 60%, #5a0101);
-    border: 2px solid var(--c-oro);
-    box-shadow: 0 0 0 4px rgba(201, 162, 39, 0.18), 0 8px 22px rgba(0, 0, 0, 0.55), inset 0 2px 4px rgba(255, 255, 255, 0.25), inset 0 -4px 8px rgba(0, 0, 0, 0.4);
+.page-titulo { display: flex; align-items: center; gap: 1.1rem; min-width: 0; }
+.page-icono, .dato-icono {
+    flex: none; display: grid; place-items: center; border-radius: 50%;
+    color: var(--c-oro-brillo); background: var(--lacre);
+    border: 2px solid #b8923a;
+    box-shadow: 0 0 0 3px rgba(110, 78, 22, 0.25), 0 6px 14px rgba(40, 20, 5, 0.45), inset 0 2px 3px rgba(255, 235, 200, 0.35), inset 0 -4px 7px rgba(0, 0, 0, 0.35);
 }
-.page-icono .icon { width: 28px; height: 28px; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.6)); }
+.page-icono { width: 58px; height: 58px; }
+.page-icono .icon, .dato-icono .icon { display: block; margin: 0; vertical-align: 0; filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.6)); }
+.page-icono .icon { width: 28px; height: 28px; }
 .page-header h1 {
-    font-family: var(--f-gotica); font-size: 2.3rem; font-weight: 400; letter-spacing: 1px;
-    text-transform: none; color: #f6ece4; text-shadow: 0 2px 0 rgba(0, 0, 0, 0.5), 0 0 24px rgba(179, 3, 3, 0.35);
+    font-family: var(--f-gotica); font-size: 2.3rem; font-weight: 400; letter-spacing: 1px; text-transform: none;
+    color: #3a1209; text-shadow: 0 1px 0 rgba(255, 240, 210, 0.5);
 }
-.page-subtitulo { font-style: italic; font-family: var(--f-titulo); font-size: 0.92rem; letter-spacing: 0.4px; color: #c2b2a6; }
+.page-subtitulo { font-style: italic; font-family: var(--f-titulo); font-size: 0.92rem; letter-spacing: 0.3px; color: var(--t-secundario); }
 
-/* ---------- Pergamino: tarjetas y paneles con marco ornamentado ---------- */
+/* ---------- Tarjetas: pergamino más oscuro con filete a tinta ---------- */
 .tarjeta, .camp-card, .pj-card, .funcion, .proxima-sesion, .dato, .rd-panel, .calendario-wrap {
-    background: var(--grano), var(--pergamino);
+    background: var(--grano), var(--manchas), var(--pergamino);
     border: 1px solid var(--oro-linea);
-    border-radius: 6px;
+    border-radius: 4px;
+    color: var(--tinta);
     box-shadow:
-        0 12px 30px rgba(0, 0, 0, 0.45),
-        inset 0 0 0 4px #1d080c,
-        inset 0 0 0 5px var(--oro-suave),
-        inset 0 0 40px rgba(0, 0, 0, 0.35);
+        0 8px 18px rgba(50, 28, 8, 0.3),
+        inset 0 0 0 3px #e0cd9f,
+        inset 0 0 0 4px var(--oro-suave),
+        inset 0 0 26px rgba(120, 80, 30, 0.22);
     position: relative;
 }
-/* esquinas doradas */
 .tarjeta::before, .camp-card::before, .dato::before, .funcion::before, .calendario-wrap::before {
     content: ""; position: absolute; inset: 7px; pointer-events: none; z-index: 1; height: auto; left: 7px; right: 7px; top: 7px;
     background:
-        linear-gradient(var(--c-oro), var(--c-oro)) top left / 14px 1px no-repeat,
-        linear-gradient(var(--c-oro), var(--c-oro)) top left / 1px 14px no-repeat,
-        linear-gradient(var(--c-oro), var(--c-oro)) top right / 14px 1px no-repeat,
-        linear-gradient(var(--c-oro), var(--c-oro)) top right / 1px 14px no-repeat,
-        linear-gradient(var(--c-oro), var(--c-oro)) bottom left / 14px 1px no-repeat,
-        linear-gradient(var(--c-oro), var(--c-oro)) bottom left / 1px 14px no-repeat,
-        linear-gradient(var(--c-oro), var(--c-oro)) bottom right / 14px 1px no-repeat,
-        linear-gradient(var(--c-oro), var(--c-oro)) bottom right / 1px 14px no-repeat;
-    opacity: 0.8;
+        linear-gradient(#8a6a1f, #8a6a1f) top left / 12px 1px no-repeat, linear-gradient(#8a6a1f, #8a6a1f) top left / 1px 12px no-repeat,
+        linear-gradient(#8a6a1f, #8a6a1f) top right / 12px 1px no-repeat, linear-gradient(#8a6a1f, #8a6a1f) top right / 1px 12px no-repeat,
+        linear-gradient(#8a6a1f, #8a6a1f) bottom left / 12px 1px no-repeat, linear-gradient(#8a6a1f, #8a6a1f) bottom left / 1px 12px no-repeat,
+        linear-gradient(#8a6a1f, #8a6a1f) bottom right / 12px 1px no-repeat, linear-gradient(#8a6a1f, #8a6a1f) bottom right / 1px 12px no-repeat;
+    opacity: 0.85;
 }
-.tarjeta:hover, .camp-card:hover, .pj-card:hover { border-color: rgba(227, 194, 90, 0.7); background: var(--grano), var(--pergamino); }
-.camp-card { border-left-width: 1px; }
-.camp-card .camp-nombre a, .pj-nombre a { font-family: var(--f-titulo); }
+.tarjeta:hover, .camp-card:hover, .pj-card:hover { border-color: #6e4e16; background: var(--grano), var(--manchas), var(--pergamino); }
+.camp-card { border-left: 4px solid var(--c-rojo); }
+h1, h2, h3, h4, h5 { color: var(--t-fuerte); }
 
-/* ---------- Títulos de sección: capitular + filigrana ---------- */
-.seccion-titulo {
-    color: var(--c-oro-claro); font-size: 0.95rem; letter-spacing: 3px; padding-bottom: 0.9rem; border: 0; position: relative;
-}
+/* ---------- Títulos de sección ---------- */
+.seccion-titulo { color: #5b1a12; font-size: 0.95rem; letter-spacing: 3px; padding-bottom: 0.9rem; border: 0; position: relative; }
 .seccion-titulo::after {
     content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 10px;
-    background:
-        var(--rombo) left center / 10px 10px no-repeat,
-        linear-gradient(90deg, transparent 16px, var(--oro-linea) 16px, transparent) left center / 100% 1px no-repeat;
+    background: var(--rombo) left center / 10px 10px no-repeat, linear-gradient(90deg, transparent 16px, var(--oro-linea) 16px, transparent) left center / 100% 1px no-repeat;
 }
 .seccion-titulo .icon { color: var(--c-oro); }
 
-/* ---------- Botones: lacre y tinta ---------- */
-.btn { border-radius: 4px; letter-spacing: 1.4px; text-transform: uppercase; font-size: 0.82rem; }
+/* ---------- Botones: lacre de cera con letra crema ---------- */
+.btn { border-radius: 3px; letter-spacing: 1.4px; text-transform: uppercase; font-size: 0.82rem; }
 .btn-primario {
-    background: radial-gradient(120% 160% at 30% 0%, #d81313 0%, var(--c-rojo) 45%, #6e0101 100%);
-    border: 1px solid var(--c-oro);
-    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.35), 0 0 0 4px var(--oro-linea), 0 8px 18px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 -3px 6px rgba(0, 0, 0, 0.35);
+    background: radial-gradient(120% 160% at 30% 0%, #b8261b 0%, #8c1f16 50%, #5e120c 100%);
+    color: var(--t-sobre-oscuro); border: 1px solid #b8923a;
+    box-shadow: 0 0 0 3px rgba(60, 30, 8, 0.25), 0 0 0 4px var(--oro-linea), 0 6px 14px rgba(40, 20, 5, 0.45), inset 0 1px 0 rgba(255, 220, 180, 0.35), inset 0 -3px 6px rgba(0, 0, 0, 0.3);
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.6);
 }
-.btn-primario:hover { background: radial-gradient(120% 160% at 30% 0%, #ee1c1c, #a30303 50%, #7a0202); border-color: var(--c-oro-claro); }
-.btn-secundario {
-    background: rgba(0, 0, 0, 0.25); color: var(--c-oro-claro);
-    border: 1px solid var(--oro-linea); box-shadow: inset 0 0 0 3px rgba(0, 0, 0, 0.25), inset 0 0 0 4px var(--oro-suave);
-}
-.btn-secundario:hover { background: rgba(201, 162, 39, 0.12); }
+.btn-primario:hover { background: radial-gradient(120% 160% at 30% 0%, #cc2c20, #a02218 50%, #6e150f); border-color: var(--c-oro-brillo); }
+.btn-secundario { background: rgba(110, 78, 22, 0.08); color: #5b1a12; border: 1px solid var(--oro-linea); box-shadow: inset 0 0 0 3px rgba(224, 205, 159, 0.6), inset 0 0 0 4px var(--oro-suave); }
+.btn-secundario:hover { background: rgba(110, 78, 22, 0.16); }
+.btn-icono { color: var(--t-secundario); }
+.btn-icono:hover { background: rgba(140, 31, 22, 0.12); color: var(--c-rojo); }
 
-/* ---------- Formularios: tinta sobre papel oscuro ---------- */
+/* ---------- Formularios: tinta sobre papel ---------- */
 .control, input.control, select.control, textarea.control {
-    background: rgba(0, 0, 0, 0.35); border: 1px solid var(--oro-linea); border-radius: 3px;
-    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.45);
+    background: rgba(255, 245, 215, 0.55); color: var(--tinta); border: 1px solid var(--oro-linea); border-radius: 3px;
+    box-shadow: inset 0 1px 4px rgba(90, 55, 20, 0.2);
 }
-.control:focus { border-color: var(--c-oro-claro); box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.45), 0 0 0 3px rgba(201, 162, 39, 0.22); }
-label, .campo label { letter-spacing: 1.2px; }
+.control::placeholder { color: var(--t-tenue); }
+.control:focus { border-color: #8a6a1f; box-shadow: inset 0 1px 4px rgba(90, 55, 20, 0.2), 0 0 0 3px rgba(138, 106, 31, 0.3); }
+label, .campo label { letter-spacing: 1.1px; color: var(--t-secundario); }
 
-/* ---------- Pestañas, etiquetas, estados ---------- */
 .estado, .badge, .pj-chip { border-radius: 3px; }
-.tab-boton[aria-selected="true"] { color: var(--c-oro-claro); border-color: var(--c-oro); }
+.tab-boton[aria-selected="true"] { color: #5b1a12; border-color: var(--c-rojo); }
 
-/* ---------- Inicio: panel de datos como medallones ---------- */
-.panel-datos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 1.1rem; margin-bottom: 2rem; }
+/* ---------- Inicio: medallones ---------- */
+.panel-datos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); gap: 1.1rem; margin-bottom: 2rem; }
 .dato { display: flex; align-items: center; gap: 1rem; padding: 1.2rem 1.3rem; color: inherit; transition: transform var(--dur) var(--ease), border-color var(--dur); }
-a.dato:hover { transform: translateY(-3px); border-color: var(--c-oro-claro); }
-.dato-icono {
-    flex: none; width: 50px; height: 50px; display: grid; place-items: center; border-radius: 50%; color: #f3d98a;
-    background: radial-gradient(circle at 35% 30%, #d41414, #8a0202 60%, #5a0101); border: 2px solid var(--c-oro);
-    box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.16), inset 0 2px 3px rgba(255, 255, 255, 0.25);
-}
+a.dato:hover { transform: translateY(-3px); border-color: #6e4e16; }
+.dato-icono { width: 50px; height: 50px; }
 .dato-icono .icon { width: 24px; height: 24px; }
-.dato-num { display: block; font-family: var(--f-gotica); font-size: 2rem; line-height: 1; color: #fff; }
+.dato-num { display: block; font-family: var(--f-gotica); font-size: 2rem; line-height: 1; color: #3a1209; }
 .dato-txt { display: block; margin-top: 0.3rem; font-size: 0.74rem; letter-spacing: 2px; text-transform: uppercase; color: var(--t-secundario); font-family: var(--f-titulo); }
 
-/* ---------- Gremio: cartas de personaje ---------- */
+/* ---------- Gremio ---------- */
 .pj-grid { align-items: stretch; gap: 1.4rem; }
 .pj-card { overflow: hidden; }
-.pj-media { margin: 9px 9px 0; border: 1px solid var(--oro-linea); border-radius: 3px; box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.6); }
-.pj-nivel {
-    top: 0.6rem; left: 0.6rem; width: auto; padding: 0.25rem 0.75rem; border-radius: 3px;
-    background: linear-gradient(180deg, #b30303, #6e0101); border: 1px solid var(--c-oro);
-}
+.pj-media { margin: 9px 9px 0; border: 1px solid var(--oro-linea); border-radius: 2px; box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.5); }
+.pj-nivel, .pj-card .pj-nivel { top: 0.6rem; left: 0.6rem; width: auto; padding: 0.25rem 0.75rem; border-radius: 3px; background: var(--lacre); color: var(--t-sobre-oscuro); border: 1px solid #b8923a; }
 .pj-cuerpo { flex: 1; margin-top: 0; padding: 0.7rem 1.1rem 1.1rem; }
 .pj-nombre { font-size: 1.12rem; text-align: center; }
-.pj-meta { text-align: center; font-style: italic; font-family: var(--f-titulo); font-size: 0.85rem; }
-.pj-chips { justify-content: center; }
-.pj-chip { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.15rem 0.6rem; font-size: 0.72rem; font-family: var(--f-titulo); color: var(--c-oro-claro); background: rgba(0, 0, 0, 0.3); border: 1px solid var(--oro-linea); }
+.pj-nombre a { color: var(--t-fuerte); }
+.pj-meta { text-align: center; font-style: italic; font-family: var(--f-titulo); font-size: 0.85rem; color: var(--t-secundario); }
+.pj-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; margin-top: 0.5rem; }
+.pj-chip { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.15rem 0.6rem; font-size: 0.72rem; font-family: var(--f-titulo); color: #5b1a12; background: rgba(110, 78, 22, 0.1); border: 1px solid var(--oro-linea); }
 .pj-chip .icon { width: 13px; height: 13px; }
 .pj-acciones { margin-top: auto; padding-top: 0.9rem; }
 .pj-acciones .btn { white-space: nowrap; }
 
-/* ---------- Móvil ---------- */
 @media (max-width: 1024px) {
-    .sidebar::after { display: none; }
     .page-icono { width: 46px; height: 46px; border-width: 1.5px; }
     .page-icono .icon { width: 22px; height: 22px; }
     .page-header h1 { font-size: 1.7rem; }
@@ -190,7 +154,3 @@ a.dato:hover { transform: translateY(-3px); border-color: var(--c-oro-claro); }
     .pj-acciones form .btn-icono { width: 100%; }
 }
 @media (max-width: 420px) { .panel-datos { grid-template-columns: 1fr 1fr; } .dato { flex-direction: column; align-items: flex-start; } }
-
-.page-titulo { display: flex; align-items: center; gap: 1.1rem; min-width: 0; }
-.pj-card .pj-nivel { border-radius: 3px; width: auto; }
-.page-icono .icon, .dato-icono .icon { display: block; margin: 0; }

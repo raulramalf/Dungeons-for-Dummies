@@ -40,7 +40,7 @@
 }
 
 .tab-boton[aria-selected="true"] {
-    color: #fff;
+    color: var(--t-sobre-oscuro);
     border-bottom-color: var(--c-rojo);
 }
 
