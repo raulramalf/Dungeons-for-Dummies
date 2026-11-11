@@ -27,7 +27,7 @@
     <div class="rd-centrado">
         <span class="rd-racha">
             @include('partials.icon', ['name' => 'flame'])
-            Racha: <span x-text="racha"></span> día<span x-show="racha !== 1">s</span>
+            Racha: <span x-text="racha + (racha === 1 ? ' día' : ' días')"></span>
         </span>
     </div>
 

@@ -14,11 +14,18 @@ class InicioController extends Controller
         // Tu próxima sesión (como DM o como jugador) — una sola, destacada aparte
         $proximaSesion = null;
         $sesionesCalendario = collect();
+        $datos = null;
 
         if (auth()->check()) {
             $campanaIds = Campana::where('dungeon_master_id', auth()->id())
                 ->orWhereHas('usuarios', fn ($q) => $q->where('usuarios.id', auth()->id()))
                 ->pluck('id');
+
+            $datos = [
+                'personajes' => \App\Models\Personaje::where('usuario_id', auth()->id())->count(),
+                'campanas'   => $campanaIds->count(),
+                'sesiones'   => Sesion::whereIn('campana_id', $campanaIds)->where('estado', 'planificada')->where('fecha_sesion', '>=', now())->count(),
+            ];
 
             $proximaSesion = Sesion::with('campana.dungeonMaster')
                 ->whereIn('campana_id', $campanaIds)
@@ -43,6 +50,6 @@ class InicioController extends Controller
                 ]);
         }
 
-        return view('inicio', compact('proximaSesion', 'sesionesCalendario'));
+        return view('inicio', compact('proximaSesion', 'sesionesCalendario', 'datos'));
     }
 }

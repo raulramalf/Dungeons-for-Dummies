@@ -29,3 +29,6 @@
 @import "./components/dialog.css";
 @import "./components/modal.css";
 @import "./components/tabs.css";
+
+/* Capa de tema: siempre la última */
+@import "./layout/tema.css";

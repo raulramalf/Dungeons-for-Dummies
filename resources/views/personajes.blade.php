@@ -38,6 +38,10 @@
                             <a href="{{ route('personajes.show', $p) }}">{{ $p->nombre }}</a>
                         </h3>
                         <p class="pj-meta">{{ $p->raza->nombre ?? 'Especie' }} · {{ $p->clase->nombre ?? 'Clase' }}</p>
+                        <div class="pj-chips">
+                            <span class="pj-chip">@include('partials.icon', ['name' => 'star']) Nivel {{ $p->nivel }}</span>
+                            @if ($p->alineamiento)<span class="pj-chip">@include('partials.icon', ['name' => 'shield']) {{ $p->alineamiento }}</span>@endif
+                        </div>
 
                         <div class="pj-acciones">
                             <a href="{{ route('personajes.show', $p) }}" class="btn btn-primario btn-sm">

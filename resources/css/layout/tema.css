@@ -1,0 +1,139 @@
+/* ============================================================================
+   CAPA DE TEMA — acabado profesional
+   Va la última: refina fondo, barra lateral, cabeceras, botones, tarjetas,
+   formularios y títulos de sección sin tocar la paleta (granate/oro).
+   ============================================================================ */
+
+/* ---------- Fondo con profundidad ---------- */
+body {
+    background:
+        radial-gradient(1100px 600px at 85% -10%, rgba(179, 3, 3, 0.16), transparent 60%),
+        radial-gradient(900px 500px at -10% 110%, rgba(201, 162, 39, 0.07), transparent 55%),
+        var(--c-fondo);
+    background-attachment: fixed;
+}
+
+/* ---------- Barra lateral ---------- */
+.sidebar {
+    background:
+        radial-gradient(260px 200px at 50% 0, rgba(179, 3, 3, 0.18), transparent 70%),
+        linear-gradient(180deg, #170409, #0f0206);
+    border-right: 1px solid rgba(201, 162, 39, 0.16);
+    box-shadow: 8px 0 40px rgba(0, 0, 0, 0.35);
+}
+.nav-link { border-radius: var(--r-lg); font-size: 0.86rem; letter-spacing: 0.9px; text-transform: uppercase; }
+.nav-link:hover { background: rgba(201, 162, 39, 0.07); }
+.nav-link:hover .icon { color: var(--c-oro-claro); }
+.nav-link[aria-current="page"] {
+    background: linear-gradient(90deg, rgba(179, 3, 3, 0.4), rgba(179, 3, 3, 0.04));
+    box-shadow: inset 0 0 0 1px rgba(201, 162, 39, 0.28), 0 4px 18px rgba(179, 3, 3, 0.18);
+}
+.nav-link[aria-current="page"] .icon { color: var(--c-oro-claro); }
+.nav-link[aria-current="page"]::before { background: linear-gradient(var(--c-oro-claro), var(--c-rojo)); box-shadow: 0 0 14px rgba(227, 194, 90, 0.6); }
+.sidebar-usuario { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(201, 162, 39, 0.14); }
+
+/* ---------- Cabecera de página ---------- */
+.page-header { border-bottom: 0; padding-bottom: 20px; margin-bottom: 26px; }
+.page-header::after {
+    width: 100%; height: 1px;
+    background: linear-gradient(90deg, var(--c-oro) 0, rgba(201, 162, 39, 0.35) 140px, rgba(179, 3, 3, 0.2) 55%, transparent);
+}
+.page-titulo { display: flex; align-items: center; gap: 1rem; min-width: 0; }
+.page-icono {
+    flex: none; width: 54px; height: 54px; display: grid; place-items: center;
+    border-radius: var(--r-lg); color: var(--c-oro-claro);
+    background: linear-gradient(145deg, rgba(179, 3, 3, 0.55), rgba(60, 5, 12, 0.9));
+    border: 1px solid rgba(201, 162, 39, 0.45);
+    box-shadow: 0 6px 20px rgba(179, 3, 3, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.page-icono .icon { width: 28px; height: 28px; }
+.page-header h1 { font-size: 1.7rem; letter-spacing: 2.5px; line-height: 1.1; }
+.page-subtitulo { margin-top: 0.35rem; color: var(--t-secundario); font-size: 0.95rem; max-width: 60ch; }
+
+/* ---------- Botones ---------- */
+.btn { border-radius: var(--r-lg); }
+.btn-primario {
+    background: linear-gradient(180deg, #d10b0b 0%, var(--c-rojo) 55%, #8f0202 100%);
+    border: 1px solid rgba(227, 194, 90, 0.35);
+    box-shadow: 0 6px 18px rgba(179, 3, 3, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+.btn-primario:hover { background: linear-gradient(180deg, #e01414, #a30303 60%, #7a0202); border-color: var(--c-oro-claro); }
+.btn-secundario { background: rgba(201, 162, 39, 0.06); border: 1px solid rgba(201, 162, 39, 0.35); color: var(--c-oro-claro); }
+.btn-secundario:hover { background: rgba(201, 162, 39, 0.14); }
+
+/* ---------- Tarjetas ---------- */
+.tarjeta, .camp-card, .pj-card, .funcion, .proxima-sesion {
+    background: linear-gradient(160deg, rgba(58, 12, 20, 0.85), rgba(30, 7, 12, 0.95));
+    border: 1px solid rgba(201, 162, 39, 0.16);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    position: relative;
+}
+.tarjeta::before, .camp-card::before {
+    content: ""; position: absolute; top: 0; left: 18px; right: 18px; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(227, 194, 90, 0.55), transparent);
+    pointer-events: none;
+}
+.tarjeta:hover, .camp-card:hover, .pj-card:hover { border-color: rgba(201, 162, 39, 0.4); }
+
+/* ---------- Títulos de sección ---------- */
+.seccion-titulo { color: var(--c-oro-claro); border-bottom: 0; position: relative; padding-bottom: 0.9rem; }
+.seccion-titulo::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+    background: linear-gradient(90deg, rgba(201, 162, 39, 0.5), rgba(201, 162, 39, 0.08) 60%, transparent);
+}
+.seccion-titulo .icon { color: var(--c-oro); }
+
+/* ---------- Formularios ---------- */
+.control, input.control, select.control, textarea.control {
+    background: rgba(10, 2, 5, 0.65);
+    border-color: rgba(201, 162, 39, 0.18);
+    border-radius: var(--r-lg);
+}
+.control:focus { border-color: var(--c-oro); box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.2); }
+
+/* ---------- Panel de datos de Inicio ---------- */
+.panel-datos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 1rem; margin-bottom: 2rem; }
+.dato {
+    display: flex; align-items: center; gap: 1rem; padding: 1.1rem 1.2rem;
+    border-radius: var(--r-lg); color: inherit;
+    background: linear-gradient(160deg, rgba(58, 12, 20, 0.9), rgba(26, 6, 11, 0.95));
+    border: 1px solid rgba(201, 162, 39, 0.18);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: transform var(--dur) var(--ease), border-color var(--dur), box-shadow var(--dur);
+}
+a.dato:hover { transform: translateY(-3px); border-color: rgba(227, 194, 90, 0.55); box-shadow: 0 14px 34px rgba(0, 0, 0, 0.45), var(--brillo-rojo); }
+.dato-icono { flex: none; width: 46px; height: 46px; display: grid; place-items: center; border-radius: 12px; color: var(--c-oro-claro); background: rgba(179, 3, 3, 0.3); border: 1px solid rgba(201, 162, 39, 0.3); }
+.dato-icono .icon { width: 24px; height: 24px; }
+.dato-num { display: block; font-family: var(--f-titulo); font-size: 1.7rem; font-weight: 700; line-height: 1; color: #fff; }
+.dato-txt { display: block; margin-top: 0.25rem; font-size: 0.78rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--t-secundario); font-family: var(--f-titulo); }
+
+/* ---------- Tarjeta de personaje ---------- */
+.pj-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+.pj-chip { display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.18rem 0.6rem; font-size: 0.74rem; font-family: var(--f-titulo); letter-spacing: 0.5px; color: var(--c-oro-claro); background: rgba(201, 162, 39, 0.08); border: 1px solid rgba(201, 162, 39, 0.28); border-radius: 999px; }
+.pj-chip .icon { width: 13px; height: 13px; }
+.pj-nivel { background: linear-gradient(180deg, #d10b0b, #8f0202); border: 1px solid rgba(227, 194, 90, 0.5); }
+
+/* ---------- Móvil ---------- */
+@media (max-width: 1024px) {
+    .page-icono { width: 44px; height: 44px; }
+    .page-icono .icon { width: 22px; height: 22px; }
+    .page-header h1 { font-size: 1.35rem; letter-spacing: 1.5px; }
+    .page-subtitulo { font-size: 0.88rem; }
+    .dato { padding: 0.9rem; gap: 0.75rem; }
+    .dato-icono { width: 40px; height: 40px; }
+    .dato-num { font-size: 1.4rem; }
+}
+@media (max-width: 420px) { .panel-datos { grid-template-columns: 1fr 1fr; } .dato { flex-direction: column; align-items: flex-start; } }
+
+/* Tarjetas de personaje: misma altura y botón sin saltos de línea */
+.pj-grid { align-items: stretch; }
+.pj-cuerpo { flex: 1; }
+.pj-acciones { margin-top: auto; padding-top: 0.8rem; }
+.pj-acciones .btn { white-space: nowrap; }
+@media (max-width: 640px) {
+    .pj-acciones { flex-wrap: wrap; }
+    .pj-acciones .btn { flex: 1 1 100%; }
+    .pj-acciones .btn-icono, .pj-acciones form { flex: 1; }
+    .pj-acciones form .btn-icono { width: 100%; }
+}

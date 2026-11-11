@@ -64,6 +64,26 @@
     @endguest
 
     @auth
+        {{-- PANEL DE DATOS --}}
+        <section class="panel-datos" aria-label="Resumen">
+            <a class="dato" href="{{ route('personajes.index') }}">
+                <span class="dato-icono">@include('partials.icon', ['name' => 'sword'])</span>
+                <span><span class="dato-num">{{ $datos['personajes'] }}</span><span class="dato-txt">Héroes</span></span>
+            </a>
+            <a class="dato" href="{{ url('/campanyas') }}">
+                <span class="dato-icono">@include('partials.icon', ['name' => 'scroll'])</span>
+                <span><span class="dato-num">{{ $datos['campanas'] }}</span><span class="dato-txt">Campañas</span></span>
+            </a>
+            <a class="dato" href="{{ url('/campanyas') }}">
+                <span class="dato-icono">@include('partials.icon', ['name' => 'calendar'])</span>
+                <span><span class="dato-num">{{ $datos['sesiones'] }}</span><span class="dato-txt">Sesiones próximas</span></span>
+            </a>
+            <a class="dato" href="{{ url('/minijuego') }}">
+                <span class="dato-icono">@include('partials.icon', ['name' => 'trophy'])</span>
+                <span><span class="dato-num">Jugar</span><span class="dato-txt">Reto diario</span></span>
+            </a>
+        </section>
+
         {{-- TU PRÓXIMA SESIÓN --}}
         @if ($proximaSesion)
             <section class="bloque" aria-label="Tu próxima sesión">
