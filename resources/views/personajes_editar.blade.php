@@ -200,7 +200,7 @@
                             multiple accept="image/jpeg,image/png,image/webp"
                             onchange="previewImgs(this, 'previewP', {{ 5 - count($imgsPersonaje) }})">
                         <div class="upload-label">
-                            📁 <span>Selecciona hasta {{ 5 - count($imgsPersonaje) }} imágenes de golpe</span> — JPG, PNG, WEBP · Máx. 2MB
+                            @include('partials.icon', ['name' => 'image', 'class' => 'icon-sm']) <span>Selecciona hasta {{ 5 - count($imgsPersonaje) }} imágenes de golpe</span> — JPG, PNG, WEBP · Máx. 2MB
                         </div>
                     </div>
                     <div id="previewP" class="imgs-grid"></div>
@@ -230,7 +230,7 @@
                             multiple accept="image/jpeg,image/png,image/webp"
                             onchange="previewImgs(this, 'previewA', {{ 5 - count($imgsArmas) }})">
                         <div class="upload-label">
-                            ⚔️ <span>Selecciona hasta {{ 5 - count($imgsArmas) }} imágenes de golpe</span> — JPG, PNG, WEBP · Máx. 2MB
+                            @include('partials.icon', ['name' => 'swords', 'class' => 'icon-sm']) <span>Selecciona hasta {{ 5 - count($imgsArmas) }} imágenes de golpe</span> — JPG, PNG, WEBP · Máx. 2MB
                         </div>
                     </div>
                     <div id="previewA" class="imgs-grid"></div>
@@ -313,44 +313,44 @@
                 <div class="combat-grid">
                     @php $est = $personaje->estadisticas; @endphp
                     <div class="combat-field">
-                        <label>❤️ PG Actuales</label>
+                        <label>@include('partials.icon', ['name' => 'heart', 'class' => 'icon-sm']) PG Actuales</label>
                         <input type="number" name="pg_actuales"
                                value="{{ old('pg_actuales', $est->pg_actuales ?? 10) }}" min="0">
                     </div>
                     <div class="combat-field">
-                        <label>❤️ PG Máximos</label>
+                        <label>@include('partials.icon', ['name' => 'heart', 'class' => 'icon-sm']) PG Máximos</label>
                         <input type="number" name="pg_maximos"
                                value="{{ old('pg_maximos', $est->pg_maximos ?? 10) }}" min="1">
                     </div>
                     <div class="combat-field">
-                        <label>💙 PG Temporales</label>
+                        <label>@include('partials.icon', ['name' => 'heart', 'class' => 'icon-sm']) PG Temporales</label>
                         <input type="number" name="pg_temporales"
                                value="{{ old('pg_temporales', $est->pg_temporales ?? 0) }}" min="0">
                     </div>
                     <div class="combat-field">
-                        <label>🛡️ Clase de Armadura</label>
+                        <label>@include('partials.icon', ['name' => 'shield', 'class' => 'icon-sm']) Clase de Armadura</label>
                         <input type="number" name="clase_de_armadura"
                                value="{{ old('clase_de_armadura', $est->clase_de_armadura ?? 10) }}" min="0">
                     </div>
                     <div class="combat-field">
-                        <label>⚡ Velocidad (ft)</label>
+                        <label>@include('partials.icon', ['name' => 'bolt', 'class' => 'icon-sm']) Velocidad (ft)</label>
                         <input type="number" name="velocidad"
                                value="{{ old('velocidad', $est->velocidad ?? 30) }}" min="0">
                     </div>
                     <div class="combat-field">
-                        <label>🎯 Bonus Competencia (auto)</label>
+                        <label>@include('partials.icon', ['name' => 'target', 'class' => 'icon-sm']) Bonus Competencia (auto)</label>
                         <input type="number" id="bonusCompetenciaDisplay"
                             value="{{ $est->bonus_competencia ?? 2 }}" disabled
                             class="campo-auto">
                     </div>
                     <div class="combat-field">
-                        <label>⚔️ Iniciativa (mod)</label>
+                        <label>@include('partials.icon', ['name' => 'swords', 'class' => 'icon-sm']) Iniciativa (mod)</label>
                         <input type="number" name="iniciativa"
                                value="{{ old('iniciativa', $est->iniciativa ?? '') }}"
                                placeholder="Auto">
                     </div>
                     <div class="combat-field">
-                        <label>🎲 Dados de Golpe disponibles</label>
+                        <label>@include('partials.icon', ['name' => 'dice', 'class' => 'icon-sm']) Dados de Golpe disponibles</label>
                         <input type="number" name="dados_golpe_disponibles"
                                value="{{ old('dados_golpe_disponibles', $est->dados_golpe_disponibles ?? '') }}" min="0">
                     </div>
@@ -374,7 +374,7 @@
                         <label class="check-item">
                             <input type="checkbox" name="inspiracion" value="1"
                                    {{ old('inspiracion', $est->inspiracion ?? false) ? 'checked' : '' }}>
-                            <span>✨ Inspiración activa</span>
+                            <span>@include('partials.icon', ['name' => 'sparkles', 'class' => 'icon-sm']) Inspiración activa</span>
                         </label>
                     </div>
                 </div>
@@ -597,9 +597,9 @@
                     <span class="equipo-nombre">{{ $item->nombre }}
                         @if($item->equipado) <span class="ed-equipado">✓</span> @endif
                     </span>
-                    <div class="equipo-det">{{ $item->tipo }}@if($item->magico) · ✨ Mágico @endif</div>
+                    <div class="equipo-det">{{ $item->tipo }}@if($item->magico) · @include('partials.icon', ['name' => 'sparkles', 'class' => 'icon-sm']) Mágico @endif</div>
                     @if($item->cantidad > 1) <div class="equipo-det">×{{ $item->cantidad }}</div> @endif
-                    @if($item->valor_po)     <div class="equipo-det">💰 {{ $item->valor_po }} PO</div> @endif
+                    @if($item->valor_po)     <div class="equipo-det">@include('partials.icon', ['name' => 'coins', 'class' => 'icon-sm']) {{ $item->valor_po }} PO</div> @endif
                     <form action="{{ route('equipo.destroy', ['personaje' => $personaje, 'equipo' => $item]) }}" method="POST" class="ed-en-linea">
                         @csrf @method('DELETE')
                         <button type="submit" class="btn-del-equipo"
@@ -626,7 +626,7 @@
                         <textarea name="descripcion" placeholder="Descripción breve..." rows="2" class="full"></textarea>
                         <div class="checks">
                             <label class="check-item">
-                                <input type="checkbox" name="magico" value="1"> <span>✨ Mágico</span>
+                                <input type="checkbox" name="magico" value="1"> <span>@include('partials.icon', ['name' => 'sparkles', 'class' => 'icon-sm']) Mágico</span>
                             </label>
                             <label class="check-item">
                                 <input type="checkbox" name="equipado" value="1"> <span>✓ Equipado</span>

@@ -69,7 +69,7 @@
     </div>
 
     <div class="exportar-descarga">
-        <a href="#" id="enlaceExportar" class="btn btn-primario" data-base="{{ route('personajes.exportar.descargar', $personaje) }}">📄 Descargar PDF</a>
+        <a href="#" id="enlaceExportar" class="btn btn-primario" data-base="{{ route('personajes.exportar.descargar', $personaje) }}">@include('partials.icon', ['name' => 'scroll', 'class' => 'icon-sm']) Descargar PDF</a>
     </div>
 
 </div>

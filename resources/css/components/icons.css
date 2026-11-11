@@ -27,3 +27,6 @@
     height: 2.4em;
 }
 
+
+/* Iconos SVG dentro de etiquetas y textos de las fichas */
+.combat-label .icon, label .icon, .equipo-det .icon { vertical-align: -0.2em; margin-right: 4px; color: var(--c-oro); }

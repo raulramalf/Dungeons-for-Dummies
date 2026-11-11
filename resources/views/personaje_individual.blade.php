@@ -139,29 +139,29 @@
             <div class="seccion-titulo">@include('partials.icon', ['name' => 'sword']) Combate</div>
             <div class="info-combat">
                 <div class="combat-card">
-                    <span class="combat-label">❤️ PG Actuales / Máx</span>
+                    <span class="combat-label">@include('partials.icon', ['name' => 'heart', 'class' => 'icon-sm']) PG Actuales / Máx</span>
                     <div class="combat-valor">{{ $est->pg_actuales ?? '?' }} / {{ $est->pg_maximos ?? '?' }}</div>
                 </div>
                 @if(($est->pg_temporales ?? 0) > 0)
                 <div class="combat-card">
-                    <span class="combat-label">💙 PG Temporales</span>
+                    <span class="combat-label">@include('partials.icon', ['name' => 'heart', 'class' => 'icon-sm']) PG Temporales</span>
                     <div class="combat-valor">{{ $est->pg_temporales }}</div>
                 </div>
                 @endif
                 <div class="combat-card">
-                    <span class="combat-label">🛡️ Clase de Armadura</span>
+                    <span class="combat-label">@include('partials.icon', ['name' => 'shield', 'class' => 'icon-sm']) Clase de Armadura</span>
                     <div class="combat-valor">{{ $est->clase_de_armadura ?? '—' }}</div>
                 </div>
                 <div class="combat-card">
-                    <span class="combat-label">⚡ Velocidad</span>
+                    <span class="combat-label">@include('partials.icon', ['name' => 'bolt', 'class' => 'icon-sm']) Velocidad</span>
                     <div class="combat-valor">{{ $est->velocidad ?? 30 }} ft</div>
                 </div>
                 <div class="combat-card">
-                    <span class="combat-label">🎯 Bonus Competencia</span>
+                    <span class="combat-label">@include('partials.icon', ['name' => 'target', 'class' => 'icon-sm']) Bonus Competencia</span>
                     <div class="combat-valor">+{{ $est->bonus_competencia ?? 2 }}</div>
                 </div>
                 <div class="combat-card">
-                    <span class="combat-label">⚔️ Iniciativa</span>
+                    <span class="combat-label">@include('partials.icon', ['name' => 'swords', 'class' => 'icon-sm']) Iniciativa</span>
                     @php
                         $ini = $est->iniciativa ?? floor((($est->destreza ?? 10) - 10) / 2);
                     @endphp
@@ -169,7 +169,7 @@
                 </div>
                 @if($est->dados_golpe_disponibles !== null)
                 <div class="combat-card">
-                    <span class="combat-label">🎲 Dados de Golpe</span>
+                    <span class="combat-label">@include('partials.icon', ['name' => 'dice', 'class' => 'icon-sm']) Dados de Golpe</span>
                     <div class="combat-valor">{{ $est->dados_golpe_disponibles }}</div>
                 </div>
                 @endif
@@ -339,10 +339,10 @@
                         {{ $item->nombre }}
                         @if($item->equipado) <span class="badge-equipado">✓ Equipado</span> @endif
                     </span>
-                    <div class="equipo-det">{{ $item->tipo }}@if($item->magico) · ✨ Mágico @endif</div>
+                    <div class="equipo-det">{{ $item->tipo }}@if($item->magico) · @include('partials.icon', ['name' => 'sparkles', 'class' => 'icon-sm']) Mágico @endif</div>
                     @if($item->cantidad > 1) <div class="equipo-det">×{{ $item->cantidad }}</div> @endif
-                    @if($item->valor_po)     <div class="equipo-det">💰 {{ $item->valor_po }} PO</div> @endif
-                    @if($item->peso)         <div class="equipo-det">⚖️ {{ $item->peso }} lb</div> @endif
+                    @if($item->valor_po)     <div class="equipo-det">@include('partials.icon', ['name' => 'coins', 'class' => 'icon-sm']) {{ $item->valor_po }} PO</div> @endif
+                    @if($item->peso)         <div class="equipo-det">{{ $item->peso }} lb</div> @endif
                     @if($item->descripcion)  <div class="equipo-det equipo-desc">{!! nl2br(e($item->descripcion)) !!}</div> @endif                </div>
                 @endforeach
             </div>
