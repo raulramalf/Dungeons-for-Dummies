@@ -9,7 +9,7 @@ class MinijuegoPregunta extends Model
 {
     use HasFactory;
 
-    protected $fillable = ["pregunta", "opciones", "categoria", "activo"];
+    protected $fillable = ["pregunta", "opciones", "categoria", "explicacion", "dificultad", "activo"];
 
     protected function casts(): array
     {

@@ -7,7 +7,11 @@
     home, sword, swords, scroll, skull, user, feed, logout, eye, edit, trash,
     plus, heart, comment, shield, dice, dragon, coins, chevron-left,
     chevron-right, book, flame, star, helmet, potion, bow, settings, lock,
-    arrow-left, x, check, image, map, more, login
+    arrow-left, x, check, image, map, more, login,
+    timer, trophy, share, sparkles, wand, alert, info, copy, crown, hourglass, target,
+    bolt, backpack, search, calendar, clock, arrow-right, refresh, check-circle,
+    x-circle, lightbulb, download, camera, moon, chevron-down, filter, sort, users,
+    tag, gem, speed, brain, mouth
 --}}
 @php $cls = $class ?? ''; @endphp
 
@@ -113,6 +117,105 @@
         @break
     @case('login')
         <svg class="icon {{ $cls }}" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><path d="M10 17l5-5-5-5"/><path d="M15 12H3"/></svg>
+        @break
+    @case('timer')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5"/><path d="M9 2h6"/></svg>
+        @break
+    @case('trophy')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3"/><path d="M7 5H4v2a3 3 0 0 0 3 3"/></svg>
+        @break
+    @case('share')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="M8.2 10.8l7.6-4.4"/><path d="M8.2 13.2l7.6 4.4"/></svg>
+        @break
+    @case('sparkles')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8z"/></svg>
+        @break
+    @case('wand')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20L16 8"/><path d="M14 6l4 4"/><path d="M18 3v3M16.5 4.5h3"/><path d="M5 5v2M4 6h2"/></svg>
+        @break
+    @case('alert')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l10 18H2z"/><path d="M12 10v5"/><path d="M12 18v.5"/></svg>
+        @break
+    @case('info')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5"/><path d="M12 8v.5"/></svg>
+        @break
+    @case('copy')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+        @break
+    @case('crown')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8l4 4 5-7 5 7 4-4-2 11H5z"/></svg>
+        @break
+    @case('hourglass')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12"/><path d="M6 21h12"/><path d="M7 3c0 5 5 6 5 9s-5 4-5 9"/><path d="M17 3c0 5-5 6-5 9s5 4 5 9"/></svg>
+        @break
+    @case('target')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>
+        @break
+    @case('bolt')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>
+        @break
+    @case('backpack')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6a4 4 0 0 1 8 0"/><rect x="5" y="6" width="14" height="15" rx="3"/><path d="M9 14h6"/><path d="M9 21v-4h6v4"/></svg>
+        @break
+    @case('search')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+        @break
+    @case('calendar')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18"/><path d="M8 3v4M16 3v4"/></svg>
+        @break
+    @case('clock')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        @break
+    @case('arrow-right')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+        @break
+    @case('refresh')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14-4"/><path d="M4 4v4h4"/><path d="M4 13a8 8 0 0 0 14 4"/><path d="M20 20v-4h-4"/></svg>
+        @break
+    @case('check-circle')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></svg>
+        @break
+    @case('x-circle')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg>
+        @break
+    @case('lightbulb')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/></svg>
+        @break
+    @case('download')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11"/><path d="M7 10l5 5 5-5"/><path d="M4 20h16"/></svg>
+        @break
+    @case('camera')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>
+        @break
+    @case('moon')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14A8 8 0 1 1 10 4a6.5 6.5 0 0 0 10 10z"/></svg>
+        @break
+    @case('chevron-down')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        @break
+    @case('filter')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4-2v-4z"/></svg>
+        @break
+    @case('sort')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16"/><path d="M3 8l4-4 4 4"/><path d="M17 20V4"/><path d="M13 16l4 4 4-4"/></svg>
+        @break
+    @case('users')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20v-1a5 5 0 0 1 5-5h3a5 5 0 0 1 5 5v1"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14h1.5a4 4 0 0 1 4 4v1"/></svg>
+        @break
+    @case('tag')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12V4h8l10 10-8 8z"/><circle cx="7.5" cy="8.5" r="1"/></svg>
+        @break
+    @case('gem')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12l4 6-10 11L2 10z"/><path d="M2 10h20"/><path d="M9 4l-2 6 5 11 5-11-2-6"/></svg>
+        @break
+    @case('speed')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17a9 9 0 1 1 18 0"/><path d="M12 17l4-6"/><path d="M12 17h.01"/></svg>
+        @break
+    @case('brain')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-2 5 3 3 0 0 0 2 5 3 3 0 0 0 6 1V4a3 3 0 0 0-3 0z"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 2 5 3 3 0 0 1-2 5 3 3 0 0 1-6 1"/></svg>
+        @break
+    @case('mouth')
+        <svg class="icon {{ $cls }}" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12c3 6 15 6 18 0z"/><path d="M7 14l1 2M11 15l.5 2M15 15l.5 2"/></svg>
         @break
     @default
         <svg class="icon {{ $cls }}" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/></svg>

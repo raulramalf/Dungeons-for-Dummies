@@ -36,12 +36,7 @@ class MinijuegoController extends Controller
             if ($intento->pregunta_actual_id && $intento->pregunta_actual_opciones) {
                 $preguntaActual = \App\Models\MinijuegoPregunta::find($intento->pregunta_actual_id);
                 $rondaActual = $preguntaActual
-                    ? [
-                        "pregunta" => $preguntaActual->pregunta,
-                        "opciones" => collect($intento->pregunta_actual_opciones)
-                            ->map(fn($o, $i) => ["indice" => $i, "texto" => $o["texto"]])
-                            ->values(),
-                    ]
+                    ? $this->payloadRonda($preguntaActual, $intento->pregunta_actual_opciones, $intento)
                     : $this->asignarNuevaPregunta($intento);
             } else {
                 $rondaActual = $this->asignarNuevaPregunta($intento);
@@ -68,8 +63,10 @@ class MinijuegoController extends Controller
     public function responder(Request $request)
     {
         $request->validate([
-            "opcion" => ["required", "integer", "min:0"],
+            "opcion" => ["required_without:tiempo_agotado", "nullable", "integer", "min:0"],
+            "tiempo_agotado" => ["sometimes", "boolean"],
         ]);
+        $tiempoAgotado = $request->boolean("tiempo_agotado");
 
         $reto = $this->retoDeHoy();
         $enemigo = $reto->enemigo;
@@ -86,13 +83,15 @@ class MinijuegoController extends Controller
         }
 
         $opciones = $intento->pregunta_actual_opciones;
-        $indice = $request->integer("opcion");
+        $indice = $tiempoAgotado ? null : $request->integer("opcion");
 
-        if (!$opciones || !isset($opciones[$indice])) {
+        if (!$opciones || (!$tiempoAgotado && !isset($opciones[$indice]))) {
             return response()->json(["error" => "Opción inválida."], 422);
         }
 
-        $correcta = (bool) ($opciones[$indice]["correcta"] ?? false);
+        $correcta = !$tiempoAgotado && (bool) ($opciones[$indice]["correcta"] ?? false);
+        $indiceCorrecta = collect($opciones)->search(fn($o) => !empty($o["correcta"]));
+        $preguntaRespondida = \App\Models\MinijuegoPregunta::find($intento->pregunta_actual_id);
 
         $historial = $intento->opciones_elegidas ?? [];
         $historial[] = [
@@ -131,6 +130,10 @@ class MinijuegoController extends Controller
 
         return response()->json([
             "correcta" => $correcta,
+            "tiempo_agotado" => $tiempoAgotado,
+            "indice_correcta" => $indiceCorrecta === false ? null : $indiceCorrecta,
+            "explicacion" => $preguntaRespondida?->explicacion,
+            "danio" => $correcta ? (int) round($enemigo->vida_max / 4) : 0,
             "vida_restante" => $vidaRestante,
             "vida_max" => $enemigo->vida_max,
             "aciertos" => $aciertos,
@@ -256,9 +259,17 @@ class MinijuegoController extends Controller
             "pregunta_actual_opciones" => $opcionesMezcladas,
         ]);
 
+        return $this->payloadRonda($pregunta, $opcionesMezcladas, $intento);
+    }
+
+    private function payloadRonda($pregunta, array $opciones, MinijuegoIntento $intento): array
+    {
         return [
+            "numero" => count($intento->opciones_elegidas ?? []) + 1,
             "pregunta" => $pregunta->pregunta,
-            "opciones" => collect($opcionesMezcladas)
+            "categoria" => $pregunta->categoria,
+            "dificultad" => $pregunta->dificultad ?? "media",
+            "opciones" => collect($opciones)
                 ->map(fn($o, $i) => ["indice" => $i, "texto" => $o["texto"]])
                 ->values(),
         ];
