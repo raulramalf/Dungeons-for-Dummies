@@ -12,9 +12,14 @@
 <body>
     <a href="#contenido" class="skip-link">Saltar al contenido</a>
 
+    <div class="mesa">
+    <div class="libro">
     @include('layouts.navigation')
 
-    <main class="main-content" id="contenido" tabindex="-1">
+    <div class="libro-base libro-base--izq" aria-hidden="true"></div>
+    <div class="libro-base" aria-hidden="true"></div>
+    <main class="main-content libro-pagina" id="contenido" tabindex="-1">
+        <div class="libro-cara-frente">
         @php
             $metaPagina = [
                 'personajes*' => ['sword',  'Tus héroes, sus historias y sus fichas.'],
@@ -29,6 +34,13 @@
             $subPagina   = html_entity_decode(trim($__env->yieldContent('subtitulo')), ENT_QUOTES) ?: null;
             foreach ($metaPagina as $patron => [$ic, $sub]) {
                 if (request()->is($patron)) { $iconoPagina ??= $ic; $subPagina ??= $sub; break; }
+            }
+        @endphp
+        @php
+            $romanos = ['I','II','III','IV','V','VI','VII'];
+            $folio = null;
+            foreach (['/' => 0, 'personajes*' => 1, 'campanyas*' => 2, 'feed*' => 3, 'enemigos*' => 4, 'minijuego*' => 5, 'perfil*' => 6, 'profile*' => 6] as $pat => $i) {
+                if (request()->is($pat)) { $folio = '— '.$romanos[$i].' —'; break; }
             }
         @endphp
         <div class="page-header @hasSection('cabecera-oculta') page-header--oculta @endif">
@@ -47,7 +59,13 @@
         </div>
 
         @yield('contenido')
+
+        <footer class="folio" aria-hidden="true"><span>{{ $folio ?? '' }}</span></footer>
+        </div>
+        <div class="libro-cara-dorso" aria-hidden="true"></div>
     </main>
+    </div>
+    </div>
 
     <x-toasts />
 

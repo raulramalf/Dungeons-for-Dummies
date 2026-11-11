@@ -32,3 +32,4 @@
 
 /* Capa de tema: siempre la última */
 @import "./layout/tema.css";
+@import "./layout/libro.css";

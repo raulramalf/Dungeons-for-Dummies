@@ -30,11 +30,14 @@
         </a>
     </div>
 
+    <p class="indice-titulo">Índice</p>
     <nav class="sidebar-nav" aria-label="Principal">
-        @foreach ($nav as $item)
+        @foreach ($nav as $i => $item)
             <a href="{{ $item['url'] }}" class="nav-link" @if ($item['activo']) aria-current="page" @endif>
                 @include('partials.icon', ['name' => $item['icono']])
-                {{ $item['texto'] }}
+                <span class="nav-txt">{{ $item['texto'] }}</span>
+                <span class="nav-puntos" aria-hidden="true"></span>
+                <span class="nav-num" aria-hidden="true">{{ ['I','II','III','IV','V','VI','VII'][$i] }}</span>
             </a>
         @endforeach
     </nav>
@@ -64,6 +67,17 @@
         @endauth
     </div>
 </aside>
+
+{{-- ======================= MARCAPÁGINAS (escritorio) ======================= --}}
+<nav class="marcapaginas" aria-label="Marcapáginas">
+    <div class="marcapaginas-lista">
+        @foreach ($nav as $item)
+            <a href="{{ $item['url'] }}" class="marcapagina" title="{{ $item['texto'] }}" aria-label="{{ $item['texto'] }}" @if ($item['activo']) aria-current="page" @endif>
+                @include('partials.icon', ['name' => $item['icono']])
+            </a>
+        @endforeach
+    </div>
+</nav>
 
 {{-- ======================= BARRA SUPERIOR (móvil) ======================= --}}
 <header class="topbar">

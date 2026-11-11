@@ -10,7 +10,7 @@
 <body class="auth-page">
     <x-bg-media nombre="castillo-fondo" :video="false" velo="0.78" />
 
-    <main class="auth-card">
+    <main class="auth-card libro-pagina">
         <a href="{{ url('/') }}" class="marca-logo auth-logo" aria-label="Dungeons for Dummies, ir al inicio">
             <x-logo-mark />
             <span class="marca-texto">

@@ -9,3 +9,4 @@ import "./confirm.js";
 import "./lightbox.js";
 import "./modal.js";
 import "./tabs.js";
+import "./libro.js";
